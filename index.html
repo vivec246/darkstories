@@ -1,0 +1,1791 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="theme-color" content="#000408">
+    <meta name="description" content="Тёмные истории от Дмитрия Ланцева — рассказы и статьи в жанре мистика и тёмное фэнтези">
+    <title>ТЕМНЫЕ ИСТОРИИ | ОТ ДМИТРИЯ ЛАНЦЕВА</title>
+    <link href="https://fonts.googleapis.com/css2?family=Marcellus+SC&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        /* ========== ПЕРЕМЕННЫЕ ========== */
+        :root {
+            --accent: #88aadd;
+            --accent-glow: rgba(136, 170, 221, 0.3);
+            --bg-dark: #000408;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --btn-graphite: rgba(40, 44, 52, 0.95);
+            --text-light: #d0e0ff;
+            --error-red: #ff5555;
+        }
+
+        /* ========== ОБНУЛЕНИЕ И БАЗА ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--bg-dark);
+            color: var(--text-light);
+            font-family: 'Merriweather', serif;
+            line-height: 1.8;
+            overflow-x: hidden;
+            cursor: auto;
+        
+        }
+
+        a, button, .btn-read, .tab-link, .control-btn, .contact-item {
+            cursor: pointer;
+        }
+
+        .reader-body {
+            cursor: auto;        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 0 90px;
+        }
+
+        /* ========== HEADER ========== */
+        header {
+            height: 60vh;
+            position: relative;
+            overflow: hidden;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .header-slide {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: #000;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+            pointer-events: none;
+        }
+
+        .header-slide.active {
+            opacity: 1;
+        }
+
+        header::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), var(--bg-dark));
+            z-index: 2;
+        }
+
+        .title-group {
+            position: relative;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        /* ========== АНИМИРОВАННЫЙ ТЕКСТ ========== */
+        .animated-text {
+            font-family: 'Marcellus SC', serif;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, #000, #d13e3e, #e2e1e1, #1cbddd, #000);
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: colorFlow 12s linear infinite, fogEffect 12s ease-in-out infinite alternate;
+            display: block;
+        }
+
+        .site-title {
+            font-size: clamp(2.5em, 8vw, 4.5em);
+            letter-spacing: 12px;
+            margin: 0;
+        }
+
+        .site-subtitle {
+            font-size: clamp(0.9em, 2vw, 1.2em);
+            letter-spacing: 5px;
+            margin-top: 15px;
+        }
+
+        @keyframes colorFlow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 300% 50%; }
+        }
+
+        @keyframes fogEffect {
+            0% { filter: drop-shadow(0 0 5px rgba(255, 0, 0, 0.4)); }
+            100% { filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.5)); }
+        }
+
+        /* ========== НАВИГАЦИЯ ========== */
+        nav.tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            padding: 3px;
+            background: rgba(0, 0, 0, 0.7);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .tab-link {
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.6;
+            transition: 0.3s;
+            font-family: 'Marcellus SC', serif;
+        }
+
+        .tab-link:hover {
+            opacity: 1;
+            color: var(--accent);
+        }
+
+        /* ========== ПОИСК ========== */
+        .search-container {
+            max-width: 600px;
+            margin: 40px auto 20px;
+            position: relative;
+        }
+
+        .search-input-wrapper {
+            display: flex;
+            align-items: center;
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            transition: 0.3s;
+        }
+
+        .search-input-wrapper:focus-within {
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        #searchInput {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 16px 24px;
+            color: var(--text-light);
+            font-family: 'Merriweather', serif;
+            font-size: 1em;
+            outline: none;
+        }
+
+        #searchInput::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .search-btn, .clear-search {
+            background: transparent;
+            border: none;
+            padding: 0 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-btn {
+            color: var(--accent);
+            font-size: 1.2em;
+        }
+
+        .clear-search {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .clear-search:hover {
+            color: var(--error-red);
+        }
+
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #0a0e14;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            margin-top: 8px;
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 100;
+            display: none;
+        }
+
+        .search-results.show {
+            display: block;
+        }
+
+        .search-result-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .search-result-item:hover {
+            background: var(--accent-glow);
+        }
+
+        .search-result-title {
+            font-family: 'Marcellus SC', serif;
+            color: var(--accent);
+            margin-bottom: 5px;
+        }
+
+        .search-result-snippet {
+            font-size: 0.85em;
+            opacity: 0.7;
+        }
+
+        .search-result-snippet mark {
+            background: var(--accent-glow);
+            color: var(--accent);
+            padding: 0 2px;
+            border-radius: 3px;
+        }
+
+        .search-stats {
+            padding: 10px 20px;
+            font-size: 0.75em;
+            opacity: 0.5;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+/* ========== КАРТОЧКИ (ПЛИТКИ) ========== */
+.card {
+    background: linear-gradient(135deg, rgba(136, 170, 221, 0.05), rgba(0, 0, 0, 0.3));
+    border: 1px solid rgba(136, 170, 221, 0.2);
+    border-radius: 20px;
+    padding: 30px;
+    transition: 0.4s;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.card:hover {
+    border-color: var(--accent);
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(136, 170, 221, 0.2);
+}
+
+.card.missing {
+    opacity: 0.4;
+    filter: grayscale(0.3);
+    pointer-events: none;
+}
+
+.card-genre {
+    font-size: 0.7em;
+    letter-spacing: 2px;
+    color: var(--accent);
+    margin-bottom: 10px;
+    font-family: 'Marcellus SC', serif;
+    opacity: 0.8;
+}
+
+.btn-read {
+    display: inline-block;
+    padding: 12px 28px;
+    background: linear-gradient(135deg, rgba(136, 170, 221, 0.1), rgba(136, 170, 221, 0.02));
+    border: 1px solid var(--accent);
+    border-radius: 50px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.8em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    backdrop-filter: blur(4px);
+    margin-top: 20px;
+    align-self: center;
+}
+
+.btn-read:hover {
+    background: var(--accent);
+    color: #000;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 20px rgba(136, 170, 221, 0.3);
+    letter-spacing: 3px;
+}
+
+/* Сетка карточек — адаптивная */
+.content-grid {
+    display: grid;
+    gap: 30px;
+    padding: 20px 0;
+}
+
+/* Смартфоны (до 768px) — 1 карточка */
+@media (max-width: 768px) {
+    .content-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+}
+
+/* Планшеты (768px - 1024px) — 2 карточки */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .content-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Ноутбуки (1024px - 1280px) — 3 карточки */
+@media (min-width: 1024px) and (max-width: 1280px) {
+    .content-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Большие экраны (1280px и выше) — максимум 4 карточки */
+@media (min-width: 1280px) {
+    .content-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+        /* ========== СВЯЗЬ СО МНОЙ ========== */
+.contact-links {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    flex-wrap: wrap;
+    margin: 40px 0;
+}
+
+.contact-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+    padding: 10px;
+    color: var(--text-light);
+    text-decoration: none;
+    transition: all 0.4s ease;
+    font-family: 'Marcellus SC', serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.contact-item i {
+    font-size: 2.2rem;
+    color: var(--accent);
+    filter: drop-shadow(0 0 5px var(--accent-glow));
+    transition: 0.3s;
+}
+
+.contact-item:hover {
+    transform: translateY(-8px);
+    opacity: 1;
+}
+
+.contact-item:hover i {
+    filter: drop-shadow(0 0 15px var(--accent));
+}
+
+.contact-item span {
+    font-size: 0.65rem;
+    opacity: 0.6;
+}
+
+        /* ========== ПРОГРЕСС-БАР ========== */
+        .progress-bar-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: rgba(17, 17, 17, 0.5);
+            z-index: 9999;
+            display: none;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent), #ffffff, var(--accent));
+            background-size: 200% 100%;
+            transition: width 0.2s;
+        }
+
+        /* ========== READER (ЧИТАЛКА) ========== */
+        .reader-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.98);
+            z-index: 2000;
+            display: none;
+            overflow-y: auto;
+        }
+
+        .reader-content {
+            background: #fdfcf8;
+            color: #2c3e50;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 60px;
+            border-radius: 8px;
+        }
+
+        .reader-content.night-mode {
+            background: #0f1114;
+            color: #b0c4de;
+        }
+
+        .reader-body h1 {
+            font-family: 'Marcellus SC', serif;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .reader-body p {
+            margin-bottom: 1.5em;
+            line-height: 1.9;
+        }
+
+        .reader-body img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+            border-radius: 8px;
+        }
+
+        /* ========== ЗАЩИТА ОТ КОПИРОВАНИЯ ========== */
+        .reader-body {
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        button, input, .btn-read, .tab-link {
+            user-select: auto;
+            -webkit-user-select: auto;
+        }
+
+        /* ========== КНОПКИ УПРАВЛЕНИЯ ЧИТАЛКОЙ ========== */
+        .reader-controls {
+            position: fixed;
+            top: 30px;
+            right: 40px;
+            z-index: 3000;
+            display: none;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .control-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--btn-graphite);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+
+        .control-btn:hover {
+            background: var(--accent);
+            color: #000;
+        }
+
+        #fontSliderContainer {
+            display: none;
+            position: absolute;
+            right: 60px;
+            background: var(--btn-graphite);
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: 1px solid var(--accent);
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* ========== ОГЛАВЛЕНИЕ ========== */
+.table-of-contents {
+    display: none;
+    position: fixed;
+    top: 30px;
+    right: 90px;
+    left: auto;
+    transform: none;
+    width: 300px;
+    height: 800px;
+    max-width: 80%;
+    max-height: 70vh;
+    overflow-y: auto;
+    background: #0a0e14;
+    border: 1px solid var(--accent);
+    border-radius: 12px;
+    padding: 20px;
+    z-index: 3500;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+}
+
+.table-of-contents h4 {
+    margin-bottom: 15px;
+    color: var(--accent);
+    text-align: center;
+    font-family: 'Marcellus SC', serif;
+}
+
+.table-of-contents a {
+    display: block;
+    color: var(--text-light);
+    text-decoration: none;
+    padding: 8px 12px;
+    margin: 4px 0;
+    border-left: 2px solid transparent;
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+.table-of-contents a:hover {
+    border-left-color: var(--accent);
+    background: rgba(136, 170, 221, 0.1);
+    color: var(--accent);
+    padding-left: 15px;
+}
+
+        /* ========== ЗАКЛАДКИ ========== */
+        .bookmarks-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 4000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-box {
+            background: var(--btn-graphite);
+            width: 90%;
+            max-width: 420px;
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid var(--accent);
+            position: relative;
+        }
+
+        #bookmarksList {
+            max-height: 320px;
+            overflow-y: auto;
+            margin-top: 15px;
+        }
+
+        .bookmark-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            border-left: 4px solid var(--accent);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .delete-bm {
+            color: var(--error-red);
+            opacity: 0.4;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .delete-bm:hover {
+            opacity: 1;
+        }
+
+        /* ========== ПОДДЕРЖКА АВТОРА ========== */
+        .support-section {
+            margin: 60px auto 40px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, rgba(136, 170, 221, 0.05), rgba(0, 0, 0, 0.3));
+            border: 1px solid rgba(136, 170, 221, 0.2);
+            border-radius: 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .support-section::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(136, 170, 221, 0.03) 0%, transparent 70%);
+            animation: rotateBg 20s linear infinite;
+        }
+
+        @keyframes rotateBg {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .support-container {
+            position: relative;
+            z-index: 2;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .support-icon {
+            font-size: 3em;
+            color: #ff6b6b;
+            margin-bottom: 15px;
+            cursor: pointer;
+            display: inline-block;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        .support-icon:hover {
+            animation: fastHeartbeat 0.4s ease-in-out infinite;
+        }
+
+        @keyframes fastHeartbeat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.3); }
+            40% { transform: scale(1.1); }
+            55% { transform: scale(1.3); }
+            70% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .support-section h3 {
+            font-family: 'Marcellus SC', serif;
+            font-size: 1.8em;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #fff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .support-section p {
+            opacity: 0.8;
+            margin-bottom: 25px;
+        }
+
+        .support-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 5000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(8px);
+        }
+
+        .support-modal-content {
+            background: linear-gradient(135deg, #1a1e2a, #0f1118);
+            max-width: 450px;
+            width: 90%;
+            padding: 35px;
+            border-radius: 20px;
+            border: 1px solid var(--accent);
+            position: relative;
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .support-modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 28px;
+            cursor: pointer;
+        }
+
+        .support-modal-close:hover {
+            color: #fff;
+        }
+
+        .donation-options {
+            text-align: center;
+        }
+
+        .donation-options h4 {
+            font-family: 'Marcellus SC', serif;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+
+        .donation-amounts {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 25px 0;
+        }
+
+        .donation-amount {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+
+        .donation-amount:hover,
+        .donation-amount.selected {
+            background: var(--accent);
+            color: #000;
+            border-color: var(--accent);
+        }
+
+        .support-link {
+            display: inline-block;
+            background: var(--accent);
+            color: #000;
+            padding: 12px 30px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+
+        .support-link:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px var(--accent);
+        }
+
+        .restore-toast {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            z-index: 10000;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        footer {
+            padding: 40px 0 30px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-social {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .footer-social-icon {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 1.4em;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+        .footer-social-icon.text-icon {
+            font-family: 'Marcellus SC', serif;
+            font-size: 0.9em;
+        }
+
+        .footer-social-icon:hover {
+            color: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        .footer-copyright {
+            opacity: 0.4;
+            font-size: 0.8em;
+            letter-spacing: 1px;
+        }
+
+        .info-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--btn-graphite);
+            border: 1px solid rgba(136, 170, 221, 0.3);
+            color: var(--accent);
+            font-size: 1.5em;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .info-button:hover {
+            transform: scale(1.1);
+            background: var(--accent);
+            color: #000;
+            border-color: var(--accent);
+        }
+
+        .info-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 6000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(8px);
+        }
+
+        .info-modal-content {
+            background: linear-gradient(135deg, #1a1e2a, #0f1118);
+            max-width: 450px;
+            width: 90%;
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid var(--accent);
+            position: relative;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .info-modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 28px;
+            cursor: pointer;
+        }
+
+        .info-modal-close:hover {
+            color: #fff;
+        }
+
+        #stories h2, #articles h2, #contact h2 {
+            text-align: center;
+            font-family: 'Marcellus SC', serif;
+            letter-spacing: 4px;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+
+        @media (max-width: 768px) {
+            .reader-content {
+                padding: 30px 20px;
+                margin: 20px;
+            }
+            .reader-controls {
+                top: 15px;
+                right: 15px;
+            }
+            .control-btn {
+                width: 38px;
+                height: 38px;
+            }
+        }
+
+        body {
+            margin-top: -35px !important;
+        }
+
+/* ========== СТИЛИЗАЦИЯ ПОЛОСЫ ПРОКРУТКИ ========== */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--accent);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #aaccee;
+}
+
+    </style>
+</head>
+<body>
+
+<!-- ========== МОДАЛЬНОЕ ОКНО ЗАКЛАДОК ========== -->
+<div id="bookmarksModal" class="bookmarks-modal" onclick="if(event.target == this) toggleBookmarks()">
+    <div class="modal-box">
+        <h3 style="text-align:center; font-family:'Marcellus SC';">ЗАКЛАДКИ</h3>
+        <div id="bookmarksList"></div>
+        <div style="text-align:center; margin-top:25px; padding-top:20px; border-top:1px solid rgba(255,255,255,0.1);">
+            <button class="control-btn" style="margin:0 auto;" onclick="addCurrentBookmark()">
+                <i class="fas fa-bookmark"></i>
+            </button>
+            <p style="font-size:0.7em; opacity:0.5; margin-top:10px;">Сохранить позицию</p>
+        </div>
+        <button onclick="toggleBookmarks()" style="position:absolute; top:15px; right:15px; background:none; border:none; color:white; cursor:pointer;">✕</button>
+    </div>
+</div>
+
+<!-- ========== КНОПКИ УПРАВЛЕНИЯ ЧИТАЛКОЙ ========== -->
+<div id="readerControls" class="reader-controls">
+    <button class="control-btn" onclick="closeReader()">
+        <i class="fas fa-times"></i>
+    </button>
+    <button class="control-btn" onclick="toggleReaderTheme()">
+        <i class="fas fa-adjust"></i>
+    </button>
+    <button class="control-btn" onclick="toggleBookmarks()">
+        <i class="fas fa-bookmark"></i>
+    </button>
+    <div style="position:relative; display:flex; align-items:center;">
+        <div id="fontSliderContainer">
+            <input type="range" min="0.8" max="2.2" step="0.1" value="1.2" oninput="updateFontSize(this.value)">
+        </div>
+        <button class="control-btn" onclick="toggleFontSlider()">
+            <i class="fas fa-font"></i>
+        </button>
+    </div>
+    <button class="control-btn" onclick="toggleTOC()">
+        <i class="fas fa-list-ul"></i>
+    </button>
+</div>
+
+<!-- ========== READER (ЧИТАЛКА) ========== -->
+<div id="readerOverlay" class="reader-overlay" onclick="if(event.target==this) closeReader()">
+    <div id="readerContent" class="reader-content night-mode">
+        <div id="readerBody" class="reader-body"></div>
+    </div>
+</div>
+
+<!-- ========== ШАПКА СЛАЙДЕР ========== -->
+<header>
+    <div class="header-slide active" style="background-image: url('cap/header_1.jpg');"></div>
+    <div class="header-slide" style="background-image: url('cap/header_2.jpg');"></div>
+    <div class="header-slide" style="background-image: url('cap/header_3.jpg');"></div>
+    <div class="header-slide" style="background-image: url('cap/header_4.jpg');"></div>
+    <div class="header-slide" style="background-image: url('cap/header_5.jpg');"></div>
+    <div class="header-slide" style="background-image: url('cap/header_6.jpg');"></div>
+    <div class="header-slide" style="background-image: url('cap/header_7.jpg');"></div>
+    <div class="title-group">
+        <h1 class="site-title animated-text">ТЕМНЫЕ ИСТОРИИ</h1>
+        <p class="site-subtitle animated-text">ОТ ДМИТРИЯ ЛАНЦЕВА</p>
+    </div>
+</header>
+
+<!-- ========== НАВИГАЦИЯ ========== -->
+<nav class="tabs">
+    <div class="tab-link" onclick="document.getElementById('stories').scrollIntoView({behavior:'smooth'})">РАССКАЗЫ</div>
+    <div class="tab-link" onclick="document.getElementById('articles').scrollIntoView({behavior:'smooth'})">СТАТЬИ</div>
+    <div class="tab-link" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">СВЯЗЬ</div>
+</nav>
+
+<main class="container">
+    <!-- ========== ПОИСК ========== -->
+    <div class="search-container">
+        <div class="search-input-wrapper">
+            <input type="text" id="searchInput" placeholder="Поиск по рассказам..." autocomplete="off">
+            <button class="clear-search" id="clearSearchBtn" style="display:none;">✕</button>
+            <button class="search-btn" id="searchBtn">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+        <div id="searchResults" class="search-results"></div>
+    </div>
+
+    <!-- ========== СЕКЦИЯ РАССКАЗЫ ========== -->
+    <section id="stories">
+        <h2>МОИ РАССКАЗЫ</h2>
+        <div class="content-grid">
+            <div class="card" data-file="stories/mission_hades/index.md">
+                <h3>МИССИЯ «АИД»</h3>
+                <div class="card-genre">Научная фантастика / Хоррор</div>
+                <div class="btn-read" onclick="openReader('stories/mission_hades/index.md', 'МИССИЯ АИД')">ПОГРУЗИТЬСЯ</div>
+            </div>
+            <div class="card" data-file="stories/witcher_jacob/index.md">
+                <h3>МЕДВЕДЬ НА ПЕРЕПУТЬЕ</h3>
+                <div class="card-genre">Темное фэнтези</div>
+                <div class="btn-read" onclick="openReader('stories/witcher_jacob/index.md', 'ВЕДЬМАК ЯКОБ')">ПОГРУЗИТЬСЯ</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== СЕКЦИЯ СТАТЬИ ========== -->
+    <section id="articles">
+        <h2>МОИ СТАТЬИ</h2>
+        <div class="content-grid">
+            <div class="card" data-file="articles/albus_dumbledore/index.md">
+                <h3>ЦЕНА МУДРОСТИ АЛЬБУСА ДАМБЛДОРА</h3>
+                <div class="card-genre">Аналитика / Статья</div>
+                <div class="btn-read" onclick="openReader('articles/albus_dumbledore/index.md', 'ЦЕНА МУДРОСТИ АЛЬБУСА ДАМБЛДОРА')">ЧИТАТЬ</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== СЕКЦИЯ СВЯЗЬ ========== -->
+<section id="contact" style="padding-bottom: 0;">
+    <h2>ПРИСОЕДИНЯЙТЕСЬ К СООБЩЕСТВУ</h2>
+    <div class="contact-links"> <a href="https://t.me/your_telegram" class="contact-item" target="_blank">
+            <i class="fab fa-telegram-plane"></i>
+            <span>Telegram</span>
+        </a>
+        <a href="mailto:your@email.com" class="contact-item">
+            <i class="fas fa-envelope"></i>
+            <span>Email</span>
+        </a>
+        <a href="https://vk.com/your_vk" class="contact-item" target="_blank">
+            <i class="fab fa-vk"></i>
+            <span>ВК</span>
+        </a>
+        <a href="https://www.tiktok.com/@your_username" class="contact-item" target="_blank">
+            <i class="fab fa-tiktok"></i>
+            <span>TikTok</span>
+        </a>
+        <a href="https://dzen.ru/твой_дзен" class="contact-item" target="_blank">
+            <i class="fas fa-feather-alt"></i>
+            <span>Дзен</span>
+        </a>
+    </div>
+</section>
+
+    <!-- ========== БЛОК ПОДДЕРЖКИ АВТОРА ========== -->
+    <section class="support-section">
+        <div class="support-container">
+            <div class="support-icon" onclick="showSupportModal()">
+                <i class="fas fa-heart"></i>
+            </div>
+            <h3>ПОДДЕРЖАТЬ АВТОРА</h3>
+            <p>Если вам нравятся мои тёмные истории, вы можете поддержать творчество</p>
+        </div>
+    </section>
+</main>
+
+<!-- ========== ФУТЕР ========== -->
+<footer class="main-footer">
+    <div class="footer-copyright">
+        <p>© 2026 ТЕМНЫЕ ИСТОРИИ • ОТ ДМИТРИЯ ЛАНЦЕВА</p>
+        <span>Все права защищены. Любое использование материалов сайта допускается только с активной ссылкой на источник.</span>
+    </div>
+</footer>
+
+<!-- ========== КНОПКА ИНФОРМАЦИИ ========== -->
+<button id="infoBtn" class="info-button">
+    <i class="fas fa-info-circle"></i>
+</button>
+
+<!-- ========== МОДАЛЬНОЕ ОКНО ИНФОРМАЦИИ ========== -->
+<div id="infoModal" class="info-modal">
+    <div class="info-modal-content">
+        <button class="info-modal-close">&times;</button>
+        <div id="infoModalBody">
+            <h3>О ПРОЕКТЕ</h3>
+            <p>«Тёмные истории» — сборник мистических рассказов и статей от Дмитрия Ланцева.</p>
+            <hr style="opacity:0.2; margin:15px 0;">
+            <h4>Об авторе</h4>
+            <p>Дмитрий Ланцев — писатель в жанрах мистика и тёмное фэнтези.</p>
+            <hr style="opacity:0.2; margin:15px 0;">
+            <h4>Версия сайта</h4>
+            <p>Апрель 2026</p>
+            <hr style="opacity:0.2; margin:15px 0;">
+            <h4>Права</h4>
+            <p>Все тексты защищены авторским правом. Копирование запрещено.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ========== МОДАЛЬНОЕ ОКНО ПОДДЕРЖКИ ========== -->
+<div id="supportModal" class="support-modal" onclick="if(event.target == this) closeSupportModal()">
+    <div class="support-modal-content">
+        <button class="support-modal-close" onclick="closeSupportModal()">&times;</button>
+        <div id="supportModalBody">
+            <!-- Динамическое содержимое -->
+        </div>
+    </div>
+</div>
+
+<script>
+// ========== КЕШ ДЛЯ FETCH ==========
+const textCache = new Map();
+
+async function fetchWithCache(path) {
+    if (textCache.has(path)) return textCache.get(path);
+    
+    try {
+        const res = await fetch(path);
+        if (!res.ok) throw new Error('Ошибка ' + res.status);
+        const text = await res.text();
+        textCache.set(path, text);
+        return text;
+    } catch(e) {
+        throw e;
+    }
+}
+
+// ========== ДАННЫЕ ==========
+const availableTexts = [
+    { path: 'stories/mission_hades/index.md', title: 'МИССИЯ АИД', type: 'Рассказ' },
+    { path: 'stories/witcher_jacob/index.md', title: 'ВЕДЬМАК ЯКОБ', type: 'Рассказ' },
+    { path: 'articles/albus_dumbledore/index.md', title: 'ЦЕНА МУДРОСТИ АЛЬБУСА ДАМБЛДОРА', type: 'Статья' }
+];
+
+let currentStoryId = "";
+let currentStoryTitle = "";
+let bookmarksData = JSON.parse(localStorage.getItem('dim_bookmarks') || '{}');
+
+// Генератор безопасных ID
+let idCounter = 0;
+function generateSecureId() {
+    return `sec_${Date.now()}_${idCounter++}_${Math.random().toString(36).substr(2, 8)}`;
+}
+
+// ========== СЛАЙДЕР ==========
+const sliderSlides = document.querySelectorAll('.header-slide');
+let slideIdx = 0;
+
+function nextSlide() {
+    if (!sliderSlides.length) return;
+    sliderSlides[slideIdx]?.classList.remove('active');
+    slideIdx = (slideIdx + 1) % sliderSlides.length;
+    sliderSlides[slideIdx]?.classList.add('active');
+}
+
+if (sliderSlides.length) {
+    setInterval(nextSlide, 8000);
+}
+
+// ========== ВСПОМОГАТЕЛЬНЫЕ ==========
+function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+    });
+}
+
+// ========== ЗАЩИТА ОТ КОПИРОВАНИЯ ==========
+function showCopyWarning(message = 'Копирование текста запрещено') {
+    const oldWarning = document.querySelector('.copy-warning-toast');
+    if (oldWarning) oldWarning.remove();
+    
+    const warning = document.createElement('div');
+    warning.className = 'copy-warning-toast';
+    warning.innerHTML = '<i class="fas fa-lock" style="margin-right: 10px;"></i> ' + message;
+    warning.style.cssText = 'position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.95); color:#ff5555; padding:12px 24px; border-radius:40px; font-size:0.9em; z-index:10000; font-family:Merriweather,serif; border:1px solid #ff5555; backdrop-filter:blur(8px); white-space:nowrap; animation:fadeOut 2s forwards; pointer-events:none;';
+    document.body.appendChild(warning);
+    setTimeout(() => warning.remove(), 2000);
+}
+
+const animStyle = document.createElement('style');
+animStyle.textContent = '@keyframes fadeOut { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }';
+document.head.appendChild(animStyle);
+
+const readerOverlay = document.getElementById('readerOverlay');
+if (readerOverlay) {
+    readerOverlay.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        showCopyWarning('Правый клик заблокирован');
+        return false;
+    });
+}
+
+console.log('🔥 Тёмные истории | Дмитрий Ланцев');
+
+// ========== ТОСТ ДЛЯ ВОССТАНОВЛЕНИЯ ПРОГРЕССА ==========
+let currentRestoreToast = null;
+
+function showRestorePrompt(percent, savedScrollTop, overlay) {
+    if (currentRestoreToast) currentRestoreToast.remove();
+    
+    const toast = document.createElement('div');
+    toast.className = 'restore-toast';
+    toast.innerHTML = `
+        <div style="
+            background: #1a1e2a;
+            padding: 15px 25px;
+            border-radius: 12px;
+            border-left: 4px solid var(--accent);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        ">
+            <p style="margin-bottom: 12px;">
+                Вы остановились на
+                <strong style="color: var(--accent);">${percent}%</strong>
+            </p>
+            <div style="display: flex; gap: 12px;">
+                <button
+                    onclick="this.closest('.restore-toast').remove(); window.restoreProgressCallback && window.restoreProgressCallback()"
+                    style="
+                        background: var(--accent);
+                        border: none;
+                        padding: 6px 18px;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        color: #000;
+                        font-weight: bold;
+                    ">
+                    Продолжить
+                </button>
+                <button
+                    onclick="this.closest('.restore-toast').remove()"
+                    style="
+                        background: none;
+                        border: 1px solid #888;
+                        padding: 6px 18px;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        color: #fff;
+                    ">
+                    Закрыть
+                </button>
+            </div>
+        </div>
+    `;
+    
+    toast.style.cssText = [
+        'position: fixed',
+        'bottom: 20px',
+        'right: 20px',
+        'z-index: 10000',
+        'animation: slideIn 0.3s ease'
+    ].join(';');
+    
+    document.body.appendChild(toast);
+    
+    window.restoreProgressCallback = () => {
+        if (overlay) overlay.scrollTop = savedScrollTop;
+    };
+    
+    currentRestoreToast = toast;
+    
+    setTimeout(() => {
+        if (toast.parentNode) toast.remove();
+        if (currentRestoreToast === toast) currentRestoreToast = null;
+    }, 20000);
+}
+
+// ========== ПРОВЕРКА СУЩЕСТВОВАНИЯ ФАЙЛОВ ==========
+async function checkFileExists(path) {
+    try {
+        const response = await fetch(path, { method: 'HEAD' });
+        return response.ok;
+    } catch {
+        return false;
+    }
+}
+
+async function checkAllCards() {
+    const cards = document.querySelectorAll('.card');
+    for (const card of cards) {
+        const filePath = card.getAttribute('data-file');
+        if (filePath) {
+            const exists = await checkFileExists(filePath);
+            if (!exists) {
+                card.classList.add('missing');
+            }
+        }
+    }
+}
+
+// ========== ОСНОВНЫЕ ФУНКЦИИ ЧИТАЛКИ ==========
+const infoButton = document.getElementById('infoBtn');
+let progBar, statsDiv;
+
+function initProgressElements() {
+    progBar = document.getElementById('readingProgressBar');
+    statsDiv = document.getElementById('readingStats');
+    
+    if (!progBar) {
+        progBar = document.createElement('div');
+        progBar.className = 'progress-bar-container';
+        progBar.id = 'readingProgressBar';
+        progBar.innerHTML = '<div class="progress-bar-fill"></div>';
+        document.body.appendChild(progBar);
+    }
+    
+    if (!statsDiv) {
+        statsDiv = document.createElement('div');
+        statsDiv.className = 'reading-stats';
+        statsDiv.id = 'readingStats';
+        statsDiv.innerHTML = '<span>0</span>% <span>—</span>';
+        document.body.appendChild(statsDiv);
+    }
+}
+
+function updateProgressHandler(overlay, storyId) {
+    const scrollTop = overlay.scrollTop;
+    const scrollHeight = overlay.scrollHeight - overlay.clientHeight;
+    const percent = scrollHeight ? Math.round((scrollTop / scrollHeight) * 100) : 0;
+    
+    const fill = document.querySelector('.progress-bar-fill');
+    if (fill) fill.style.width = percent + '%';
+    
+    const percentSpan = statsDiv?.querySelector('span:first-child');
+    if (percentSpan) percentSpan.textContent = percent;
+    
+    const saved = JSON.parse(localStorage.getItem('reading_progress') || '{}');
+    saved[storyId] = { percent, scrollTop, date: new Date().toISOString() };
+    localStorage.setItem('reading_progress', JSON.stringify(saved));
+}
+
+async function openReader(path, title) {
+    currentStoryId = path;
+    currentStoryTitle = title;
+    
+    const overlay = document.getElementById('readerOverlay');
+    const readerBody = document.getElementById('readerBody');
+    const controls = document.getElementById('readerControls');
+    
+    overlay.style.display = 'block';
+    controls.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    if (infoButton) infoButton.style.display = 'none';
+    
+    readerBody.innerHTML = '<div style="text-align:center; padding:80px;"><i class="fas fa-spinner fa-spin" style="font-size:3em;"></i><p>Загрузка...</p></div>';
+    overlay.scrollTop = 0;
+    
+    try {
+        const content = await fetchWithCache(path);
+        if (!content.trim()) throw new Error('Файл пуст');
+        
+        let htmlContent;
+        if (path.endsWith('.md')) {
+            htmlContent = marked.parse(content);
+        } else {
+            const paragraphs = content.split(/\n\s*\n/).filter(p => p.trim());
+            htmlContent = paragraphs.map(p => '<p>' + escapeHtml(p.replace(/\n/g, ' ')) + '</p>').join('');
+        }
+        
+        readerBody.innerHTML = '<h1>' + escapeHtml(title) + '</h1>' + htmlContent;
+        
+        const headers = readerBody.querySelectorAll('h2, h3');
+        if (headers.length > 0) {
+            const toc = document.createElement('div');
+            toc.className = 'table-of-contents';
+            toc.innerHTML = '<h4>СОДЕРЖАНИЕ</h4>';
+            headers.forEach(h => {
+                const id = generateSecureId();
+                h.id = id;
+                const a = document.createElement('a');
+                a.textContent = h.textContent;
+                a.onclick = (e) => {
+                    e.preventDefault();
+                    document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+                };
+                if (h.tagName === 'H3') a.style.marginLeft = '20px';
+                toc.appendChild(a);
+            });
+            readerBody.insertBefore(toc, readerBody.firstChild);
+        }
+        
+        initProgressElements();
+        progBar.style.display = 'block';
+        statsDiv.style.display = 'flex';
+        
+        const updateProgress = () => updateProgressHandler(overlay, currentStoryId);
+        overlay.removeEventListener('scroll', updateProgress);
+        overlay.addEventListener('scroll', updateProgress);
+        setTimeout(updateProgress, 100);
+        
+        const saved = JSON.parse(localStorage.getItem('reading_progress') || '{}')[currentStoryId];
+        if (saved?.scrollTop > 100) showRestorePrompt(saved.percent, saved.scrollTop, overlay);
+        
+    } catch(e) {
+        readerBody.innerHTML = `<div style="text-align:center; padding:80px;"><i class="fas fa-skull" style="font-size:3em; color:#88aadd;"></i><p style="color: #88aadd; font-size: 1.2em;">Упс...</p><p>Реальность исказилась, и рассказ исчез.</p><p>Попробуйте найти его в другое время.</p><p>Или сообщите мне.</p><button onclick="closeReader()" style="margin-top:20px; padding:10px 30px; background:#88aadd; border:none; border-radius:30px; cursor:pointer; color:#000;">Вернуться</button></div>`;
+    }
+}
+
+function closeReader() {
+    const overlay = document.getElementById('readerOverlay');
+    const controls = document.getElementById('readerControls');
+    
+    overlay.style.display = 'none';
+    controls.style.display = 'none';
+    document.body.style.overflow = 'auto';
+    
+    if (progBar) progBar.style.display = 'none';
+    if (statsDiv) statsDiv.style.display = 'none';
+    if (infoButton) infoButton.style.display = 'flex';
+    if (currentRestoreToast) currentRestoreToast.remove();
+}
+
+// ========== НАСТРОЙКИ ЧИТАЛКИ ==========
+const toggleReaderTheme = () => document.getElementById('readerContent').classList.toggle('night-mode');
+const toggleFontSlider = () => {
+    const slider = document.getElementById('fontSliderContainer');
+    slider.style.display = slider.style.display === 'flex' ? 'none' : 'flex';
+};
+const updateFontSize = (value) => document.querySelectorAll('#readerBody p').forEach(p => p.style.fontSize = value + 'em');
+
+function toggleTOC() {
+    const toc = document.querySelector('.table-of-contents');
+    if (toc) {
+        if (toc.style.display === 'none' || toc.style.display === '') {
+            toc.style.display = 'block';
+        } else {
+            toc.style.display = 'none';
+        }
+    }
+}
+
+// ========== ЗАКЛАДКИ ==========
+function addCurrentBookmark() {
+    if (!currentStoryId) return;
+    if (!bookmarksData[currentStoryId]) bookmarksData[currentStoryId] = [];
+    
+    const overlay = document.getElementById('readerOverlay');
+    bookmarksData[currentStoryId].push({
+        time: new Date().toLocaleTimeString(),
+        text: currentStoryTitle,
+        pos: overlay.scrollTop
+    });
+    
+    localStorage.setItem('dim_bookmarks', JSON.stringify(bookmarksData));
+    renderBookmarks();
+}
+
+function renderBookmarks() {
+    const list = document.getElementById('bookmarksList');
+    const bms = bookmarksData[currentStoryId] || [];
+    
+    if (!bms.length) {
+        list.innerHTML = '<p style="text-align:center; opacity:0.5;">Нет закладок</p>';
+        return;
+    }
+    
+    list.innerHTML = bms.map((bm, i) => `
+        <div class="bookmark-item" onclick="jumpToBookmark(${i})">
+            <div>
+                <strong>${escapeHtml(bm.text)}</strong>
+                <br>
+                <span style="font-size:0.7em;">${bm.time}</span>
+            </div>
+            <div class="delete-bm" onclick="event.stopPropagation(); deleteBookmark(${i})">
+                <i class="fas fa-trash"></i>
+            </div>
+        </div>
+    `).join('');
+}
+
+function jumpToBookmark(index) {
+    const bm = bookmarksData[currentStoryId][index];
+    const overlay = document.getElementById('readerOverlay');
+    overlay.scrollTo({ top: bm.pos, behavior: 'smooth' });
+    toggleBookmarks();
+}
+
+function deleteBookmark(index) {
+    bookmarksData[currentStoryId].splice(index, 1);
+    localStorage.setItem('dim_bookmarks', JSON.stringify(bookmarksData));
+    renderBookmarks();
+}
+
+function toggleBookmarks() {
+    const modal = document.getElementById('bookmarksModal');
+    const isVisible = modal.style.display === 'flex';
+    modal.style.display = isVisible ? 'none' : 'flex';
+    if (modal.style.display === 'flex') renderBookmarks();
+}
+
+// ========== ПОИСК С DEBOUNCE ==========
+const searchIndex = new Map();
+
+async function buildSearchIndex() {
+    for (const item of availableTexts) {
+        try {
+            const content = await fetchWithCache(item.path);
+            searchIndex.set(item.path, { ...item, content: content });
+        } catch(e) {
+            console.log('Ошибка индексации:', item.path);
+        }
+    }
+}
+
+function searchTexts(query) {
+    if (!query || query.length < 2) return [];
+    
+    const q = query.toLowerCase();
+    const results = [];
+    
+    for (const [path, data] of searchIndex) {
+        if (!data.content) continue;
+        
+        const idx = data.content.toLowerCase().indexOf(q);
+        if (idx !== -1) {
+            let snippet = data.content.substring(Math.max(0, idx - 50), Math.min(data.content.length, idx + q.length + 70));
+            if (idx > 50) snippet = '...' + snippet;
+            if (idx + q.length + 70 < data.content.length) snippet = snippet + '...';
+            
+            results.push({
+                path: path,
+                title: data.title,
+                type: data.type,
+                snippet: snippet
+            });
+        }
+    }
+    
+    return results;
+}
+
+function debounce(func, delay) {
+    let timeout;
+    return function(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), delay);
+    };
+}
+
+function setupSearch() {
+    const input = document.getElementById('searchInput');
+    const resultsDiv = document.getElementById('searchResults');
+    const clearBtn = document.getElementById('clearSearchBtn');
+    
+    if (!input) return;
+    
+    const performSearch = debounce(() => {
+        const q = input.value.trim();
+        
+        if (q.length < 2) {
+            resultsDiv.classList.remove('show');
+            clearBtn.style.display = 'none';
+            return;
+        }
+        
+        const results = searchTexts(q);
+        
+        if (!results.length) {
+            resultsDiv.innerHTML = '<div class="search-stats">Ничего не найдено</div>';
+            resultsDiv.classList.add('show');
+            clearBtn.style.display = 'flex';
+            return;
+        }
+        
+        const regex = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+        
+        resultsDiv.innerHTML = '<div class="search-stats">Найдено ' + results.length + '</div>' +
+            results.map(r => `
+                <div class="search-result-item" onclick="openReader('${r.path}', '${r.title.replace(/'/g, "\\'")}')">
+                    <div class="search-result-title">
+                        ${escapeHtml(r.title)}
+                        <span style="font-size:0.7em;">${r.type}</span>
+                    </div>
+                    <div class="search-result-snippet">
+                        ${escapeHtml(r.snippet).replace(regex, '<mark>$1</mark>')}
+                    </div>
+                </div>
+            `).join('');
+        
+        resultsDiv.classList.add('show');
+        clearBtn.style.display = 'flex';
+    }, 300);
+    
+    input.addEventListener('input', performSearch);
+    
+    if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+            input.value = '';
+            resultsDiv.classList.remove('show');
+            clearBtn.style.display = 'none';
+        });
+    }
+    
+    document.addEventListener('click', (e) => {
+        if (!input.contains(e.target) && !resultsDiv.contains(e.target)) {
+            resultsDiv.classList.remove('show');
+        }
+    });
+}
+
+// ========== ПОДДЕРЖКА АВТОРА ==========
+function showSupportModal() {
+    const modal = document.getElementById('supportModal');
+    const modalBody = document.getElementById('supportModalBody');
+    
+    modalBody.innerHTML = `
+        <div class="donation-options">
+            <i class="fas fa-heart" style="font-size: 2.5em; color: #ff6b6b; margin-bottom: 15px;"></i>
+            <h4>Поддержать автора</h4>
+            <p>Спасибо, что цените моё творчество!</p>
+            <div class="donation-amounts">
+                <div class="donation-amount" onclick="selectAmount(100)">100 ₽</div>
+                <div class="donation-amount" onclick="selectAmount(250)">250 ₽</div>
+                <div class="donation-amount" onclick="selectAmount(500)">500 ₽</div>
+                <div class="donation-amount" onclick="selectAmount(1000)">1000 ₽</div>
+                <div class="donation-amount" onclick="selectAmount('custom')">Своя сумма</div>
+            </div>
+            <div id="customAmountDiv" style="display: none; margin: 15px 0;">
+                <input type="number" id="customAmount" placeholder="Введите сумму" style="padding: 10px; border-radius: 8px; border: none; width: 150px;">
+                <button onclick="processCustomAmount()" style="margin-left: 10px; padding: 10px 20px; background: var(--accent); border: none; border-radius: 8px; cursor: pointer;">OK</button>
+            </div>
+            <div style="margin: 20px 0;">
+                <p style="margin-bottom: 10px;">💳 По номеру карты:</p>
+                <code style="background: rgba(0,0,0,0.5); padding: 8px 15px; border-radius: 8px; display: inline-block; user-select: all;">
+                    🌟 1234 5678 9012 3456
+                </code>
+                <button onclick="copyCardNumber()" style="margin-left: 10px; background: none; border: 1px solid var(--accent); color: var(--accent); padding: 8px 15px; border-radius: 8px; cursor: pointer;">
+                    <i class="fas fa-copy"></i>
+                </button>
+            </div>
+            <div style="margin: 15px 0;">
+                <p>📱 Или по СБП:</p>
+                <button class="support-link" onclick="window.open('https://www.tinkoff.ru/rm/lantsev.dmitry1', '_blank')">
+                    <i class="fas fa-mobile-alt"></i> Открыть форму оплаты
+                </button>
+            </div>
+            <p style="font-size: 0.7em; opacity: 0.5; margin-top: 20px;">Средства пойдут на развитие сайта и новые истории</p>
+        </div>
+    `;
+    
+    modal.style.display = 'flex';
+}
+
+function closeSupportModal() {
+    const modal = document.getElementById('supportModal');
+    modal.style.display = 'none';
+}
+
+let selectedAmount = null;
+
+function selectAmount(amount) {
+    const amounts = document.querySelectorAll('.donation-amount');
+    amounts.forEach(el => el.classList.remove('selected'));
+    if (event.target) event.target.classList.add('selected');
+    
+    const customDiv = document.getElementById('customAmountDiv');
+    if (amount === 'custom') {
+        if (customDiv) customDiv.style.display = 'block';
+        selectedAmount = null;
+    } else {
+        if (customDiv) customDiv.style.display = 'none';
+        selectedAmount = amount;
+        showPaymentPrompt(amount);
+    }
+}
+
+function processCustomAmount() {
+    const amountInput = document.getElementById('customAmount');
+    const amount = amountInput.value;
+    if (amount && amount > 0) {
+        showPaymentPrompt(amount);
+    }
+}
+
+function showPaymentPrompt(amount) {
+    closeSupportModal();
+    setTimeout(() => {
+        alert('Спасибо за желание поддержать автора на ' + amount + ' ₽!\n\nСсылка для оплаты откроется в новом окне.');
+        window.open('https://www.tinkoff.ru/rm/lantsev.dmitry1', '_blank');
+    }, 300);
+}
+
+function copyCardNumber() {
+    const cardNumber = '1234 5678 9012 3456';
+    navigator.clipboard.writeText(cardNumber);
+    alert('Номер карты скопирован! Спасибо за поддержку ❤️');
+}
+
+// ========== КНОПКА ИНФОРМАЦИИ ==========
+const infoBtn = document.getElementById('infoBtn');
+const infoModal = document.getElementById('infoModal');
+const infoClose = document.querySelector('.info-modal-close');
+
+if (infoBtn) {
+    infoBtn.addEventListener('click', () => {
+        infoModal.style.display = 'flex';
+    });
+}
+
+if (infoClose) {
+    infoClose.addEventListener('click', () => {
+        infoModal.style.display = 'none';
+    });
+}
+
+if (infoModal) {
+    infoModal.addEventListener('click', (e) => {
+        if (e.target === infoModal) infoModal.style.display = 'none';
+    });
+}
+
+// ========== ИНИЦИАЛИЗАЦИЯ ==========
+document.addEventListener('DOMContentLoaded', () => {
+    if (!document.getElementById('readingProgressBar')) {
+        const pb = document.createElement('div');
+        pb.className = 'progress-bar-container';
+        pb.id = 'readingProgressBar';
+        pb.innerHTML = '<div class="progress-bar-fill"></div>';
+        document.body.appendChild(pb);
+    }
+    
+});
+
+console.log('Тёмные истории | Дмитрий Ланцев');
+</script>
+</body>
+</html>
