@@ -39,21 +39,20 @@
             font-family: 'Merriweather', serif;
             line-height: 1.8;
             overflow-x: hidden;
-            cursor: auto;
-        
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
         a, button, .btn-read, .tab-link, .control-btn, .contact-item {
             cursor: pointer;
         }
 
-        .reader-body {
-            cursor: auto;        }
-
         .container {
             max-width: 100%;
             margin: 0 auto;
-            padding: 0 90px;
+            padding: 0 20px;
+            flex-grow: 1;
         }
 
         /* ========== HEADER ========== */
@@ -138,7 +137,7 @@
             justify-content: center;
             flex-wrap: wrap;
             gap: 30px;
-            padding: 3px;
+            padding: 12px 20px;
             background: rgba(0, 0, 0, 0.7);
             position: sticky;
             top: 0;
@@ -189,7 +188,7 @@
             padding: 16px 24px;
             color: var(--text-light);
             font-family: 'Merriweather', serif;
-            font-size: 1em;
+            font-size: 16px;
             outline: none;
         }
 
@@ -275,146 +274,147 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-/* ========== КАРТОЧКИ (ПЛИТКИ) ========== */
-.card {
-    background: linear-gradient(135deg, rgba(136, 170, 221, 0.05), rgba(0, 0, 0, 0.3));
-    border: 1px solid rgba(136, 170, 221, 0.2);
-    border-radius: 20px;
-    padding: 30px;
-    transition: 0.4s;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-}
+        /* ========== КАРТОЧКИ ========== */
+        .card {
+            background: linear-gradient(135deg, rgba(136, 170, 221, 0.05), rgba(0, 0, 0, 0.3));
+            border: 1px solid rgba(136, 170, 221, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            transition: 0.4s;
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+        }
 
-.card:hover {
-    border-color: var(--accent);
-    transform: translateY(-5px);
-    box-shadow: 0 5px 20px rgba(136, 170, 221, 0.2);
-}
+        .card:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(136, 170, 221, 0.2);
+        }
 
-.card.missing {
-    opacity: 0.4;
-    filter: grayscale(0.3);
-    pointer-events: none;
-}
+        .card.missing {
+            opacity: 0.4;
+            filter: grayscale(0.3);
+            pointer-events: none;
+        }
 
-.card-genre {
-    font-size: 0.7em;
-    letter-spacing: 2px;
-    color: var(--accent);
-    margin-bottom: 10px;
-    font-family: 'Marcellus SC', serif;
-    opacity: 0.8;
-}
+        .card-genre {
+            font-size: 0.85em;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 10px;
+            font-family: 'Marcellus SC', serif;
+            opacity: 0.8;
+        }
 
-.btn-read {
-    display: inline-block;
-    padding: 12px 28px;
-    background: linear-gradient(135deg, rgba(136, 170, 221, 0.1), rgba(136, 170, 221, 0.02));
-    border: 1px solid var(--accent);
-    border-radius: 50px;
-    color: var(--accent);
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    font-size: 0.8em;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    backdrop-filter: blur(4px);
-    margin-top: 20px;
-    align-self: center;
-}
+        .btn-read {
+            display: inline-block;
+            padding: 12px 28px;
+            background: linear-gradient(135deg, rgba(136, 170, 221, 0.1), rgba(136, 170, 221, 0.02));
+            border: 1px solid var(--accent);
+            border-radius: 50px;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.8em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            backdrop-filter: blur(4px);
+            margin-top: 20px;
+            align-self: center;
+        }
 
-.btn-read:hover {
-    background: var(--accent);
-    color: #000;
-    transform: translateY(-3px);
-    box-shadow: 0 5px 20px rgba(136, 170, 221, 0.3);
-    letter-spacing: 3px;
-}
+        .btn-read:hover {
+            background: var(--accent);
+            color: #000;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(136, 170, 221, 0.3);
+            letter-spacing: 3px;
+        }
 
-/* Сетка карточек — адаптивная */
-.content-grid {
-    display: grid;
-    gap: 30px;
-    padding: 20px 0;
-}
+        /* Сетка карточек — адаптивная */
+        .content-grid {
+            display: grid;
+            gap: 30px;
+            padding: 20px 0;
+        }
 
-/* Смартфоны (до 768px) — 1 карточка */
-@media (max-width: 768px) {
-    .content-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-}
+        @media (max-width: 767px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
 
-/* Планшеты (768px - 1024px) — 2 карточки */
-@media (min-width: 768px) and (max-width: 1024px) {
-    .content-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
+        @media (min-width: 768px) and (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
 
-/* Ноутбуки (1024px - 1280px) — 3 карточки */
-@media (min-width: 1024px) and (max-width: 1280px) {
-    .content-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
+        @media (min-width: 1025px) and (max-width: 1366px) {
+            .content-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
 
-/* Большие экраны (1280px и выше) — максимум 4 карточки */
-@media (min-width: 1280px) {
-    .content-grid {
-        grid-template-columns: repeat(4, 1fr);
-    }
-}
+        @media (min-width: 1367px) and (max-width: 1919px) {
+            .content-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (min-width: 1920px) {
+            .content-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
 
         /* ========== СВЯЗЬ СО МНОЙ ========== */
-.contact-links {
-    display: flex;
-    justify-content: center;
-    gap: 50px;
-    flex-wrap: wrap;
-    margin: 40px 0;
-}
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            flex-wrap: wrap;
+            margin: 40px 0;
+        }
 
-.contact-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    background: transparent;
-    padding: 10px;
-    color: var(--text-light);
-    text-decoration: none;
-    transition: all 0.4s ease;
-    font-family: 'Marcellus SC', serif;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-}
+        .contact-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            background: transparent;
+            padding: 10px;
+            color: var(--text-light);
+            text-decoration: none;
+            transition: all 0.4s ease;
+            font-family: 'Marcellus SC', serif;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
 
-.contact-item i {
-    font-size: 2.2rem;
-    color: var(--accent);
-    filter: drop-shadow(0 0 5px var(--accent-glow));
-    transition: 0.3s;
-}
+        .contact-item i {
+            font-size: 2.2rem;
+            color: var(--accent);
+            filter: drop-shadow(0 0 5px var(--accent-glow));
+            transition: 0.3s;
+        }
 
-.contact-item:hover {
-    transform: translateY(-8px);
-    opacity: 1;
-}
+        .contact-item:hover {
+            transform: translateY(-8px);
+        }
 
-.contact-item:hover i {
-    filter: drop-shadow(0 0 15px var(--accent));
-}
+        .contact-item:hover i {
+            filter: drop-shadow(0 0 15px var(--accent));
+        }
 
-.contact-item span {
-    font-size: 0.65rem;
-    opacity: 0.6;
-}
+        .contact-item span {
+            font-size: 0.65rem;
+            opacity: 0.6;
+        }
 
         /* ========== ПРОГРЕСС-БАР ========== */
         .progress-bar-container {
@@ -422,7 +422,7 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 2px;
+            height: 3px;
             background: rgba(17, 17, 17, 0.5);
             z-index: 9999;
             display: none;
@@ -447,12 +447,12 @@
         }
 
         .reader-content {
-            background: #fdfcf8;
-            color: #2c3e50;
             max-width: 800px;
             margin: 40px auto;
             padding: 60px;
             border-radius: 8px;
+            background: #fdfcf8;
+            color: #2c3e50;
         }
 
         .reader-content.night-mode {
@@ -477,6 +477,30 @@
             display: block;
             margin: 20px auto;
             border-radius: 8px;
+        }
+
+        /* ========== АДАПТАЦИЯ ЧИТАЛКИ ========== */
+        @media (min-width: 768px) and (max-width: 1024px) {
+            .reader-content {
+                max-width: 90%;
+                margin: 30px auto;
+                padding: 40px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .reader-overlay {
+                background: #0f1114;
+                cursor: default;
+            }
+            
+            .reader-content {
+                max-width: 100%;
+                margin: 0;
+                padding: 20px;
+                border-radius: 0;
+                min-height: 100vh;
+            }
         }
 
         /* ========== ЗАЩИТА ОТ КОПИРОВАНИЯ ========== */
@@ -533,50 +557,48 @@
         }
 
         /* ========== ОГЛАВЛЕНИЕ ========== */
-.table-of-contents {
-    display: none;
-    position: fixed;
-    top: 30px;
-    right: 90px;
-    left: auto;
-    transform: none;
-    width: 300px;
-    height: 800px;
-    max-width: 80%;
-    max-height: 70vh;
-    overflow-y: auto;
-    background: #0a0e14;
-    border: 1px solid var(--accent);
-    border-radius: 12px;
-    padding: 20px;
-    z-index: 3500;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-}
+        .table-of-contents {
+            display: none;
+            position: fixed;
+            top: 30px;
+            right: 90px;
+            left: auto;
+            width: 300px;
+            max-width: 80%;
+            max-height: 70vh;
+            overflow-y: auto;
+            background: #0a0e14;
+            border: 1px solid var(--accent);
+            border-radius: 12px;
+            padding: 20px;
+            z-index: 3500;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+        }
 
-.table-of-contents h4 {
-    margin-bottom: 15px;
-    color: var(--accent);
-    text-align: center;
-    font-family: 'Marcellus SC', serif;
-}
+        .table-of-contents h4 {
+            margin-bottom: 15px;
+            color: var(--accent);
+            text-align: center;
+            font-family: 'Marcellus SC', serif;
+        }
 
-.table-of-contents a {
-    display: block;
-    color: var(--text-light);
-    text-decoration: none;
-    padding: 8px 12px;
-    margin: 4px 0;
-    border-left: 2px solid transparent;
-    transition: 0.2s;
-    cursor: pointer;
-}
+        .table-of-contents a {
+            display: block;
+            color: var(--text-light);
+            text-decoration: none;
+            padding: 8px 12px;
+            margin: 4px 0;
+            border-left: 2px solid transparent;
+            transition: 0.2s;
+            cursor: pointer;
+        }
 
-.table-of-contents a:hover {
-    border-left-color: var(--accent);
-    background: rgba(136, 170, 221, 0.1);
-    color: var(--accent);
-    padding-left: 15px;
-}
+        .table-of-contents a:hover {
+            border-left-color: var(--accent);
+            background: rgba(136, 170, 221, 0.1);
+            color: var(--accent);
+            padding-left: 15px;
+        }
 
         /* ========== ЗАКЛАДКИ ========== */
         .bookmarks-modal {
@@ -825,35 +847,41 @@
             }
         }
 
+        /* ========== РЕКЛАМНАЯ ПЛАШКА ========== */
+        .ad-banner {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10000;
+            width: 90%;
+            max-width: 550px;
+            animation: slideUp 0.8s ease; 
+        }
+
+        .ad-banner .card {
+            background: linear-gradient(135deg, #1a1e2a, #0f1118);
+            border: 1px solid var(--accent);
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
         footer {
             padding: 40px 0 30px;
             text-align: center;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .footer-social {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-        }
-
-        .footer-social-icon {
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 1.4em;
-            transition: 0.3s;
-            text-decoration: none;
-        }
-
-        .footer-social-icon.text-icon {
-            font-family: 'Marcellus SC', serif;
-            font-size: 0.9em;
-        }
-
-        .footer-social-icon:hover {
-            color: var(--accent);
-            transform: translateY(-3px);
+            flex-shrink: 0;
         }
 
         .footer-copyright {
@@ -934,45 +962,120 @@
             font-size: 2em;
         }
 
+        /* ========== МОБИЛЬНЫЕ СТИЛИ ========== */
         @media (max-width: 768px) {
-            .reader-content {
-                padding: 30px 20px;
-                margin: 20px;
+            .container {
+                padding: 0 15px;
             }
+
+            nav.tabs {
+                gap: 15px;
+                padding: 10px;
+            }
+
+            .tab-link {
+                font-size: 0.8em;
+                letter-spacing: 1px;
+            }
+
+            #stories h2, #articles h2, #contact h2 {
+                font-size: 1.5em;
+                margin-bottom: 20px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .card h3 {
+                font-size: 1.2em;
+            }
+
+            .btn-read {
+                padding: 8px 20px;
+                font-size: 0.7em;
+            }
+
             .reader-controls {
                 top: 15px;
                 right: 15px;
+                gap: 10px;
             }
+
             .control-btn {
                 width: 38px;
                 height: 38px;
             }
+
+            .search-container {
+                margin: 25px auto 15px;
+            }
+
+            #searchInput {
+                padding: 12px 18px;
+                font-size: 16px;
+            }
+
+            .search-btn, .clear-search {
+                padding: 0 15px;
+            }
+
+            .support-section {
+                margin: 40px auto 30px;
+                padding: 30px 15px;
+            }
+
+            .support-icon {
+                font-size: 2.5em;
+            }
+
+            .support-section h3 {
+                font-size: 1.3em;
+            }
+
+            .contact-links {
+                gap: 25px;
+            }
+
+            .contact-item i {
+                font-size: 1.6rem;
+            }
+
+            .contact-item span {
+                font-size: 0.55rem;
+            }
+
+            .ad-banner {
+                width: 95%;
+                padding: 10px 15px;
+            }
         }
 
-        body {
-            margin-top: -35px !important;
+        /* ========== СТИЛИЗАЦИЯ ПОЛОСЫ ПРОКРУТКИ ========== */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
         }
 
-/* ========== СТИЛИЗАЦИЯ ПОЛОСЫ ПРОКРУТКИ ========== */
-::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-}
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+        }
 
-::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 3px;
-}
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 3px;
+            transition: background 0.3s;
+        }
 
-::-webkit-scrollbar-thumb {
-    background: var(--accent);
-    border-radius: 3px;
-}
+        ::-webkit-scrollbar-thumb:hover {
+            background: #aaccee;
+        }
 
-::-webkit-scrollbar-thumb:hover {
-    background: #aaccee;
-}
-
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent) rgba(255, 255, 255, 0.05);
+        }
     </style>
 </head>
 <body>
@@ -1017,7 +1120,7 @@
 </div>
 
 <!-- ========== READER (ЧИТАЛКА) ========== -->
-<div id="readerOverlay" class="reader-overlay" onclick="if(event.target==this) closeReader()">
+<div id="readerOverlay" class="reader-overlay">
     <div id="readerContent" class="reader-content night-mode">
         <div id="readerBody" class="reader-body"></div>
     </div>
@@ -1030,8 +1133,6 @@
     <div class="header-slide" style="background-image: url('cap/header_3.jpg');"></div>
     <div class="header-slide" style="background-image: url('cap/header_4.jpg');"></div>
     <div class="header-slide" style="background-image: url('cap/header_5.jpg');"></div>
-    <div class="header-slide" style="background-image: url('cap/header_6.jpg');"></div>
-    <div class="header-slide" style="background-image: url('cap/header_7.jpg');"></div>
     <div class="title-group">
         <h1 class="site-title animated-text">ТЕМНЫЕ ИСТОРИИ</h1>
         <p class="site-subtitle animated-text">ОТ ДМИТРИЯ ЛАНЦЕВА</p>
@@ -1062,15 +1163,20 @@
     <section id="stories">
         <h2>МОИ РАССКАЗЫ</h2>
         <div class="content-grid">
-            <div class="card" data-file="stories/mission_hades/index.md">
+            <div class="card" data-file="stories/mission_hades/mission_hades.md">
                 <h3>МИССИЯ «АИД»</h3>
                 <div class="card-genre">Научная фантастика / Хоррор</div>
-                <div class="btn-read" onclick="openReader('stories/mission_hades/index.md', 'МИССИЯ АИД')">ПОГРУЗИТЬСЯ</div>
+                <div class="btn-read" onclick="openReader('stories/mission_hades/mission_hades.md', 'МИССИЯ АИД')">ПОГРУЗИТЬСЯ|18+</div>
             </div>
-            <div class="card" data-file="stories/witcher_jacob/index.md">
+            <div class="card" data-file="stories/bear_at_a_crossroads/bear_at_a_crossroads.md">
                 <h3>МЕДВЕДЬ НА ПЕРЕПУТЬЕ</h3>
                 <div class="card-genre">Темное фэнтези</div>
-                <div class="btn-read" onclick="openReader('stories/witcher_jacob/index.md', 'ВЕДЬМАК ЯКОБ')">ПОГРУЗИТЬСЯ</div>
+                <div class="btn-read" onclick="openReader('stories/bear_at_a_crossroads/bear_at_a_crossroads.md', 'МЕДВЕДЬ НА ПЕРЕПУТЬЕ')">ПОГРУЗИТЬСЯ|18+</div>
+            </div>
+            <div class="card" data-file="stories/the_fox_folk/the_fox_folk.md">
+                <h3>ЛИСИЙ НАРОД</h3>
+                <div class="card-genre">Мистика / Фэнтези</div>
+                <div class="btn-read" onclick="openReader('stories/the_fox_folk/the_fox_folk.md', 'ЛИСИЙ НАРОД')">ПОГРУЗИТЬСЯ|18+</div>
             </div>
         </div>
     </section>
@@ -1079,39 +1185,36 @@
     <section id="articles">
         <h2>МОИ СТАТЬИ</h2>
         <div class="content-grid">
-            <div class="card" data-file="articles/albus_dumbledore/index.md">
+            <div class="card" data-file="articles/albus_dumbledore/albus_dumbledore.md">
                 <h3>ЦЕНА МУДРОСТИ АЛЬБУСА ДАМБЛДОРА</h3>
                 <div class="card-genre">Аналитика / Статья</div>
-                <div class="btn-read" onclick="openReader('articles/albus_dumbledore/index.md', 'ЦЕНА МУДРОСТИ АЛЬБУСА ДАМБЛДОРА')">ЧИТАТЬ</div>
+                <div class="btn-read" onclick="openReader('articles/albus_dumbledore/albus_dumbledore.md', 'ЦЕНА МУДРОСТИ АЛЬБУСА ДАМБЛДОРА')">ЧИТАТЬ|12+</div>
             </div>
         </div>
     </section>
 
     <!-- ========== СЕКЦИЯ СВЯЗЬ ========== -->
-<section id="contact" style="padding-bottom: 0;">
-    <h2>ПРИСОЕДИНЯЙТЕСЬ К СООБЩЕСТВУ</h2>
-    <div class="contact-links"> <a href="https://t.me/your_telegram" class="contact-item" target="_blank">
-            <i class="fab fa-telegram-plane"></i>
-            <span>Telegram</span>
-        </a>
-        <a href="mailto:your@email.com" class="contact-item">
-            <i class="fas fa-envelope"></i>
-            <span>Email</span>
-        </a>
-        <a href="https://vk.com/your_vk" class="contact-item" target="_blank">
-            <i class="fab fa-vk"></i>
-            <span>ВК</span>
-        </a>
-        <a href="https://www.tiktok.com/@your_username" class="contact-item" target="_blank">
-            <i class="fab fa-tiktok"></i>
-            <span>TikTok</span>
-        </a>
-        <a href="https://dzen.ru/твой_дзен" class="contact-item" target="_blank">
-            <i class="fas fa-feather-alt"></i>
-            <span>Дзен</span>
-        </a>
-    </div>
-</section>
+    <section id="contact" style="padding-bottom: 0;">
+        <h2>ПРИСОЕДИНЯЙТЕСЬ К СООБЩЕСТВУ</h2>
+        <div class="contact-links">
+            <a href="https://t.me/+tjq3Xa1tBlhjNWMy" class="contact-item" target="_blank">
+                <i class="fab fa-telegram-plane"></i>
+                <span>Telegram</span>
+            </a>
+            <a href="mailto:lancev.dmitrij.avtor@gmail.com" class="contact-item">
+                <i class="fas fa-envelope"></i>
+                <span>Email</span>
+            </a>
+            <a href="#" class="contact-item" style="opacity:0.4; pointer-events:none;">
+                <i class="fab fa-vk"></i>
+                <span>ВК (скоро)</span>
+            </a>
+            <a href="https://dzen.ru/slovo_lanceva" class="contact-item" target="_blank">
+                <i class="fas fa-feather-alt"></i>
+                <span>Дзен</span>
+            </a>
+        </div>
+    </section>
 
     <!-- ========== БЛОК ПОДДЕРЖКИ АВТОРА ========== -->
     <section class="support-section">
@@ -1129,9 +1232,27 @@
 <footer class="main-footer">
     <div class="footer-copyright">
         <p>© 2026 ТЕМНЫЕ ИСТОРИИ • ОТ ДМИТРИЯ ЛАНЦЕВА</p>
-        <span>Все права защищены. Любое использование материалов сайта допускается только с активной ссылкой на источник.</span>
+        <p style="margin-top: 10px; font-size: 0.75em; opacity: 0.5;">
+            Сайт может содержать материалы, предназначенные для лиц старше 18 лет.<br>
+            Все права защищены. Любое использование материалов сайта допускается только с активной ссылкой на источник.
+        </p>
     </div>
 </footer>
+
+<!-- ========== РЕКЛАМНАЯ ПЛАШКА (СТИЛЬ) ========== -->
+<div id="adBanner" class="ad-banner" style="display: none;">
+    <div class="card" style="max-width: 400px; margin: 0 auto; padding: 15px 20px; text-align: center; position: relative;">
+        <button onclick="closeAd()" style="position: absolute; top: 10px; right: 15px; background: none; border: none; color: #888; font-size: 1.2em; cursor: pointer;">✕</button>
+        <div class="card-genre">
+            <i class="fas fa-heart" style="color: #ff6b6b;"></i> ПОДДЕРЖКА
+        </div>
+        <h3 style="margin: 8px 0; font-size: 1.1em;">ПОНРАВИЛИСЬ ИСТОРИИ?</h3>
+        <p style="font-size: 0.8em; opacity: 0.8;">Поддержите автора — посмотрите короткий ролик</p>
+        <div class="btn-read" onclick="watchAd()" style="margin-top: 10px; padding: 8px 20px;">
+            <i class="fas fa-play"></i> ПОСМОТРЕТЬ
+        </div>
+    </div>
+</div>
 
 <!-- ========== КНОПКА ИНФОРМАЦИИ ========== -->
 <button id="infoBtn" class="info-button">
@@ -1162,9 +1283,7 @@
 <div id="supportModal" class="support-modal" onclick="if(event.target == this) closeSupportModal()">
     <div class="support-modal-content">
         <button class="support-modal-close" onclick="closeSupportModal()">&times;</button>
-        <div id="supportModalBody">
-            <!-- Динамическое содержимое -->
-        </div>
+        <div id="supportModalBody"></div>
     </div>
 </div>
 
@@ -1188,19 +1307,22 @@ async function fetchWithCache(path) {
 
 // ========== ДАННЫЕ ==========
 const availableTexts = [
-    { path: 'stories/mission_hades/index.md', title: 'МИССИЯ АИД', type: 'Рассказ' },
-    { path: 'stories/witcher_jacob/index.md', title: 'ВЕДЬМАК ЯКОБ', type: 'Рассказ' },
-    { path: 'articles/albus_dumbledore/index.md', title: 'ЦЕНА МУДРОСТИ АЛЬБУСА ДАМБЛДОРА', type: 'Статья' }
+    { path: 'stories/mission_hades/mission_hades.md', title: 'МИССИЯ АИД', type: 'Рассказ' },
+    { path: 'stories/bear_at_a_crossroads/bear_at_a_crossroads.md', title: 'МЕДВЕДЬ НА ПЕРЕПУТЬЕ', type: 'Рассказ' },
+    { path: 'stories/the_fox_folk/the_fox_folk.md', title: 'ЛИСИЙ НАРОД', type: 'Рассказ' },
+    { path: 'articles/albus_dumbledore/albus_dumbledore.md', title: 'ЦЕНА МУДРОСТИ АЛЬБУСА ДАМБЛДОРА', type: 'Статья' }
 ];
 
 let currentStoryId = "";
 let currentStoryTitle = "";
 let bookmarksData = JSON.parse(localStorage.getItem('dim_bookmarks') || '{}');
+let scrollHandler = null;
+let progBar = null;
 
 // Генератор безопасных ID
 let idCounter = 0;
 function generateSecureId() {
-    return `sec_${Date.now()}_${idCounter++}_${Math.random().toString(36).substr(2, 8)}`;
+    return `sec_${Date.now()}_${idCounter++}_${Math.random().toString(36).substring(2, 10)}`;
 }
 
 // ========== СЛАЙДЕР ==========
@@ -1229,6 +1351,17 @@ function escapeHtml(str) {
     });
 }
 
+function throttle(func, delay) {
+    let lastCall = 0;
+    return function(...args) {
+        const now = Date.now();
+        if (now - lastCall >= delay) {
+            lastCall = now;
+            func.apply(this, args);
+        }
+    };
+}
+
 // ========== ЗАЩИТА ОТ КОПИРОВАНИЯ ==========
 function showCopyWarning(message = 'Копирование текста запрещено') {
     const oldWarning = document.querySelector('.copy-warning-toast');
@@ -1246,16 +1379,40 @@ const animStyle = document.createElement('style');
 animStyle.textContent = '@keyframes fadeOut { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }';
 document.head.appendChild(animStyle);
 
-const readerOverlay = document.getElementById('readerOverlay');
-if (readerOverlay) {
-    readerOverlay.addEventListener('contextmenu', (e) => {
+const readerOverlayElem = document.getElementById('readerOverlay');
+if (readerOverlayElem) {
+    readerOverlayElem.addEventListener('contextmenu', (e) => {
         e.preventDefault();
         showCopyWarning('Правый клик заблокирован');
         return false;
     });
 }
 
-console.log('🔥 Тёмные истории | Дмитрий Ланцев');
+// ========== ПРОГРЕСС-БАР ==========
+function initProgressBar() {
+    progBar = document.getElementById('readingProgressBar');
+    if (!progBar) {
+        progBar = document.createElement('div');
+        progBar.className = 'progress-bar-container';
+        progBar.id = 'readingProgressBar';
+        progBar.innerHTML = '<div class="progress-bar-fill"></div>';
+        document.body.appendChild(progBar);
+    }
+}
+
+const updateProgress = throttle((overlay) => {
+    const scrollTop = overlay.scrollTop;
+    const scrollHeight = overlay.scrollHeight - overlay.clientHeight;
+    const percent = scrollHeight ? Math.round((scrollTop / scrollHeight) * 100) : 0;
+    
+    const fill = document.querySelector('.progress-bar-fill');
+    if (fill) fill.style.width = percent + '%';
+    
+    // Сохраняем прогресс в localStorage
+    const saved = JSON.parse(localStorage.getItem('reading_progress') || '{}');
+    saved[currentStoryId] = { percent, scrollTop, date: new Date().toISOString() };
+    localStorage.setItem('reading_progress', JSON.stringify(saved));
+}, 100);
 
 // ========== ТОСТ ДЛЯ ВОССТАНОВЛЕНИЯ ПРОГРЕССА ==========
 let currentRestoreToast = null;
@@ -1266,59 +1423,21 @@ function showRestorePrompt(percent, savedScrollTop, overlay) {
     const toast = document.createElement('div');
     toast.className = 'restore-toast';
     toast.innerHTML = `
-        <div style="
-            background: #1a1e2a;
-            padding: 15px 25px;
-            border-radius: 12px;
-            border-left: 4px solid var(--accent);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-        ">
-            <p style="margin-bottom: 12px;">
-                Вы остановились на
-                <strong style="color: var(--accent);">${percent}%</strong>
-            </p>
+        <div style="background: #1a1e2a; padding: 15px 25px; border-radius: 12px; border-left: 4px solid var(--accent); box-shadow: 0 5px 20px rgba(0,0,0,0.3);">
+            <p style="margin-bottom: 12px;">Вы остановились на <strong style="color: var(--accent);">${percent}%</strong></p>
             <div style="display: flex; gap: 12px;">
-                <button
-                    onclick="this.closest('.restore-toast').remove(); window.restoreProgressCallback && window.restoreProgressCallback()"
-                    style="
-                        background: var(--accent);
-                        border: none;
-                        padding: 6px 18px;
-                        border-radius: 6px;
-                        cursor: pointer;
-                        color: #000;
-                        font-weight: bold;
-                    ">
-                    Продолжить
-                </button>
-                <button
-                    onclick="this.closest('.restore-toast').remove()"
-                    style="
-                        background: none;
-                        border: 1px solid #888;
-                        padding: 6px 18px;
-                        border-radius: 6px;
-                        cursor: pointer;
-                        color: #fff;
-                    ">
-                    Закрыть
-                </button>
+                <button onclick="this.closest('.restore-toast').remove(); window.restoreProgressCallback && window.restoreProgressCallback()" style="background: var(--accent); border: none; padding: 6px 18px; border-radius: 6px; cursor: pointer; color: #000; font-weight: bold;">Продолжить</button>
+                <button onclick="this.closest('.restore-toast').remove()" style="background: none; border: 1px solid #888; padding: 6px 18px; border-radius: 6px; cursor: pointer; color: #fff;">Закрыть</button>
             </div>
         </div>
     `;
     
-    toast.style.cssText = [
-        'position: fixed',
-        'bottom: 20px',
-        'right: 20px',
-        'z-index: 10000',
-        'animation: slideIn 0.3s ease'
-    ].join(';');
-    
+    toast.style.cssText = 'position: fixed; bottom: 20px; right: 20px; z-index: 10000; animation: slideIn 0.3s ease';
     document.body.appendChild(toast);
     
     window.restoreProgressCallback = () => {
         if (overlay) overlay.scrollTop = savedScrollTop;
+        updateProgress(overlay);
     };
     
     currentRestoreToast = toast;
@@ -1354,44 +1473,6 @@ async function checkAllCards() {
 
 // ========== ОСНОВНЫЕ ФУНКЦИИ ЧИТАЛКИ ==========
 const infoButton = document.getElementById('infoBtn');
-let progBar, statsDiv;
-
-function initProgressElements() {
-    progBar = document.getElementById('readingProgressBar');
-    statsDiv = document.getElementById('readingStats');
-    
-    if (!progBar) {
-        progBar = document.createElement('div');
-        progBar.className = 'progress-bar-container';
-        progBar.id = 'readingProgressBar';
-        progBar.innerHTML = '<div class="progress-bar-fill"></div>';
-        document.body.appendChild(progBar);
-    }
-    
-    if (!statsDiv) {
-        statsDiv = document.createElement('div');
-        statsDiv.className = 'reading-stats';
-        statsDiv.id = 'readingStats';
-        statsDiv.innerHTML = '<span>0</span>% <span>—</span>';
-        document.body.appendChild(statsDiv);
-    }
-}
-
-function updateProgressHandler(overlay, storyId) {
-    const scrollTop = overlay.scrollTop;
-    const scrollHeight = overlay.scrollHeight - overlay.clientHeight;
-    const percent = scrollHeight ? Math.round((scrollTop / scrollHeight) * 100) : 0;
-    
-    const fill = document.querySelector('.progress-bar-fill');
-    if (fill) fill.style.width = percent + '%';
-    
-    const percentSpan = statsDiv?.querySelector('span:first-child');
-    if (percentSpan) percentSpan.textContent = percent;
-    
-    const saved = JSON.parse(localStorage.getItem('reading_progress') || '{}');
-    saved[storyId] = { percent, scrollTop, date: new Date().toISOString() };
-    localStorage.setItem('reading_progress', JSON.stringify(saved));
-}
 
 async function openReader(path, title) {
     currentStoryId = path;
@@ -1406,6 +1487,18 @@ async function openReader(path, title) {
     document.body.style.overflow = 'hidden';
     if (infoButton) infoButton.style.display = 'none';
     
+    // Определяем мобильное устройство
+    const isMobile = window.innerWidth <= 768;
+    
+    // На мобильных: убираем закрытие по клику на overlay
+    if (isMobile) {
+        overlay.onclick = null;
+    } else {
+        overlay.onclick = function(e) {
+            if (e.target === overlay) closeReader();
+        };
+    }
+    
     readerBody.innerHTML = '<div style="text-align:center; padding:80px;"><i class="fas fa-spinner fa-spin" style="font-size:3em;"></i><p>Загрузка...</p></div>';
     overlay.scrollTop = 0;
     
@@ -1415,13 +1508,17 @@ async function openReader(path, title) {
         
         let htmlContent;
         if (path.endsWith('.md')) {
-            htmlContent = marked.parse(content);
+            htmlContent = await marked.parse(content);
         } else {
             const paragraphs = content.split(/\n\s*\n/).filter(p => p.trim());
             htmlContent = paragraphs.map(p => '<p>' + escapeHtml(p.replace(/\n/g, ' ')) + '</p>').join('');
         }
         
         readerBody.innerHTML = '<h1>' + escapeHtml(title) + '</h1>' + htmlContent;
+        
+        // Удаляем старый TOC если был
+        const oldToc = document.querySelector('.table-of-contents');
+        if (oldToc) oldToc.remove();
         
         const headers = readerBody.querySelectorAll('h2, h3');
         if (headers.length > 0) {
@@ -1443,20 +1540,26 @@ async function openReader(path, title) {
             readerBody.insertBefore(toc, readerBody.firstChild);
         }
         
-        initProgressElements();
-        progBar.style.display = 'block';
-        statsDiv.style.display = 'flex';
+        // Инициализация прогресс-бара
+        initProgressBar();
+        if (progBar) progBar.style.display = 'block';
         
-        const updateProgress = () => updateProgressHandler(overlay, currentStoryId);
-        overlay.removeEventListener('scroll', updateProgress);
-        overlay.addEventListener('scroll', updateProgress);
-        setTimeout(updateProgress, 100);
+        // Удаляем старый обработчик если есть
+        if (scrollHandler) {
+            overlay.removeEventListener('scroll', scrollHandler);
+        }
+        
+        // Создаем новый обработчик
+        scrollHandler = () => updateProgress(overlay);
+        overlay.addEventListener('scroll', scrollHandler);
+        setTimeout(() => updateProgress(overlay), 100);
         
         const saved = JSON.parse(localStorage.getItem('reading_progress') || '{}')[currentStoryId];
         if (saved?.scrollTop > 100) showRestorePrompt(saved.percent, saved.scrollTop, overlay);
         
     } catch(e) {
-        readerBody.innerHTML = `<div style="text-align:center; padding:80px;"><i class="fas fa-skull" style="font-size:3em; color:#88aadd;"></i><p style="color: #88aadd; font-size: 1.2em;">Упс...</p><p>Реальность исказилась, и рассказ исчез.</p><p>Попробуйте найти его в другое время.</p><p>Или сообщите мне.</p><button onclick="closeReader()" style="margin-top:20px; padding:10px 30px; background:#88aadd; border:none; border-radius:30px; cursor:pointer; color:#000;">Вернуться</button></div>`;
+        console.error('Ошибка загрузки:', e);
+        readerBody.innerHTML = `<div style="text-align:center; padding:80px;"><i class="fas fa-skull" style="font-size:3em; color:#88aadd;"></i><p style="color: #88aadd; font-size: 1.2em;">УПС!</p><p>Реальность исказилась, и текст исчез.</p><p>Попробуйте найти его в другое время.</p><p>Или сообщите мне.</p><button onclick="closeReader()" style="margin-top:20px; padding:10px 30px; background:#88aadd; border:none; border-radius:30px; cursor:pointer; color:#000;">Вернуться</button></div>`;
     }
 }
 
@@ -1469,9 +1572,11 @@ function closeReader() {
     document.body.style.overflow = 'auto';
     
     if (progBar) progBar.style.display = 'none';
-    if (statsDiv) statsDiv.style.display = 'none';
     if (infoButton) infoButton.style.display = 'flex';
     if (currentRestoreToast) currentRestoreToast.remove();
+    
+    // Скрываем рекламную плашку
+    closeAd();
 }
 
 // ========== НАСТРОЙКИ ЧИТАЛКИ ==========
@@ -1552,8 +1657,9 @@ function toggleBookmarks() {
     if (modal.style.display === 'flex') renderBookmarks();
 }
 
-// ========== ПОИСК С DEBOUNCE ==========
+// ========== ПОИСК ==========
 const searchIndex = new Map();
+let searchIndexReady = false;
 
 async function buildSearchIndex() {
     for (const item of availableTexts) {
@@ -1564,6 +1670,7 @@ async function buildSearchIndex() {
             console.log('Ошибка индексации:', item.path);
         }
     }
+    searchIndexReady = true;
 }
 
 function searchTexts(query) {
@@ -1609,6 +1716,12 @@ function setupSearch() {
     if (!input) return;
     
     const performSearch = debounce(() => {
+        if (!searchIndexReady) {
+            resultsDiv.innerHTML = '<div class="search-stats">Индексация...</div>';
+            resultsDiv.classList.add('show');
+            return;
+        }
+        
         const q = input.value.trim();
         
         if (q.length < 2) {
@@ -1630,7 +1743,7 @@ function setupSearch() {
         
         resultsDiv.innerHTML = '<div class="search-stats">Найдено ' + results.length + '</div>' +
             results.map(r => `
-                <div class="search-result-item" onclick="openReader('${r.path}', '${r.title.replace(/'/g, "\\'")}')">
+                <div class="search-result-item" data-path="${r.path}" data-title="${r.title.replace(/"/g, '&quot;')}">
                     <div class="search-result-title">
                         ${escapeHtml(r.title)}
                         <span style="font-size:0.7em;">${r.type}</span>
@@ -1640,6 +1753,12 @@ function setupSearch() {
                     </div>
                 </div>
             `).join('');
+        
+        document.querySelectorAll('.search-result-item').forEach(el => {
+            el.addEventListener('click', () => {
+                openReader(el.dataset.path, el.dataset.title);
+            });
+        });
         
         resultsDiv.classList.add('show');
         clearBtn.style.display = 'flex';
@@ -1673,11 +1792,11 @@ function showSupportModal() {
             <h4>Поддержать автора</h4>
             <p>Спасибо, что цените моё творчество!</p>
             <div class="donation-amounts">
-                <div class="donation-amount" onclick="selectAmount(100)">100 ₽</div>
-                <div class="donation-amount" onclick="selectAmount(250)">250 ₽</div>
-                <div class="donation-amount" onclick="selectAmount(500)">500 ₽</div>
-                <div class="donation-amount" onclick="selectAmount(1000)">1000 ₽</div>
-                <div class="donation-amount" onclick="selectAmount('custom')">Своя сумма</div>
+                <div class="donation-amount" data-amount="100">100 ₽</div>
+                <div class="donation-amount" data-amount="250">250 ₽</div>
+                <div class="donation-amount" data-amount="500">500 ₽</div>
+                <div class="donation-amount" data-amount="1000">1000 ₽</div>
+                <div class="donation-amount" data-amount="custom">Своя сумма</div>
             </div>
             <div id="customAmountDiv" style="display: none; margin: 15px 0;">
                 <input type="number" id="customAmount" placeholder="Введите сумму" style="padding: 10px; border-radius: 8px; border: none; width: 150px;">
@@ -1686,23 +1805,34 @@ function showSupportModal() {
             <div style="margin: 20px 0;">
                 <p style="margin-bottom: 10px;">💳 По номеру карты:</p>
                 <code style="background: rgba(0,0,0,0.5); padding: 8px 15px; border-radius: 8px; display: inline-block; user-select: all;">
-                    🌟 1234 5678 9012 3456
+                    2202 2023 5788 7805
                 </code>
                 <button onclick="copyCardNumber()" style="margin-left: 10px; background: none; border: 1px solid var(--accent); color: var(--accent); padding: 8px 15px; border-radius: 8px; cursor: pointer;">
                     <i class="fas fa-copy"></i>
                 </button>
             </div>
             <div style="margin: 15px 0;">
-                <p>📱 Или по СБП:</p>
-                <button class="support-link" onclick="window.open('https://www.tinkoff.ru/rm/lantsev.dmitry1', '_blank')">
-                    <i class="fas fa-mobile-alt"></i> Открыть форму оплаты
+                <p>📱 Или по СБП (временно заглушка):</p>
+                <button class="support-link" onclick="showSbpComingSoon()">
+                    <i class="fas fa-mobile-alt"></i> Скоро будет доступно
                 </button>
             </div>
             <p style="font-size: 0.7em; opacity: 0.5; margin-top: 20px;">Средства пойдут на развитие сайта и новые истории</p>
         </div>
     `;
     
+    document.querySelectorAll('.donation-amount').forEach(el => {
+        el.addEventListener('click', (e) => {
+            const amount = el.dataset.amount;
+            selectAmount(amount, el);
+        });
+    });
+    
     modal.style.display = 'flex';
+}
+
+function showSbpComingSoon() {
+    alert('СБП ссылка будет добавлена позже. Пока можно поддержать по номеру карты!');
 }
 
 function closeSupportModal() {
@@ -1712,10 +1842,10 @@ function closeSupportModal() {
 
 let selectedAmount = null;
 
-function selectAmount(amount) {
+function selectAmount(amount, element) {
     const amounts = document.querySelectorAll('.donation-amount');
     amounts.forEach(el => el.classList.remove('selected'));
-    if (event.target) event.target.classList.add('selected');
+    if (element) element.classList.add('selected');
     
     const customDiv = document.getElementById('customAmountDiv');
     if (amount === 'custom') {
@@ -1733,59 +1863,130 @@ function processCustomAmount() {
     const amount = amountInput.value;
     if (amount && amount > 0) {
         showPaymentPrompt(amount);
+    } else {
+        alert('Введите корректную сумму');
     }
 }
 
 function showPaymentPrompt(amount) {
     closeSupportModal();
     setTimeout(() => {
-        alert('Спасибо за желание поддержать автора на ' + amount + ' ₽!\n\nСсылка для оплаты откроется в новом окне.');
-        window.open('https://www.tinkoff.ru/rm/lantsev.dmitry1', '_blank');
+        alert('Спасибо за желание поддержать автора на ' + amount + ' ₽!\n\nНомер карты для перевода: 2202 2023 5788 7805');
     }, 300);
 }
 
 function copyCardNumber() {
-    const cardNumber = '1234 5678 9012 3456';
-    navigator.clipboard.writeText(cardNumber);
-    alert('Номер карты скопирован! Спасибо за поддержку ❤️');
+    const cardNumber = '2202 2023 5788 7805';
+    navigator.clipboard.writeText(cardNumber).then(() => {
+        alert('Номер карты скопирован! Спасибо за поддержку ❤️');
+    }).catch(() => {
+        alert('Не удалось скопировать номер. Пожалуйста, скопируйте вручную: 2202 2023 5788 7805');
+    });
 }
 
 // ========== КНОПКА ИНФОРМАЦИИ ==========
-const infoBtn = document.getElementById('infoBtn');
-const infoModal = document.getElementById('infoModal');
-const infoClose = document.querySelector('.info-modal-close');
+const infoBtnModal = document.getElementById('infoBtn');
+const infoModalElem = document.getElementById('infoModal');
+const infoCloseBtn = document.querySelector('.info-modal-close');
 
-if (infoBtn) {
-    infoBtn.addEventListener('click', () => {
-        infoModal.style.display = 'flex';
+if (infoBtnModal) {
+    infoBtnModal.addEventListener('click', () => {
+        infoModalElem.style.display = 'flex';
     });
 }
 
-if (infoClose) {
-    infoClose.addEventListener('click', () => {
-        infoModal.style.display = 'none';
+if (infoCloseBtn) {
+    infoCloseBtn.addEventListener('click', () => {
+        infoModalElem.style.display = 'none';
     });
 }
 
-if (infoModal) {
-    infoModal.addEventListener('click', (e) => {
-        if (e.target === infoModal) infoModal.style.display = 'none';
+if (infoModalElem) {
+    infoModalElem.addEventListener('click', (e) => {
+        if (e.target === infoModalElem) infoModalElem.style.display = 'none';
     });
 }
 
-// ========== ИНИЦИАЛИЗАЦИЯ ==========
-document.addEventListener('DOMContentLoaded', () => {
-    if (!document.getElementById('readingProgressBar')) {
-        const pb = document.createElement('div');
-        pb.className = 'progress-bar-container';
-        pb.id = 'readingProgressBar';
-        pb.innerHTML = '<div class="progress-bar-fill"></div>';
-        document.body.appendChild(pb);
+// ========== ЗАКРЫТИЕ МОДАЛЬНЫХ ОКОН ПО КЛИКУ ВНЕ ==========
+document.addEventListener('click', function(e) {
+    const bookmarksModal = document.getElementById('bookmarksModal');
+    const bookmarksBtn = document.querySelector('.control-btn[onclick="toggleBookmarks()"]');
+    if (bookmarksModal && bookmarksModal.style.display === 'flex') {
+        if (!bookmarksModal.contains(e.target) && !bookmarksBtn?.contains(e.target)) {
+            bookmarksModal.style.display = 'none';
+        }
     }
     
+    const toc = document.querySelector('.table-of-contents');
+    const tocBtn = document.querySelector('.control-btn[onclick="toggleTOC()"]');
+    if (toc && toc.style.display === 'block') {
+        if (!toc.contains(e.target) && !tocBtn?.contains(e.target)) {
+            toc.style.display = 'none';
+        }
+    }
+    
+    const fontSlider = document.getElementById('fontSliderContainer');
+    const fontBtn = document.querySelector('.control-btn[onclick="toggleFontSlider()"]');
+    if (fontSlider && fontSlider.style.display === 'flex') {
+        if (!fontSlider.contains(e.target) && !fontBtn?.contains(e.target)) {
+            fontSlider.style.display = 'none';
+        }
+    }
 });
 
-console.log('Тёмные истории | Дмитрий Ланцев');
+// ========== ЗАКРЫТИЕ ПО ESC ==========
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        const readerOverlay = document.getElementById('readerOverlay');
+        if (readerOverlay.style.display === 'block') {
+            closeReader();
+        }
+        
+        const supportModal = document.getElementById('supportModal');
+        if (supportModal.style.display === 'flex') {
+            closeSupportModal();
+        }
+        
+        const infoModalElem = document.getElementById('infoModal');
+        if (infoModalElem.style.display === 'flex') {
+            infoModalElem.style.display = 'none';
+        }
+        
+        const bookmarksModal = document.getElementById('bookmarksModal');
+        if (bookmarksModal.style.display === 'flex') {
+            bookmarksModal.style.display = 'none';
+        }
+        
+        const toc = document.querySelector('.table-of-contents');
+        if (toc && toc.style.display === 'block') {
+            toc.style.display = 'none';
+        }
+    }
+});
+
+// ========== ОБРАБОТЧИК ИЗМЕНЕНИЯ РАЗМЕРА ОКНА ==========
+window.addEventListener('resize', function() {
+    const overlay = document.getElementById('readerOverlay');
+    if (overlay.style.display === 'block') {
+        const isMobile = window.innerWidth <= 768;
+        if (isMobile) {
+            overlay.onclick = null;
+        } else {
+            overlay.onclick = function(e) {
+                if (e.target === overlay) closeReader();
+            };
+        }
+    }
+});
+
+// ========== ИНИЦИАЛИЗАЦИЯ ==========
+document.addEventListener('DOMContentLoaded', async () => {
+    await buildSearchIndex();
+    setupSearch();
+    await checkAllCards();
+});
+
+console.log('🔥 Тёмные истории | Дмитрий Ланцев | Версия 3.00 (с прогресс-баром и адаптивной читалкой)');
 </script>
 </body>
 </html>
