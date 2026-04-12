@@ -6,6 +6,10 @@
     <meta name="theme-color" content="#000408">
     <meta name="description" content="Тёмные истории от Дмитрия Ланцева — рассказы и статьи в жанре мистика и тёмное фэнтези">
     <title>ТЕМНЫЕ ИСТОРИИ | ОТ ДМИТРИЯ ЛАНЦЕВА</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="manifest" href="site.webmanifest">
     <link href="https://fonts.googleapis.com/css2?family=Marcellus+SC&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -1239,21 +1243,6 @@
     </div>
 </footer>
 
-<!-- ========== РЕКЛАМНАЯ ПЛАШКА (СТИЛЬ) ========== -->
-<div id="adBanner" class="ad-banner" style="display: none;">
-    <div class="card" style="max-width: 400px; margin: 0 auto; padding: 15px 20px; text-align: center; position: relative;">
-        <button onclick="closeAd()" style="position: absolute; top: 10px; right: 15px; background: none; border: none; color: #888; font-size: 1.2em; cursor: pointer;">✕</button>
-        <div class="card-genre">
-            <i class="fas fa-heart" style="color: #ff6b6b;"></i> ПОДДЕРЖКА
-        </div>
-        <h3 style="margin: 8px 0; font-size: 1.1em;">ПОНРАВИЛИСЬ ИСТОРИИ?</h3>
-        <p style="font-size: 0.8em; opacity: 0.8;">Поддержите автора — посмотрите короткий ролик</p>
-        <div class="btn-read" onclick="watchAd()" style="margin-top: 10px; padding: 8px 20px;">
-            <i class="fas fa-play"></i> ПОСМОТРЕТЬ
-        </div>
-    </div>
-</div>
-
 <!-- ========== КНОПКА ИНФОРМАЦИИ ========== -->
 <button id="infoBtn" class="info-button">
     <i class="fas fa-info-circle"></i>
@@ -1483,6 +1472,7 @@ async function openReader(path, title) {
     const controls = document.getElementById('readerControls');
     
     overlay.style.display = 'block';
+    startAdInterval();
     controls.style.display = 'flex';
     document.body.style.overflow = 'hidden';
     if (infoButton) infoButton.style.display = 'none';
@@ -1490,13 +1480,16 @@ async function openReader(path, title) {
     // Определяем мобильное устройство
     const isMobile = window.innerWidth <= 768;
     
-    // На мобильных: убираем закрытие по клику на overlay
-    if (isMobile) {
-        overlay.onclick = null;
-    } else {
+    // На мобильных читалка на весь экран — закрытие только крестиком
+    if (!isMobile) {
         overlay.onclick = function(e) {
             if (e.target === overlay) closeReader();
         };
+    }
+    
+    // На мобильных: кнопки скрываются/показываются по клику
+    if (isMobile) {
+        initMobileReader();
     }
     
     readerBody.innerHTML = '<div style="text-align:center; padding:80px;"><i class="fas fa-spinner fa-spin" style="font-size:3em;"></i><p>Загрузка...</p></div>';
@@ -1573,7 +1566,7 @@ function closeReader() {
     
     if (progBar) progBar.style.display = 'none';
     if (infoButton) infoButton.style.display = 'flex';
-    if (currentRestoreToast) currentRestoreToast.remove();
+    stopAdInterval();
     
     // Скрываем рекламную плашку
     closeAd();
@@ -1985,6 +1978,80 @@ document.addEventListener('DOMContentLoaded', async () => {
     setupSearch();
     await checkAllCards();
 });
+
+// ========== КНОПКИ ЧИТАЛКИ НА МОБИЛЬНЫХ ==========
+let controlsVisible = true;
+
+function toggleControls() {
+    const controls = document.getElementById('readerControls');
+    if (!controls) return;
+    
+    if (controlsVisible) {
+        controls.style.opacity = '0';
+        controls.style.pointerEvents = 'none';
+        controlsVisible = false;
+    } else {
+        controls.style.opacity = '1';
+        controls.style.pointerEvents = 'auto';
+        controlsVisible = true;
+    }
+}
+
+function initMobileReader() {
+    const overlay = document.getElementById('readerOverlay');
+    const controls = document.getElementById('readerControls');
+    if (!overlay || !controls) return;
+    
+    controls.style.transition = 'opacity 0.3s ease';
+    controls.style.opacity = '1';
+    controlsVisible = true;
+    
+    overlay.addEventListener('click', (e) => {
+        if (controls.contains(e.target)) return;
+        toggleControls();
+    });
+}
+
+// ========== РЕКЛАМНАЯ ПЛАШКА ==========
+let adInterval = null;
+
+function showAdBanner() {
+    const banner = document.getElementById('adBanner');
+    if (!banner) return;
+    banner.style.display = 'block';
+    setTimeout(() => {
+        if (banner.style.display === 'block') {
+            banner.style.display = 'none';
+        }
+    }, 10000);
+}
+
+function closeAd() {
+    const banner = document.getElementById('adBanner');
+    if (banner) banner.style.display = 'none';
+}
+
+function watchAd() {
+    alert('Спасибо за поддержку! Реклама будет добавлена позже.');
+    closeAd();
+}
+
+function startAdInterval() {
+    if (adInterval) clearInterval(adInterval);
+    adInterval = setInterval(() => {
+        const banner = document.getElementById('adBanner');
+        if (banner && banner.style.display !== 'block') {
+            showAdBanner();
+        }
+    }, 2400000);
+}
+
+function stopAdInterval() {
+    if (adInterval) {
+        clearInterval(adInterval);
+        adInterval = null;
+    }
+}
 
 console.log('🔥 Тёмные истории | Дмитрий Ланцев | Версия 3.00 (с прогресс-баром и адаптивной читалкой)');
 </script>
