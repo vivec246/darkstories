@@ -765,6 +765,23 @@
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
         ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+    
+    /* УБИРАЕМ ГОРИЗОНТАЛЬНУЮ ПРОКРУТКУ */
+html, body {
+    overflow-x: hidden !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+body {
+    overflow-x: hidden !important;
+}
+
+.container, main, .content-grid, .card, .reader-content {
+    overflow-x: hidden !important;
+    max-width: 100% !important;
+}
+    
     </style>
 </head>
 <body>
@@ -936,42 +953,42 @@
     </section>
 
     <!-- СВЯЗЬ -->
-    <section id="contact" class="content-section" style="display:none;">
-        <div class="contact-header">
-            <h2>Давайте создавать вместе</h2>
-            <p>Всегда открыт для идей, коллабораций и общения с читателями.</p>
-        </div>
-        <div class="contact-grid">
-            <a href="https://t.me/lancev_dark" class="contact-card" target="_blank">
-                <i class="fab fa-telegram-plane"></i>
-                <div class="contact-info">
-                    <span class="contact-name">TELEGRAM</span>
-                    <span class="contact-value">@lancev_dark</span>
-                </div>
-            </a>
-            <a href="mailto:lancev.dmitrij.avtor@gmail.com" class="contact-card">
-                <i class="fas fa-envelope"></i>
-                <div class="contact-info">
-                    <span class="contact-name">EMAIL</span>
-                    <span class="contact-value">lancev.dmitrij.avtor@gmail.com</span>
-                </div>
-            </a>
-            <div class="contact-card" style="opacity:0.6; cursor:default;">
-                <i class="fab fa-vk"></i>
-                <div class="contact-info">
-                    <span class="contact-name">ВКОНТАКТЕ</span>
-                    <span class="contact-value soon">скоро</span>
-                </div>
+<section id="contact" class="content-section" style="display:none;">
+    <div class="contact-header">
+        <h2>Давайте создавать вместе</h2>
+        <p>Всегда открыт для идей, коллабораций и общения с читателями.</p>
+    </div>
+    <div class="contact-grid">
+        <a href="https://t.me/lancev_dark" class="contact-card" target="_blank">
+            <i class="fab fa-telegram-plane"></i>
+            <div class="contact-info">
+                <span class="contact-name">TELEGRAM</span>
+                <span class="contact-value">@lancev_dark</span>
             </div>
-            <a href="https://dzen.ru/slovo_lanceva" class="contact-card" target="_blank">
-                <i class="fas fa-feather-alt"></i>
-                <div class="contact-info">
-                    <span class="contact-name">ДЗЕН</span>
-                    <span class="contact-value">slovo_lanceva</span>
-                </div>
-            </a>
+        </a>
+        <a href="mailto:lancev.dmitrij.avtor@gmail.com" class="contact-card">
+            <i class="fas fa-envelope"></i>
+            <div class="contact-info">
+                <span class="contact-name">EMAIL</span>
+                <span class="contact-value">lancev.dmitrij.avtor@gmail.com</span>
+            </div>
+        </a>
+        <a href="https://dzen.ru/slovo_lanceva" class="contact-card" target="_blank">
+            <i class="fas fa-feather-alt"></i>
+            <div class="contact-info">
+                <span class="contact-name">ДЗЕН</span>
+                <span class="contact-value">slovo_lanceva</span>
+            </div>
+        </a>
+        <div class="contact-card" style="opacity:0.6; cursor:default;">
+            <i class="fab fa-vk"></i>
+            <div class="contact-info">
+                <span class="contact-name">ВКОНТАКТЕ</span>
+                <span class="contact-value soon">скоро</span>
+            </div>
         </div>
-    </section>
+    </div>
+</section>
 </main>
 
 <!-- ФУТЕР -->
@@ -1168,6 +1185,25 @@ function initMobileReader() {
     });
 }
 
+// ========== ЗАКРЫТИЕ ЧИТАЛКИ ПО КНОПКЕ "НАЗАД" НА ТЕЛЕФОНЕ ==========
+let readerHistoryState = null;
+
+function handleBackButton() {
+    const readerOverlay = document.getElementById('readerOverlay');
+    if (readerOverlay && readerOverlay.style.display === 'block') {
+        closeReader();
+        if (readerHistoryState) {
+            history.replaceState(readerHistoryState, '', location.href);
+            readerHistoryState = null;
+        }
+    }
+}
+
+function initBackButtonHandler() {
+    readerHistoryState = history.state;
+    history.pushState({ readerOpen: true }, '', location.href);
+}
+
 // ========== ЧИТАЛКА ==========
 async function openReader(path, title) {
     currentStoryId = path;
@@ -1180,6 +1216,14 @@ async function openReader(path, title) {
     document.body.style.overflow = 'hidden';
     readerBody.innerHTML = '<div style="text-align:center; padding:80px;"><i class="fas fa-spinner fa-spin"></i><p>Загрузка...</p></div>';
     overlay.scrollTop = 0;
+    
+    // Мобильные фичи
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile) {
+        initMobileReader();
+        initBackButtonHandler();
+    }
+    
     try {
         const content = await fetchWithCache(path);
         let htmlContent;
@@ -1206,12 +1250,6 @@ async function openReader(path, title) {
             }, 300);
         }
         
-        // ========== МОБИЛЬНЫЕ: КНОПКИ ПРЯЧУТСЯ ПРИ КЛИКЕ ==========
-        const isMobile = window.innerWidth <= 768;
-        if (isMobile) {
-            initMobileReader();
-        }
-        
     } catch(e) {
         readerBody.innerHTML = '<div style="text-align:center; padding:80px;"><i class="fas fa-skull"></i><p>Ошибка загрузки</p><button onclick="closeReader()" style="background:var(--accent); border:none; padding:10px 30px; border-radius:30px; cursor:pointer;">Закрыть</button></div>';
     }
@@ -1224,6 +1262,12 @@ function closeReader() {
     controls.style.display = 'none';
     document.body.style.overflow = 'auto';
     if (progBar) progBar.style.display = 'none';
+    
+    // Очищаем историю при закрытии читалки
+    if (readerHistoryState) {
+        history.replaceState(readerHistoryState, '', location.href);
+        readerHistoryState = null;
+    }
 }
 
 function toggleReaderTheme() { document.getElementById('readerContent').classList.toggle('night-mode'); }
@@ -1289,6 +1333,9 @@ function deleteBookmark(index) {
     localStorage.setItem('dim_bookmarks', JSON.stringify(bookmarksData));
     renderBookmarks();
 }
+
+// ========== ДОБАВЛЯЕМ ОБРАБОТЧИК КНОПКИ "НАЗАД" ==========
+window.addEventListener('popstate', handleBackButton);
 
 // ========== ПОДДЕРЖКА ==========
 function showSupportModal() {
@@ -1442,6 +1489,5 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 console.log('DARK STORIES | v3.0');
 </script>
-
 </body>
 </html>
