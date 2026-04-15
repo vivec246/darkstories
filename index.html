@@ -1135,6 +1135,39 @@ const updateProgress = throttle((overlay) => {
     localStorage.setItem('reading_progress', JSON.stringify(saved));
 }, 100);
 
+// ========== КНОПКИ ЧИТАЛКИ НА МОБИЛЬНЫХ ==========
+let controlsVisible = true;
+
+function toggleControls() {
+    const controls = document.getElementById('readerControls');
+    if (!controls) return;
+    
+    if (controlsVisible) {
+        controls.style.opacity = '0';
+        controls.style.pointerEvents = 'none';
+        controlsVisible = false;
+    } else {
+        controls.style.opacity = '1';
+        controls.style.pointerEvents = 'auto';
+        controlsVisible = true;
+    }
+}
+
+function initMobileReader() {
+    const overlay = document.getElementById('readerOverlay');
+    const controls = document.getElementById('readerControls');
+    if (!overlay || !controls) return;
+    
+    controls.style.transition = 'opacity 0.3s ease';
+    controls.style.opacity = '1';
+    controlsVisible = true;
+    
+    overlay.addEventListener('click', (e) => {
+        if (controls.contains(e.target)) return;
+        toggleControls();
+    });
+}
+
 // ========== ЧИТАЛКА ==========
 async function openReader(path, title) {
     currentStoryId = path;
@@ -1171,6 +1204,12 @@ async function openReader(path, title) {
                 overlay.scrollTop = saved.scrollTop;
                 updateProgress(overlay);
             }, 300);
+        }
+        
+        // ========== МОБИЛЬНЫЕ: КНОПКИ ПРЯЧУТСЯ ПРИ КЛИКЕ ==========
+        const isMobile = window.innerWidth <= 768;
+        if (isMobile) {
+            initMobileReader();
         }
         
     } catch(e) {
