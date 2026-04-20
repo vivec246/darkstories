@@ -42,6 +42,15 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             line-height: 1.6;
         }
+        
+        /* Убираем подсветку при касании на мобильных */
+        button, .btn-read, .tab-link, .control-btn, .contact-card,
+        .search-btn, .clear-search, .card-content, .support-icon,
+        .support-tab-btn, .footer-links span, a, div[onclick] {
+            -webkit-tap-highlight-color: transparent;
+            tap-highlight-color: transparent;
+        }
+        
         .blob {
             position: fixed;
             width: 50vw;
@@ -56,6 +65,7 @@
         .blob-2 { bottom: -20%; right: -20%; background: radial-gradient(circle, rgba(255,107,107,0.05), transparent 70%); animation: floatBlob2 30s infinite; }
         @keyframes floatBlob1 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(100px,50px); } }
         @keyframes floatBlob2 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(-80px,-60px); } }
+        
         header {
             height: 100vh;
             position: relative;
@@ -167,6 +177,7 @@
         }
         @keyframes textGlow { 0% { opacity: 0.4; text-shadow: 0 0 5px rgba(136,170,221,0.3); } 50% { opacity: 0.9; text-shadow: 0 0 15px rgba(136,170,221,0.8); } 100% { opacity: 0.4; text-shadow: 0 0 5px rgba(136,170,221,0.3); } }
         @keyframes scrollPulse { 0%,100% { opacity: 0.3; transform: scaleY(1); } 50% { opacity: 1; transform: scaleY(1.2); } }
+        
         nav.tabs {
             position: sticky;
             top: 0;
@@ -196,6 +207,7 @@
         .tab-link.active { opacity: 1; color: var(--accent); }
         .tab-link.active::after { content: ''; position: absolute; bottom: -5px; left: 0; right: 0; height: 1px; background: var(--accent); }
         .tab-link:hover { opacity: 1; color: var(--accent); }
+        
         .search-container { max-width: 280px; width: 100%; position: relative; }
         .search-input-wrapper {
             display: flex;
@@ -243,6 +255,8 @@
         .search-result-title { font-family: 'Montserrat', sans-serif; font-weight: 500; color: var(--accent); font-size: 13px; }
         .search-result-snippet { font-size: 0.7em; opacity: 0.6; }
         .search-stats { padding: 8px 15px; font-size: 11px; opacity: 0.5; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        
+        /* ========== СЕТКА КАРТОЧЕК ========== */
         .content-grid {
             display: grid;
             gap: 25px;
@@ -250,10 +264,35 @@
             max-width: 1400px;
             margin: 0 auto;
         }
-        @media (max-width: 768px) { .content-grid { grid-template-columns: 1fr; gap: 20px; } }
-        @media (min-width: 768px) and (max-width: 1024px) { .content-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (min-width: 1025px) and (max-width: 1366px) { .content-grid { grid-template-columns: repeat(3, 1fr); } }
-        @media (min-width: 1367px) { .content-grid { grid-template-columns: repeat(4, 1fr); } }
+        /* Телефоны вертикальные — 1 карточка */
+        @media (max-width: 768px) and (orientation: portrait) {
+            .content-grid { grid-template-columns: 1fr; gap: 20px; }
+        }
+        /* Телефоны горизонтальные — 2 карточки */
+        @media (max-width: 900px) and (orientation: landscape) {
+            .content-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+            .card-content { padding: 12px; }
+            .card h3 { font-size: 0.9em; }
+            .card-genre { font-size: 8px; }
+            .btn-read { font-size: 9px; padding: 4px 12px; }
+        }
+        /* Планшеты вертикальные — 2 карточки */
+        @media (min-width: 768px) and (max-width: 900px) and (orientation: portrait) {
+            .content-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        /* Планшеты горизонтальные — 3 карточки */
+        @media (min-width: 900px) and (max-width: 1024px) {
+            .content-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        /* Ноутбуки и ПК — 4 карточки */
+        @media (min-width: 1024px) and (max-width: 1920px) {
+            .content-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+        /* Широкоформатные — 5 карточек */
+        @media (min-width: 1920px) {
+            .content-grid { grid-template-columns: repeat(5, 1fr); }
+        }
+        
         .card {
             position: relative;
             border-radius: 20px;
@@ -278,6 +317,7 @@
             pointer-events: none;
             border-radius: 20px;
         }
+        /* Подсветка на ПК — при наведении */
         .card:hover {
             border-color: var(--accent);
             transform: translateY(-4px);
@@ -285,7 +325,12 @@
             background: rgba(10, 14, 20, 0.6);
             backdrop-filter: blur(8px);
         }
+        .card:hover .card-image {
+            filter: grayscale(0%);
+            transform: scale(1.05);
+        }
         .card.missing { opacity: 0.4; filter: grayscale(0.3); pointer-events: none; }
+        
         .card-image-wrapper {
             position: relative;
             width: 100%;
@@ -304,7 +349,6 @@
             filter: grayscale(100%);
             transition: filter 0.3s, transform 0.3s;
         }
-        .card:hover .card-image { filter: grayscale(0%); transform: scale(1.05); }
         .card-content {
             position: absolute;
             bottom: 0;
@@ -352,6 +396,23 @@
             transition: 0.3s;
         }
         .card:hover .btn-read { opacity: 1; gap: 8px; }
+        
+        /* Анимация карточек на мобильных при прокрутке */
+        .card-visible {
+            animation: cardGlow 0.4s ease-out forwards;
+        }
+        @keyframes cardGlow {
+            0% {
+                transform: scale(1);
+                border-color: rgba(136, 170, 221, 0.2);
+            }
+            100% {
+                transform: scale(1.02);
+                border-color: var(--accent);
+                box-shadow: 0 0 15px rgba(136, 170, 221, 0.4);
+            }
+        }
+        
         .contact-header { text-align: center; max-width: 600px; margin: 0 auto 40px; padding: 0 20px; }
         .contact-header h2 {
             font-family: 'Playfair Display', serif;
@@ -419,6 +480,7 @@
             .contact-name { font-size: 9px; }
             .contact-value { font-size: 11px; }
         }
+        
         .support-tab-section {
             margin: 40px auto;
             padding: 40px 20px;
@@ -489,6 +551,7 @@
             border-color: var(--accent);
             box-shadow: 0 0 20px rgba(136, 170, 221, 0.4);
         }
+        
         .progress-bar-container {
             position: fixed;
             top: 0;
@@ -507,6 +570,7 @@
             transition: width 0.15s ease-out;
             border-radius: 0 2px 2px 0;
         }
+        
         .reader-overlay {
             position: fixed;
             inset: 0;
@@ -542,6 +606,7 @@
         .reader-body h3 { font-size: 1.3em; }
         .reader-body p { margin-bottom: 1.2em; line-height: 1.8; color: var(--text-light); }
         .reader-body img { max-width: 100%; height: auto; display: block; margin: 20px auto; border-radius: 8px; }
+        
         .reader-content:not(.night-mode) {
             background: #fdfcf8;
             border: 1px solid rgba(0, 0, 0, 0.05);
@@ -566,6 +631,7 @@
             border: 1px solid rgba(136, 170, 221, 0.25);
         }
         .night-mode.reader-content .reader-body p { color: #b0c4de; }
+        
         .table-of-contents {
             display: none;
             position: fixed;
@@ -636,6 +702,7 @@
             color: #0d3b66;
             border-left-color: #88aadd;
         }
+        
         .reader-controls {
             position: fixed;
             top: 20px;
@@ -678,6 +745,7 @@
             gap: 12px;
         }
         #fontSliderContainer input { width: 120px; }
+        
         .bookmarks-modal, .support-modal {
             position: fixed;
             inset: 0;
@@ -698,8 +766,9 @@
             width: 90%;
             position: relative;
         }
-        .bookmark-item { background: rgba(255,255,255,0.05); padding: 10px; margin-bottom: 8px; border-radius: 10px; cursor: pointer; border-left: 3px solid var(--accent); display: flex; justify-content: space-between; align-items: center; }
+                .bookmark-item { background: rgba(255,255,255,0.05); padding: 10px; margin-bottom: 8px; border-radius: 10px; cursor: pointer; border-left: 3px solid var(--accent); display: flex; justify-content: space-between; align-items: center; }
         .delete-bm { color: #ff5555; cursor: pointer; padding: 5px; }
+        
         .main-footer {
             width: 100%;
             padding: 25px 20px;
@@ -745,13 +814,14 @@
         }
         .footer-links span:hover { opacity: 1; color: var(--accent); }
         .footer-links .separator { opacity: 0.3; cursor: default; }
-        .footer-links .separator:hover { opacity: 0.3; color: inherit; }
+        
+        /* Мобильные стили */
         @media (max-width: 768px) {
             nav.tabs { flex-direction: column; align-items: stretch; }
             .nav-links { justify-content: center; gap: 15px; }
             .search-container { max-width: 100%; }
             .reader-controls { top: 10px; right: 10px; gap: 8px; }
-                        .control-btn { width: 38px; height: 38px; font-size: 0.9rem; }
+            .control-btn { width: 38px; height: 38px; font-size: 0.9rem; }
             #fontSliderContainer { top: 10px; right: 60px; padding: 8px 12px; }
             #fontSliderContainer input { width: 100px; }
             .reader-content { padding: 50px 20px; }
@@ -763,55 +833,38 @@
             .table-of-contents .toc-modal-box { max-width: 320px; padding: 20px; }
             .table-of-contents a { padding: 8px 10px; font-size: 0.8em; }
             
-            /* Убираем горизонтальную прокрутку ТОЛЬКО на мобильных */
-            .reader-overlay {
-                overflow-x: hidden;
-            }
-            .reader-content {
-                overflow-x: hidden;
-                max-width: 100%;
-                padding: 20px 15px;
-            }
-            .reader-body {
-                overflow-x: hidden;
-                word-wrap: break-word;
-            }
+            /* Убираем горизонтальную прокрутку на мобильных */
+            .reader-overlay { overflow-x: hidden; }
+            .reader-content { overflow-x: hidden; max-width: 100%; padding: 20px 15px; }
+            .reader-body { overflow-x: hidden; word-wrap: break-word; }
         }
+        
         @media (max-width: 480px) {
             .table-of-contents .toc-modal-box { max-width: 280px; padding: 15px; }
             .table-of-contents h4 { font-size: 1em; }
             .table-of-contents a { padding: 6px 8px; font-size: 0.75em; }
             .toc-close { top: 8px; right: 10px; font-size: 18px; }
         }
+        
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
         ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
-    
-       /* АНИМАЦИЯ КАРТОЧЕК ПРИ ПРОКРУТКЕ (МОБИЛЬНЫЕ) */
-.card {
-    transition: all 0.3s ease;
-}
-
-.card-visible {
-    animation: cardGlow 0.4s ease-out forwards;
-}
-
-@keyframes cardGlow {
-    0% {
-        transform: scale(1);
-        border-color: rgba(136, 170, 221, 0.2);
-    }
-    100% {
-        transform: scale(1.02);
-        border-color: var(--accent);
-        box-shadow: 0 0 15px rgba(136, 170, 221, 0.4);
-    }
-}
-
-.card-visible:hover {
-    transform: scale(1.02);
-}
-    
+        
+        /* Защита от копирования в читалке */
+        .reader-body {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+        .reader-overlay {
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        button, input, textarea, .btn-read, .tab-link, .control-btn, .search-input-wrapper {
+            user-select: auto;
+            -webkit-user-select: auto;
+        }
     </style>
 </head>
 <body>
@@ -962,7 +1015,7 @@
                     <div class="card-genre">Аналитика / Статья</div>
                     <h3>ЦЕНА МУДРОСТИ АЛЬБУСА ДАМБЛДОРА</h3>
                     <div class="card-footer">
-                        <span class="age-rating">12+</span>
+                        <span class="age-rating">14+</span>
                         <div class="btn-read" onclick="event.stopPropagation(); openReader('articles/albus_dumbledore/albus_dumbledore.md', 'ЦЕНА МУДРОСТИ АЛЬБУСА ДАМБЛДОРА')">ЧИТАТЬ →</div>
                     </div>
                 </div>
@@ -1189,7 +1242,6 @@ let mobileReaderHandler = null;
 function toggleControls() {
     const controls = document.getElementById('readerControls');
     if (!controls) return;
-    
     if (controlsVisible) {
         controls.style.opacity = '0';
         controls.style.pointerEvents = 'none';
@@ -1205,38 +1257,27 @@ function initMobileReader() {
     const overlay = document.getElementById('readerOverlay');
     const controls = document.getElementById('readerControls');
     if (!overlay || !controls) return;
-    
-    // Удаляем старый обработчик
-    if (mobileReaderHandler) {
-        overlay.removeEventListener('click', mobileReaderHandler);
-    }
-    
+    if (mobileReaderHandler) overlay.removeEventListener('click', mobileReaderHandler);
     controls.style.transition = 'opacity 0.3s ease';
     controls.style.opacity = '1';
     controlsVisible = true;
-    
     mobileReaderHandler = (e) => {
         if (controls.contains(e.target)) return;
         toggleControls();
     };
-    
     overlay.addEventListener('click', mobileReaderHandler);
 }
 
-// ========== ЗАКРЫТИЕ ЧИТАЛКИ ПО КНОПКЕ "НАЗАД" НА ТЕЛЕФОНЕ ==========
+// ========== ЗАКРЫТИЕ ПО КНОПКЕ НАЗАД ==========
 let readerHistoryState = null;
-
 function handleBackButton() {
-    const readerOverlay = document.getElementById('readerOverlay');
-    if (readerOverlay && readerOverlay.style.display === 'block') {
+    const overlay = document.getElementById('readerOverlay');
+    if (overlay && overlay.style.display === 'block') {
         closeReader();
-        if (readerHistoryState) {
-            history.replaceState(readerHistoryState, '', location.href);
-            readerHistoryState = null;
-        }
+        if (readerHistoryState) history.replaceState(readerHistoryState, '', location.href);
+        readerHistoryState = null;
     }
 }
-
 function initBackButtonHandler() {
     readerHistoryState = history.state;
     history.pushState({ readerOpen: true }, '', location.href);
@@ -1255,7 +1296,6 @@ async function openReader(path, title) {
     readerBody.innerHTML = '<div style="text-align:center; padding:80px;"><i class="fas fa-spinner fa-spin"></i><p>Загрузка...</p></div>';
     overlay.scrollTop = 0;
     
-    // Мобильные фичи
     const isMobile = window.innerWidth <= 768;
     if (isMobile) {
         initMobileReader();
@@ -1279,7 +1319,6 @@ async function openReader(path, title) {
         overlay.addEventListener('scroll', scrollHandler);
         setTimeout(() => updateProgress(overlay), 100);
         
-        // Автоперемотка
         const saved = JSON.parse(localStorage.getItem('reading_progress') || '{}')[currentStoryId];
         if (saved && saved.scrollTop > 100) {
             setTimeout(() => {
@@ -1287,7 +1326,6 @@ async function openReader(path, title) {
                 updateProgress(overlay);
             }, 300);
         }
-        
     } catch(e) {
         readerBody.innerHTML = '<div style="text-align:center; padding:80px;"><i class="fas fa-skull"></i><p>Ошибка загрузки</p><button onclick="closeReader()" style="background:var(--accent); border:none; padding:10px 30px; border-radius:30px; cursor:pointer;">Закрыть</button></div>';
     }
@@ -1300,15 +1338,11 @@ function closeReader() {
     controls.style.display = 'none';
     document.body.style.overflow = 'auto';
     if (progBar) progBar.style.display = 'none';
-    
-    // Сбрасываем состояние кнопок
     controlsVisible = true;
     if (controls) {
         controls.style.opacity = '1';
         controls.style.pointerEvents = 'auto';
     }
-    
-    // Очищаем историю
     if (readerHistoryState) {
         history.replaceState(readerHistoryState, '', location.href);
         readerHistoryState = null;
@@ -1379,7 +1413,6 @@ function deleteBookmark(index) {
     renderBookmarks();
 }
 
-// ========== ОБРАБОТЧИК КНОПКИ "НАЗАД" ==========
 window.addEventListener('popstate', handleBackButton);
 
 // ========== ПОДДЕРЖКА ==========
@@ -1397,8 +1430,11 @@ function showSupportModal() {
                 <div onclick="selectAmount(500)" style="background:rgba(255,255,255,0.05); padding:10px 20px; border-radius:12px; cursor:pointer;">500 ₽</div>
                 <div onclick="selectAmount(1000)" style="background:rgba(255,255,255,0.05); padding:10px 20px; border-radius:12px; cursor:pointer;">1000 ₽</div>
             </div>
-            <div style="margin:20px 0;"><p>💳 По номеру карты:</p><code style="background:rgba(0,0,0,0.5); padding:8px 15px; border-radius:8px; display:inline-block;">2202 2023 5788 7805</code>
-            <button onclick="copyCardNumber()" style="margin-left:10px; background:none; border:1px solid var(--accent); padding:8px 15px; border-radius:8px; cursor:pointer;"><i class="fas fa-copy"></i></button></div>
+            <div style="margin:20px 0;">
+                <p>💳 По номеру карты:</p>
+                <code style="background:rgba(0,0,0,0.5); padding:8px 15px; border-radius:8px; display:inline-block;">2202 2023 5788 7805</code>
+                <button onclick="copyCardNumber()" style="margin-left:10px; background:none; border:1px solid var(--accent); padding:8px 15px; border-radius:8px; cursor:pointer;"><i class="fas fa-copy"></i></button>
+            </div>
             <p style="font-size:0.7em; opacity:0.5;">Средства пойдут на развитие сайта</p>
         </div>
     `;
@@ -1521,6 +1557,64 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
+// ========== АНИМАЦИЯ КАРТОЧЕК ПРИ ПРОКРУТКЕ (МОБИЛЬНЫЕ) ==========
+function initCardAnimation() {
+    if (window.innerWidth > 768) return;
+    const cards = document.querySelectorAll('.card');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('card-visible');
+                const img = entry.target.querySelector('.card-image');
+                if (img) {
+                    img.style.transition = 'filter 0.3s';
+                    img.style.filter = 'grayscale(0%)';
+                }
+            } else {
+                entry.target.classList.remove('card-visible');
+                const img = entry.target.querySelector('.card-image');
+                if (img) img.style.filter = 'grayscale(100%)';
+            }
+        });
+    }, { threshold: 0.9 });
+    cards.forEach(card => observer.observe(card));
+}
+
+// ========== ЗАЩИТА ОТ КОПИРОВАНИЯ (ТИХО) ==========
+document.addEventListener('copy', function(e) {
+    const overlay = document.getElementById('readerOverlay');
+    if (overlay && overlay.style.display === 'block') {
+        e.preventDefault();
+        return false;
+    }
+});
+document.addEventListener('cut', function(e) {
+    const overlay = document.getElementById('readerOverlay');
+    if (overlay && overlay.style.display === 'block') {
+        e.preventDefault();
+        return false;
+    }
+});
+document.addEventListener('contextmenu', function(e) {
+    const overlay = document.getElementById('readerOverlay');
+    if (overlay && overlay.style.display === 'block') {
+        e.preventDefault();
+        return false;
+    }
+});
+document.addEventListener('keydown', function(e) {
+    const overlay = document.getElementById('readerOverlay');
+    if (overlay && overlay.style.display !== 'block') return;
+    if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'x' || e.key === 'v')) {
+        e.preventDefault();
+        return false;
+    }
+    if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+        e.preventDefault();
+        return false;
+    }
+});
+
 // ========== ИНИЦИАЛИЗАЦИЯ ==========
 document.addEventListener('DOMContentLoaded', async () => {
     document.querySelectorAll('.tab-link').forEach(tab => {
@@ -1530,49 +1624,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     await buildSearchIndex();
     setupSearch();
     checkAllCards();
-});
-
-// ========== АНИМАЦИЯ КАРТОЧЕК ПРИ ПРОКРУТКЕ (МОБИЛЬНЫЕ) ==========
-function initCardAnimation() {
-    // Только для мобильных устройств
-    if (window.innerWidth > 768) return;
-    
-    const cards = document.querySelectorAll('.card');
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                // Карточка видна на 90% — включаем эффект
-                entry.target.classList.add('card-visible');
-                const img = entry.target.querySelector('.card-image');
-                if (img) {
-                    img.style.transition = 'filter 0.3s';
-                    img.style.filter = 'grayscale(0%)'; // ← ПОЛНОСТЬЮ ЦВЕТНАЯ
-                }
-            } else {
-                // Карточка ушла с экрана — выключаем эффект
-                entry.target.classList.remove('card-visible');
-                const img = entry.target.querySelector('.card-image');
-                if (img) {
-                    img.style.filter = 'grayscale(100%)'; // ← СНОВА Ч/Б
-                }
-            }
-        });
-    }, { threshold: 0.9 });
-    
-    cards.forEach(card => observer.observe(card));
-}
-
-// Запускаем
-initCardAnimation();
-
-// При изменении размера окна перезапускаем
-window.addEventListener('resize', () => {
-    document.querySelectorAll('.card').forEach(card => {
-        card.classList.remove('card-visible');
-        const img = card.querySelector('.card-image');
-        if (img) img.style.filter = 'grayscale(100%)';
-    });
     initCardAnimation();
 });
 
