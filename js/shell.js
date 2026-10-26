@@ -8,7 +8,7 @@ function shell(path, inner, showHero) {
   var h = '<div class="shell"><button type="button" class="skip" data-goto="main">К содержанию</button>';
   if (showHero) {
     h += '<header class="hero">' + HERO.map(function (s, i) {
-      return '<img class="slide' + (i === 0 ? ' on' : '') + '" src="' + s + '" alt="" draggable="false" style="object-position:' + (HERO_FOCUS[s] || 'center top') + '" onerror="heroImgFail(this)">';
+      return '<img class="slide' + (i === 0 ? ' on' : '') + '" src="' + s + '" alt="" draggable="false" onload="heroFocusOne(this)" onerror="heroImgFail(this)">';
     }).join('') +
       '<div class="title-group"><div class="header-eyebrow"><span>' + SITE.tagline + '</span></div>' +
       '<h1 class="site-title">Dark<br>Stories</h1>' +

@@ -18,5 +18,6 @@ var ICONS = {
   "mail": "<path d=\"m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7\"/><rect x=\"2\" y=\"4\" width=\"20\" height=\"16\" rx=\"2\"/>",
   "send": "<path d=\"M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z\"/><path d=\"m21.854 2.147-10.94 10.939\"/>",
   "pen": "<path d=\"M12 20h9\"/><path d=\"M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z\"/>",
-  "ruble": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><text x=\"12\" y=\"16\" text-anchor=\"middle\" font-size=\"11\" font-family=\"Montserrat, sans-serif\" font-weight=\"700\" fill=\"currentColor\" stroke=\"none\">₽</text>"
+  "ruble": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><text x=\"12\" y=\"16\" text-anchor=\"middle\" font-size=\"11\" font-family=\"Montserrat, sans-serif\" font-weight=\"700\" fill=\"currentColor\" stroke=\"none\">₽</text>",
+  "heartfill": "<path d=\"M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z\"/>"
 };

@@ -11,6 +11,7 @@ document.addEventListener('click', function (e) {
     startHero(); /* после ручного выбора автолистание отсчитывает 5 секунд заново */
     return;
   }
+  if (up('[data-docclose]')) { closeDoc(); return; }
   if (up('#backToTopBtn')) {
     var hero = $('.hero');
     window.scrollTo({ top: hero ? hero.offsetHeight - 1 : 0, behavior: 'smooth' });
@@ -48,13 +49,6 @@ document.addEventListener('click', function (e) {
     el.closest('.card').classList.toggle('desc-open'); return;
   }
   if ((el = up('.card[data-href]')) && !up('a, button')) { location.hash = el.getAttribute('data-href'); return; }
-  if ((el = up('[data-amount]'))) {
-    var a = el.getAttribute('data-amount');
-    copyText('Здравствуйте, ' + SITE.author + '! Хочу поддержать Dark Stories на ' + a + ' ₽.')
-      .then(function () { toast('Текст скопирован. Отправьте его в Telegram или письмом — без номера карты на сайте.'); })
-      .catch(function () { toast('Не удалось скопировать. Напишите в Telegram вручную.'); });
-    return;
-  }
   if (up('#qclear')) { var q = $('#q'); q.value = ''; closeResults(); q.focus(); return; }
   if (up('.results a')) { closeResults(); var qi = $('#q'); if (qi) qi.value = ''; return; }
   if (!up('.search')) closeResults();
@@ -97,6 +91,7 @@ document.addEventListener('keydown', function (e) {
     if (quoteShareOpen()) { closeQuoteShare(); return; }
     if ($('#overlay-root .v3modal')) { closeDialog(); return; }
     var rs = $('#results'); if (rs && !rs.hidden) { closeResults(); return; }
+    if (isDocPath(parseHash().path)) { closeDoc(); return; }
     if (R) location.hash = returnHash || (R.work.kind === 'article' ? '#/articles' : '#/');
     return;
   }
@@ -132,6 +127,10 @@ function runSearch(value) {
 function updateBackToTop() {
   var b = $('#backToTopBtn'); if (!b) return;
   b.classList.toggle('show', window.scrollY > 400 && !$('#reader'));
+  /* когда внизу показывается подвал, кнопка поднимается и остаётся над ним, не заходя на него */
+  var f = $('.footer'), lift = 0;
+  if (f) lift = Math.max(0, window.innerHeight - f.getBoundingClientRect().top);
+  b.style.setProperty('--lift', lift + 'px');
 }
 
 /* скролл: прогресс чтения и прячущееся меню на телефоне */
@@ -155,3 +154,5 @@ window.addEventListener('scroll', function () {
     ticking = false;
   });
 }, { passive: true });
+
+window.addEventListener('resize', updateBackToTop);

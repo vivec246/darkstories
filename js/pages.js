@@ -1,3 +1,7 @@
+/* крестик «Закрыть» на страницах «О сайте», «Политика», «Авторские права» */
+function docCloseBtn() {
+  return '<button type="button" class="btn control doc-close" data-docclose aria-label="Закрыть">' + icon('x') + '</button>';
+}
 /* СТРАНИЦЫ: главная («Ваша полка», новинки), книги, статьи, о сайте, политика, связь, донат. */
 
 var PAGES = {};
@@ -32,7 +36,7 @@ PAGES['/'] = { hero: true, title: SITE.name, render: homeHtml };
 PAGES['/books'] = { hero: true, title: 'Книги — ' + SITE.name, desc: 'Рассказы Дмитрия Ланцева: мистика и тёмное фэнтези.', render: function () { return gridHtml(byKind('story')); } };
 PAGES['/articles'] = { hero: true, title: 'Статьи — ' + SITE.name, desc: 'Аналитика и эссе Дмитрия Ланцева о литературе и тёмных историях.', render: function () { return gridHtml(byKind('article')); } };
 PAGES['/about'] = { title: 'О сайте — ' + SITE.name, render: function () {
-  return '<article class="doc"><h1>О сайте</h1><p><strong>Dark Stories</strong> — авторский проект Дмитрия Ланцева.</p>' +
+  return '<article class="doc">' + docCloseBtn() + '<h1>О сайте</h1><p><strong>Dark Stories</strong> — авторский проект Дмитрия Ланцева.</p>' +
     '<p><strong>Жанры:</strong> мистика, тёмное фэнтези, научная фантастика, детектив.</p>' +
     '<p><strong>Версия:</strong> ' + SITE.version + '</p><p><strong>Год:</strong> ' + SITE.year + '</p>' +
     '<p>Читалка запоминает вашу полку, прогресс чтения и закладки на этом устройстве. У каждого текста — своя страница, поиск подсвечивает найденное, незаконченные вещи помечены как «Пишется».</p>' +
@@ -40,7 +44,7 @@ PAGES['/about'] = { title: 'О сайте — ' + SITE.name, render: function ()
     '<p>Telegram: <a class="l" href="' + SITE.telegram + '">' + SITE.telegramHandle + '</a></p></article>';
 }};
 PAGES['/policy'] = { title: 'Политика — ' + SITE.name, render: function () {
-  return '<article class="doc"><h1>Политика конфиденциальности</h1><p>Сайт ' + SITE.name + ' уважает вашу конфиденциальность.</p>' +
+  return '<article class="doc">' + docCloseBtn() + '<h1>Политика конфиденциальности</h1><p>Сайт ' + SITE.name + ' уважает вашу конфиденциальность.</p>' +
     '<p><strong>1.</strong> Часть материалов предназначена для читателей старше 16 или 18 лет — это указано на карточке. Продолжая читать, вы подтверждаете возраст.</p>' +
     '<p><strong>2.</strong> Сайт не собирает анкеты и не просит регистрацию.</p>' +
     '<p><strong>3.</strong> Ваша полка (тексты со звездой), прогресс чтения и закладки хранятся только в браузере (localStorage) и никуда не отправляются.</p>' +
@@ -48,7 +52,7 @@ PAGES['/policy'] = { title: 'Политика — ' + SITE.name, render: functio
     '<p>Контакт: <a class="l" href="mailto:' + SITE.email + '">' + SITE.email + '</a></p></article>';
 }};
 PAGES['/copyright'] = { title: 'Авторские права — ' + SITE.name, render: function () {
-  return '<article class="doc"><h1>Авторские права</h1><p><strong>' + SITE.year + ' ' + SITE.author + '. Все права защищены.</strong></p>' +
+  return '<article class="doc">' + docCloseBtn() + '<h1>Авторские права</h1><p><strong>' + SITE.year + ' ' + SITE.author + '. Все права защищены.</strong></p>' +
     '<p><strong>1.</strong> Цитирование допускается с активной ссылкой на источник.</p>' +
     '<p><strong>2.</strong> Полное копирование текстов без письменного разрешения автора запрещено.</p>' +
     '<p><strong>3.</strong> Коммерческое использование — только по согласованию.</p>' +
@@ -63,11 +67,9 @@ PAGES['/contact'] = { hero: true, title: 'Связь — ' + SITE.name, render: 
     }).join('') + '</div>';
 }};
 PAGES['/support'] = { hero: true, title: 'Поддержать — ' + SITE.name, render: function () {
-  return '<section class="support">' + icon('heart', 'xl heart') + '<h1>Поддержать проект</h1>' +
-    '<p>Номер карты на сайте больше не публикуется. Если хотите помочь новым рассказам — напишите в Telegram или на почту. Можно скопировать готовое сообщение с суммой.</p>' +
-    '<div class="amounts">' + [100, 250, 500, 1000].map(function (a) { return '<button type="button" data-amount="' + a + '">' + a + ' ₽</button>'; }).join('') + '</div>' +
-    '<div class="cta"><a class="btn" href="' + SITE.telegram + '" target="_blank" rel="noreferrer">' + icon('send') + 'Telegram ' + SITE.telegramHandle + '</a>' +
-    '<a class="btn outline" href="mailto:' + SITE.email + '?subject=' + encodeURIComponent('Поддержка Dark Stories') + '">' + icon('mail') + 'Написать на почту</a></div></section>';
+  return '<section class="support">' + '<span class="support-icon" aria-hidden="true">' + icon('heartfill') + '</span>' + '<h1>Поддержать проект</h1>' +
+    '<p>Донаты пока недоступны. Если хотите поддержать проект, напишите мне во вкладке «Связь» — договоримся.</p>' +
+    '<div class="cta"><a class="btn" href="#/contact">' + icon('msg') + 'Перейти в «Связь»</a></div></section>';
 }};
 
 function recommend() {
