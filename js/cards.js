@@ -2,12 +2,14 @@
 
 function cardHtml(w) {
   var fav = Store.isFav(w.slug), href = '#/read/' + w.slug;
+  var pct = Math.min(100, Math.round(Store.pct(w.slug)));   /* сколько уже прочитано, в процентах */
   var label = fav ? 'Убрать с полки' : 'Добавить на полку';
   return '<article class="card" data-href="' + href + '" tabindex="0" aria-label="Читать: ' + esc(w.title) + '">' +
     '<div class="card-image-wrapper">' +
       '<img class="card-image" src="' + esc(w.cover) + '" alt="" loading="lazy" decoding="async" onerror="coverFail(this)">' +
       '<div class="card-image-fallback" style="display:none"><span>' + esc(w.genre) + '</span></div>' +
-      '<div class="card-badges"><span class="card-year-badge">' + esc(w.year) + '</span>' +
+      '<div class="card-badges"><div class="card-badges-left"><span class="card-year-badge">' + esc(w.year) + '</span>' +
+          (pct >= 1 ? '<span class="card-year-badge card-progress-badge" title="Прочитано">' + pct + '%</span>' : '') + '</div>' +
         '<button type="button" class="card-favorite-badge' + (fav ? ' active' : '') + '" data-fav="' + w.slug + '" aria-pressed="' + fav + '" aria-label="' + label + '" title="' + label + '">' + icon('star') + '</button></div>' +
     '</div>' +
     '<div class="card-content">' +

@@ -49,7 +49,7 @@ document.addEventListener('click', function (e) {
     el.closest('.card').classList.toggle('desc-open'); return;
   }
   if ((el = up('.card[data-href]')) && !up('a, button')) { location.hash = el.getAttribute('data-href'); return; }
-  if (up('#qclear')) { var q = $('#q'); q.value = ''; closeResults(); q.focus(); return; }
+  if (up('#qclear')) { var q = $('#q'); q.value = ''; runSearch(''); q.focus(); return; }
   if (up('.results a')) { closeResults(); var qi = $('#q'); if (qi) qi.value = ''; return; }
   if (!up('.search')) closeResults();
 
@@ -113,7 +113,8 @@ function closeResults() { var r = $('#results'); if (r) { r.hidden = true; r.inn
 function runSearch(value) {
   var clear = $('#qclear'), ic = $('#qicon'), box = $('#results');
   if (!box) return;
-  if (clear) clear.hidden = !value; if (ic) ic.hidden = !!value;
+  /* крестик появляется только когда в поле есть текст; лупа остаётся всегда */
+  if (clear) clear.hidden = !value;
   var q = value.trim();
   if (q.length < 2) { closeResults(); return; }
   var hits = searchWorks(q);
