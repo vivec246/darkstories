@@ -90,10 +90,6 @@ document.addEventListener('click', function (e) {
   if (up('#qclear')) { var q = $('#q'); q.value = ''; runSearch(''); q.focus(); return; }
   if (up('.results a')) { closeResults(); var qi = $('#q'); if (qi) qi.value = ''; if (searchBarOpen()) { var nv = $('.nav'); nv.classList.remove('search-open'); var lb = $('#qicon'); if (lb) lb.setAttribute('aria-expanded', 'false'); } return; }
   if (!up('.search')) { closeResults(); if (searchBarOpen() && !($('#q') || {}).value) closeSearchBar(); }
-  if ((el = up('.card[data-href]')) && !up('a, button')) { location.hash = el.getAttribute('data-href'); return; }
-  if (up('#qclear')) { var q = $('#q'); q.value = ''; runSearch(''); q.focus(); return; }
-  if (up('.results a')) { closeResults(); var qi = $('#q'); if (qi) qi.value = ''; return; }
-  if (!up('.search')) closeResults();
 
   if ((el = up('[data-bm-del]'))) { Store.removeBookmark(R.work.slug, el.getAttribute('data-bm-del')); openDialog('bookmarks'); return; }
   if ((el = up('[data-bm-go]'))) { window.scrollTo({ top: Number(el.getAttribute('data-bm-go')), behavior: 'smooth' }); closeDialog(); return; }

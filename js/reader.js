@@ -215,7 +215,7 @@ function updateProgressBar() {
   var rt = $('#rtime');
   if (rt && R && R.words) {
     var left = Math.round(R.words / 190 * (1 - frac));   /* ~190 слов в минуту */
-    rt.textContent = frac >= 0.985 ? 'дочитано' : left < 1 ? 'меньше минуты' : 'осталось ~' + left + ' мин';
+    rt.textContent = frac >= 0.985 ? 'дочитано' : left < 1 ? 'меньше минуты' : 'осталось ' + left + ' мин';
   }
   return pct;
 }
