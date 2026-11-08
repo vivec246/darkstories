@@ -913,3 +913,56 @@ html:has(#reader.scifi)::-webkit-scrollbar-button,html:has(#reader.fantasy)::-we
 .footer .links .install{font:inherit;letter-spacing:inherit;text-transform:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;transition:color .3s ease,text-shadow .3s ease}
 .footer .links .install:hover,.footer .links .install:focus-visible{color:#fff;text-shadow:0 0 8px rgba(255,255,255,.9),0 0 20px rgba(255,255,255,.35)}
 @media (display-mode:standalone){.footer .links .install{display:none}}
+
+
+/* =====================================================================
+   СТИЛЬ «ГАЗЕТА» — для статей. Продолжение карточек статей на полке: газетная бумага, чёрная краска, красный акцент,
+   заголовок с двойной линией, буквица. День — бумага; ночью — негатив (тёмная бумага, светлая краска); свеча — тёплая сепия.
+   ===================================================================== */
+#reader.gazette{--gz-head:var(--font-display),'Playfair Display',Georgia,serif;--gz-body:Georgia,'Times New Roman',serif;background:var(--gz-desk);background-attachment:fixed}
+#reader.gazette.day{--gz-desk:radial-gradient(ellipse 80% 60% at 50% 25%,#2c2720 0%,#15120e 70%,#0a0907 100%);--gz-paper:#faf6e6;--gz-ink:#1c1a17;--gz-text:#241f18;--gz-red:#8a1c1c;--gz-dim:#5b5444;--gz-line:rgba(28,26,23,.55);--gz-shadow:0 22px 60px rgba(0,0,0,.65),0 3px 8px rgba(0,0,0,.4)}
+#reader.gazette.night{--gz-desk:radial-gradient(ellipse 80% 60% at 50% 25%,#12110f 0%,#080706 70%,#030302 100%);--gz-paper:#141210;--gz-ink:#ece6d4;--gz-text:#d9d2bf;--gz-red:#dc7b66;--gz-dim:#9b9482;--gz-line:rgba(236,230,212,.45);--gz-shadow:0 22px 60px rgba(0,0,0,.7),0 0 0 1px rgba(236,230,212,.05)}
+#reader.gazette.night.candle{--gz-desk:radial-gradient(ellipse 80% 60% at 50% 25%,#1d140b 0%,#0e0905 70%,#050302 100%);--gz-paper:#1b140c;--gz-ink:#f1dfb4;--gz-text:#e2cfa2;--gz-red:#e8a553;--gz-dim:#a8936a;--gz-line:rgba(241,223,180,.42)}
+#reader.gazette .rcontent{border-radius:2px;background-color:var(--gz-paper);border:1px solid var(--gz-ink);box-shadow:var(--gz-shadow);outline:1px solid var(--gz-line);outline-offset:-8px;padding-top:44px;position:relative;overflow:hidden}
+#reader.gazette.day .rcontent{background-image:radial-gradient(ellipse at center,transparent 55%,rgba(150,118,50,.16) 100%),url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .28 0 0 0 0 .15 0 0 0 .1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+#reader.gazette.night .rcontent{background-image:radial-gradient(ellipse at center,transparent 60%,rgba(0,0,0,.35) 100%)}
+/* шапка газеты над заголовком */
+#reader.gazette .rcontent::before{content:"DARK STORIES  ·  СТАТЬЯ";display:block;margin:0 0 26px;padding:0 0 9px;text-align:center;font:700 10px/1 var(--font-sans);letter-spacing:.34em;text-indent:.34em;color:var(--gz-dim);border-bottom:3px double var(--gz-line);-webkit-backdrop-filter:none;backdrop-filter:none}
+#reader.gazette .reader-body h1{font-family:var(--gz-head);font-weight:900;font-size:2.7rem;line-height:1.06;letter-spacing:.012em;text-align:center;text-wrap:balance;color:var(--gz-ink);border:0;padding:0;margin:0 0 26px}
+#reader.gazette .reader-body h1::after{content:"";display:block;height:5px;margin-top:20px;border-top:2px solid var(--gz-ink);border-bottom:1px solid var(--gz-ink)}
+#reader.gazette .reader-body h2,#reader.gazette .reader-body h3{font-family:var(--gz-head);font-weight:900;color:var(--gz-ink);text-align:left;border:0;margin:2em 0 .7em;padding:0 0 .35em;border-bottom:1px solid var(--gz-line);line-height:1.2}
+#reader.gazette .reader-body h2{font-size:1.65em}
+#reader.gazette .reader-body h3{font-size:1.3em}
+#reader.gazette .reader-body p,#reader.gazette .reader-body li,#reader.gazette .reader-body blockquote{font-family:var(--gz-body);color:var(--gz-text)}
+#reader.gazette .reader-body h1 + p::first-letter,#reader.gazette .reader-body h1 + div + p::first-letter{font-family:var(--gz-head);font-weight:900;float:left;font-size:3.5em;line-height:.82;padding:.06em .1em 0 0;color:var(--gz-ink)}
+#reader.gazette .reader-body blockquote{color:var(--gz-dim);border-left:3px solid var(--gz-red);font-style:italic}
+#reader.gazette .reader-body a{color:var(--gz-red);text-decoration:underline;text-underline-offset:3px}
+#reader.gazette .reader-body hr{border:0;height:5px;border-top:2px solid var(--gz-ink);border-bottom:1px solid var(--gz-ink);background:none}
+#reader.gazette .rbar{background:var(--gz-line)}
+#reader.gazette .rbar i{background:var(--gz-red)}
+#reader.gazette .btn.control{border-radius:50%;border:1.5px solid var(--gz-ink);background:var(--gz-paper);color:var(--gz-ink);box-shadow:0 4px 14px rgba(0,0,0,.45)}
+#reader.gazette .btn.control:hover{background:var(--gz-ink);color:var(--gz-paper)}
+#reader.gazette .rtime{border-radius:2px;border:1.5px solid var(--gz-ink);background:var(--gz-paper);color:var(--gz-ink);font:700 11px/1 var(--font-sans);letter-spacing:.14em}
+#reader.gazette .rnext-t,#reader.gazette .rend{color:var(--gz-red)}
+#reader.gazette .spop{border-radius:2px;border:1.5px solid var(--gz-ink);outline:1px solid var(--gz-line);outline-offset:-5px;background:var(--gz-paper);box-shadow:var(--gz-shadow);color:var(--gz-text)}
+#reader.gazette .sp-t{color:var(--gz-red);font:700 11px/1 var(--font-sans);letter-spacing:.2em}
+#reader.gazette .sp-keys{color:var(--gz-dim)}
+#reader.gazette .spop input[type=range]{accent-color:var(--gz-red)}
+#reader.gazette .chip{border-radius:2px;border:1px solid var(--gz-line);background:transparent;color:var(--gz-ink)}
+#reader.gazette .chip:hover{border-color:var(--gz-ink);color:var(--gz-red)}
+#reader.gazette .chip.on{background:var(--gz-ink);border-color:var(--gz-ink);color:var(--gz-paper)}
+@media (hover:hover) and (pointer:fine){#reader.gazette .rbar{display:none}}
+html:has(#reader.gazette.day){--sb-thumb:#1c1a17;--sb-line:rgba(250,246,230,.3);--sb-bg:#15120e}
+html:has(#reader.gazette.night){--sb-thumb:#dc7b66;--sb-line:rgba(236,230,212,.3);--sb-bg:#080706}
+html:has(#reader.gazette.night.candle){--sb-thumb:#e8a553;--sb-line:rgba(241,223,180,.3);--sb-bg:#0e0905}
+html:has(#reader.gazette){scrollbar-color:var(--sb-thumb) var(--sb-bg)}
+html:has(#reader.gazette)::-webkit-scrollbar{width:16px;background:var(--sb-bg)}
+html:has(#reader.gazette)::-webkit-scrollbar-track{background:linear-gradient(90deg,transparent 7px,var(--sb-line) 7px 8px,transparent 8px),var(--sb-bg)}
+html:has(#reader.gazette)::-webkit-scrollbar-thumb{min-height:44px;background:var(--sb-thumb);border:4px solid transparent;background-clip:padding-box;border-radius:2px}
+html:has(#reader.gazette.day)::-webkit-scrollbar-thumb{background:#c9bf9a;background-clip:padding-box}
+html:has(#reader.gazette)::-webkit-scrollbar-button{display:none;width:0;height:0}
+@media (max-width:768px){
+  #reader.gazette .rcontent{padding-top:34px}
+  #reader.gazette .reader-body h1{font-size:2rem}
+  #reader.gazette .reader-body h2{font-size:1.4em}
+}

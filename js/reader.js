@@ -16,11 +16,13 @@ var STYLES = [['standard', 'Стандартная'], ['scifi', 'Sci-Fi'], ['fan
 function styleName(id) { for (var i = 0; i < STYLES.length; i++) if (STYLES[i][0] === id) return STYLES[i][1]; return id; }
 /* какие стили предложены читателю: «Стандартная» и стиль текста (если автор включил выбор) */
 function styleOptions(w) {
+  if (w && w.kind === 'article') return ['gazette'];   /* статьи всегда в газетном стиле, выбора нет */
   var def = w && (w.readerStyle === 'scifi' || w.readerStyle === 'fantasy') ? w.readerStyle : 'standard';
   return def !== 'standard' && w.readerStyleChoice ? ['standard', def] : [def];
 }
 function workStyle(w) {
   if (!w) return 'standard';
+  if (w.kind === 'article') return 'gazette';
   var def = w.readerStyle === 'scifi' || w.readerStyle === 'fantasy' ? w.readerStyle : 'standard';
   var opts = styleOptions(w);
   if (opts.length < 2) return def;
@@ -30,7 +32,7 @@ function workStyle(w) {
 /* шрифты для Sci-Fi подгружаем только тогда, когда стиль реально нужен */
 function ensureStyleFonts(style) {
   var id = 'fonts-' + style;
-  if (style === 'standard' || document.getElementById(id)) return;
+  if (style === 'standard' || style === 'gazette' || document.getElementById(id)) return;
   var l = document.createElement('link'); l.id = id; l.rel = 'stylesheet';
   l.href = style === 'scifi'
     ? 'https://fonts.googleapis.com/css2?family=Tektur:wght@500;700&family=IBM+Plex+Mono:wght@400;500&display=swap'
@@ -99,6 +101,7 @@ function applyReaderPrefs() {
   var st = workStyle(R && R.work);
   rd.classList.toggle('scifi', st === 'scifi');
   rd.classList.toggle('fantasy', st === 'fantasy');
+  rd.classList.toggle('gazette', st === 'gazette');
   ensureStyleFonts(st);
   rd.setAttribute('data-font', S.readerFont);
   rd.setAttribute('data-width', S.readerWidth);
