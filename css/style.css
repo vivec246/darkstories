@@ -907,3 +907,9 @@ html:has(#reader.scifi)::-webkit-scrollbar-button,html:has(#reader.fantasy)::-we
 #selbar[hidden]{display:none}
 #selbar button{font:600 .85rem/1 inherit;font-family:inherit;color:#eee;background:none;border:0;padding:.7rem .9rem;border-radius:9px;cursor:pointer}
 #selbar button:active{background:rgba(255,255,255,.12)}
+
+
+/* кнопка «Скачать приложение» в подвале — выглядит как соседние ссылки */
+.footer .links .install{font:inherit;letter-spacing:inherit;text-transform:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;transition:color .3s ease,text-shadow .3s ease}
+.footer .links .install:hover,.footer .links .install:focus-visible{color:#fff;text-shadow:0 0 8px rgba(255,255,255,.9),0 0 20px rgba(255,255,255,.35)}
+@media (display-mode:standalone){.footer .links .install{display:none}}
