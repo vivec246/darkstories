@@ -6,7 +6,7 @@ function docCloseBtn() {
 
 var PAGES = {};
 function shelfHtml() {
-  var items = Store.s.favorites.map(getWork).filter(Boolean);
+  var items = Store.s.favorites.map(getWork).filter(function (w) { return w && w.kind === 'story'; });
   var h = '<h2 class="h-label">Ваша полка</h2>';
   var cont = Store.s.recent.map(getWork).filter(function (w) {
     if (!w) return false; var p = Store.pct(w.slug); return p > 4 && p < 96;
@@ -16,9 +16,9 @@ function shelfHtml() {
       '<a class="btn" href="#/read/' + cont.slug + '?resume=1">Продолжить</a></div>';
   }
   if (!items.length) {
-    h += '<div class="panel"><p class="eyebrow">Полка пуста</p><p class="t">Нажмите на звезду на карточке рассказа или статьи — текст появится здесь, и вы всегда сможете быстро к нему вернуться.</p><a class="btn" href="#/books">К книгам</a></div>';
+    h += '<div class="panel"><p class="eyebrow">Полка пуста</p><p class="t">Нажмите на звезду на карточке книги — текст появится здесь, и вы всегда сможете быстро к нему вернуться.</p><a class="btn" href="#/books">К книгам</a></div>';
   } else {
-    h += gridHtml(items);
+    h += shelfBooksHtml(items);
   }
   return h;
 }
@@ -43,12 +43,18 @@ PAGES['/about'] = { title: 'О сайте — ' + SITE.name, render: function ()
     '<p>Email: <a class="l" href="mailto:' + SITE.email + '">' + SITE.email + '</a></p>' +
     '<p>Telegram: <a class="l" href="' + SITE.telegram + '">' + SITE.telegramHandle + '</a></p></article>';
 }};
+PAGES['/author'] = { title: 'Об авторе — ' + SITE.name, desc: 'Дмитрий Ланцев: пишу о ведьмаках, космических аномалиях и людях, которые пытаются остаться людьми.', render: function () {
+  return '<article class="doc">' + docCloseBtn() + '<h1>Об авторе</h1><p><strong>Я Дмитрий Ланцев.</strong></p>' +
+    '<p>Родился и живу в Сибири. Пишу о ведьмаках, космических аномалиях и людях, которые пытаются остаться людьми. Здесь, на «Dark Stories», я собираю свои миры, чтобы поделиться с вами, чтобы они наконец-то нашли своего читателя.</p></article>';
+}};
 PAGES['/policy'] = { title: 'Политика — ' + SITE.name, render: function () {
   return '<article class="doc">' + docCloseBtn() + '<h1>Политика конфиденциальности</h1><p>Сайт ' + SITE.name + ' уважает вашу конфиденциальность.</p>' +
     '<p><strong>1.</strong> Часть материалов предназначена для читателей старше 16 или 18 лет — это указано на карточке. Продолжая читать, вы подтверждаете возраст.</p>' +
-    '<p><strong>2.</strong> Сайт не собирает анкеты и не просит регистрацию.</p>' +
-    '<p><strong>3.</strong> Ваша полка (тексты со звездой), прогресс чтения и закладки хранятся только в браузере (localStorage) и никуда не отправляются.</p>' +
-    '<p><strong>4.</strong> Ссылки на Telegram и Дзен ведут на чужие сервисы — там действуют их политики.</p>' +
+    '<p><strong>2.</strong> Сайт не собирает анкеты и не просит регистрацию. Вы не передаёте нам имя, почту или другие сведения о себе, если не напишете сами.</p>' +
+    '<p><strong>3.</strong> Ваша полка (книги со звездой), прогресс чтения, закладки и настройки читалки (тема, шрифт, размер текста) хранятся только в вашем браузере (localStorage) и никуда не отправляются.</p>' +
+    '<p><strong>4. Статистика посещений.</strong> Чтобы понимать, какие тексты интересны читателям, сайт использует сервис «Яндекс Метрика» (ООО «Яндекс», Россия). Он получает обезличенные данные: адрес и название открытой страницы или рассказа, факт дочтения рассказа до конца, время на странице, откуда вы пришли (поисковик, Telegram, Дзен и т. п.), тип устройства, браузер и операционную систему, размер экрана, примерный город по IP-адресу, а также нажатия на ссылки и кнопки. Для этого в вашем браузере сохраняются файлы cookie Метрики. Работает «Вебвизор»: Метрика записывает обезличенный ход визита — движения мыши, прокрутку и клики на странице, чтобы мы видели, где читателям неудобно. Поля ввода (например, поиск) в записи скрываются, сам текст, который вы выделяете или копируете, не собирается. Мы не связываем эти данные с вашим именем и не пытаемся вас идентифицировать.</p>' +
+    '<p><strong>5.</strong> Как отказаться: отключите cookie в настройках браузера, воспользуйтесь расширением для блокировки Метрики или запретом сбора данных на странице <a class="l" href="https://yandex.ru/support/metrica/general/opt-out.html" target="_blank" rel="noopener">yandex.ru/support/metrica/general/opt-out.html</a>. Сайт при этом продолжит работать. Подробнее об обработке данных — в <a class="l" href="https://yandex.ru/legal/confidential/" target="_blank" rel="noopener">политике «Яндекса»</a>.</p>' +
+    '<p><strong>6.</strong> Ссылки на Telegram и Дзен ведут на чужие сервисы — там действуют их политики.</p>' +
     '<p>Контакт: <a class="l" href="mailto:' + SITE.email + '">' + SITE.email + '</a></p></article>';
 }};
 PAGES['/copyright'] = { title: 'Авторские права — ' + SITE.name, render: function () {

@@ -2,12 +2,13 @@
    Чтобы добавить рассказ или статью — положите .md в stories/ или articles/ и добавьте блок в WORKS. */
 
 var SITE = {
-  name: 'Dark Stories', author: 'Дмитрий Ланцев', tagline: 'Цифровое издание мистики',
+  name: 'Dark Stories', author: 'Дмитрий Ланцев', tagline: 'Цифровое издание',
   description: 'Тёмные истории от Дмитрия Ланцева — рассказы и статьи в жанре мистика и тёмное фэнтези',
   email: 'lancev.dmitrij.avtor@gmail.com',
   telegram: 'https://t.me/lancev_dark', telegramHandle: '@lancev_dark',
   dzen: 'https://dzen.ru/slovo_lanceva', dzenHandle: 'slovo_lanceva',
-  year: 2026, version: '4.0'
+  year: 2026, version: '4.0',
+  metrikaId: '108542095', metrikaWebvisor: true,   /* номер счётчика Яндекс Метрики; пусто — статистика выключена. Задаётся в админке: Сайт → Статистика */
 };
 var HERO = ['cap/header_1.jpg','cap/header_2.jpg','cap/header_3.jpg','cap/header_4.jpg','cap/header_5.jpg','cap/header_6.jpg','cap/header_7.jpg'];
 /* Где в картинке главный объект (число — процент от ширины картинки: 0 — левый край, 50 — середина, 100 — правый).
@@ -23,6 +24,10 @@ var HERO_FOCUS = {
   'cap/header_7.jpg': 50    // лес
 };
 
+/* То же по вертикали: на каком проценте высоты картинки главный объект (0 — верх, 100 — низ).
+   Работает на широких экранах (компьютер), где картинка обрезается сверху и снизу. Если картинки здесь нет — показывается верх. */
+var HERO_FOCUS_Y = {};
+
 /* Список текстов: чтобы добавить рассказ — положите .md в stories/ или articles/ и добавьте строку сюда */
 var WORKS = [
   {
@@ -37,7 +42,9 @@ var WORKS = [
     "age": "18+",
     "year": "2025",
     "status": "published",
-    "minutes": 90
+    "minutes": 90,
+    "readerStyle": "fantasy",
+    "readerStyleChoice": true
   },
   {
     "slug": "mission-hades",
@@ -51,7 +58,9 @@ var WORKS = [
     "age": "18+",
     "year": "2025",
     "status": "published",
-    "minutes": 22
+    "minutes": 22,
+    "readerStyle": "scifi",
+    "readerStyleChoice": true
   },
   {
     "slug": "detective-murr",
@@ -61,7 +70,7 @@ var WORKS = [
     "title": "Детектив Мурр и «Чистая Лапа». Часть I",
     "shortTitle": "Детектив Мурр. Часть I",
     "description": "Детектив Мурр находит странную записку и, пытаясь разобраться, оказывается втянут в дело, которое перевернёт его жизнь.",
-    "genre": "Детектив",
+    "genre": "Детективный нуар",
     "age": "16+",
     "year": "2025",
     "status": "published",
@@ -93,7 +102,9 @@ var WORKS = [
     "age": "18+",
     "year": "2026",
     "status": "wip",
-    "minutes": 1
+    "minutes": 1,
+    "readerStyle": "fantasy",
+    "readerStyleChoice": true
   },
   {
     "slug": "lord-balderon",
@@ -108,6 +119,8 @@ var WORKS = [
     "year": "2026",
     "status": "published",
     "minutes": 3,
+    "readerStyle": "fantasy",
+    "readerStyleChoice": true,
     "cycle": [
       "Сказ первый. Глина",
       "Сказ второй. Дар",
@@ -148,7 +161,8 @@ var WORKS = [
 ];
 
 var NEWS = [
-  { date: 'Апрель 2026', title: 'Издание 4.0', text: 'У каждого текста свой адрес. На карточке видно, сколько уже прочитано. Цикл Балдерона открывается шестью сказами, а не одним полотном.' },
+  { date: 'Ноябрь 2026', title: 'Издание 4.1', text: 'Обновление внешнего вида карточек книг и статей.' },
+  { date: 'Октябрь 2026', title: 'Издание 4.0', text: 'У каждого текста свой адрес. На карточке видно, сколько уже прочитано. Цикл Балдерона открывается шестью сказами, а не одним полотном.' },
   { date: 'Март 2026', title: 'Медведь на перепутье', text: 'Новый сказ в работе. На полке пока анонс.', slug: 'bear-at-a-crossroads' },
   { date: 'Январь 2026', title: 'Цикл Балдерона', text: 'Шесть сказов о создателе, который ошибается. Философское фэнтези, 16+.', slug: 'lord-balderon' },
   { date: 'Декабрь 2025', title: 'Пролетая над гнездом кукушки', text: 'Статья о романе Кизи: почему клетка держится изнутри.', slug: 'cuckoos-nest' },

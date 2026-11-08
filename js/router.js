@@ -5,16 +5,21 @@ var heroTimer = null;
 /* Подбираем кадр картинки шапки так, чтобы главный объект (HERO_FOCUS) был по центру экрана.
    Работает при любой ширине: на телефоне, планшете и компьютере. */
 function heroFocusOne(img) {
-  var hero = img.closest ? img.closest('.hero') : null;
+  var hero = $('.hero');
   if (!hero || !img.naturalWidth) return;
   var q = HERO_FOCUS[img.getAttribute('src')];
   if (typeof q !== 'number') q = 50;
-  var cw = hero.clientWidth, ch = hero.clientHeight, iw = img.naturalWidth, ih = img.naturalHeight;
-  var scale = Math.max(cw / iw, ch / ih), dw = iw * scale, over = dw - cw;
+  /* картинка шапки выше самой шапки на --ext: этот «хвост» виден под меню */
+  var ext = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--ext')) || 0;
+  var cw = hero.clientWidth, ch = hero.clientHeight + ext, iw = img.naturalWidth, ih = img.naturalHeight;
+  var scale = Math.max(cw / iw, ch / ih), dw = iw * scale, dh = ih * scale, over = dw - cw, overY = dh - ch;
   var p = over > 1 ? Math.min(1, Math.max(0, (q / 100 * dw - cw / 2) / over)) : 0.5;
-  img.style.objectPosition = (p * 100).toFixed(1) + '% 0%';
+  /* по вертикали: если задана высота главного объекта (HERO_FOCUS_Y) — подбираем кадр так же; иначе показываем верх картинки, как раньше */
+  var qy = (typeof HERO_FOCUS_Y !== 'undefined') ? HERO_FOCUS_Y[img.getAttribute('src')] : undefined;
+  var py = (typeof qy === 'number' && overY > 1) ? Math.min(1, Math.max(0, (qy / 100 * dh - ch / 2) / overY)) : 0;
+  img.style.objectPosition = (p * 100).toFixed(1) + '% ' + (py * 100).toFixed(1) + '%';
 }
-function heroFocusAll() { $$('.hero .slide').forEach(heroFocusOne); }
+function heroFocusAll() { $$('.hero .slide, .nav-slide').forEach(heroFocusOne); }
 (function () {
   var timer = null;
   window.addEventListener('resize', function () { clearTimeout(timer); timer = setTimeout(heroFocusAll, 120); });
@@ -35,18 +40,30 @@ function renderHeroDots() {
 function showHeroSlide(i) {
   var slides = $$('.hero .slide');
   if (!slides[i]) return;
+  /* ещё не загруженный кадр (быстрый клик по точке) грузим сразу */
+  takeSrc(slides[i]); takeSrc($$('.nav-slide')[i]);
   slides.forEach(function (s, k) { s.classList.toggle('on', k === i); });
   $$('.hero-dot').forEach(function (d, k) {
     var on = k === i;
     d.classList.toggle('active', on);
     d.setAttribute('aria-selected', on);
   });
+  syncNavSlides();
+}
+/* отражение под меню показывает ту же картинку, что и шапка */
+function syncNavSlides() {
+  var cur = -1;
+  $$('.hero .slide').forEach(function (s, k) { if (s.classList.contains('on')) cur = k; });
+  $$('.nav-slide').forEach(function (n, k) { n.classList.toggle('on', k === cur); });
 }
 /* если картинки шапки нет на сервере — убираем слайд, чтобы не было пустого экрана */
 function heroImgFail(img) {
   var wasOn = img.classList.contains('on');
+  var idx = $$('.hero .slide').indexOf(img);
   img.remove();
+  var ns = $$('.nav-slide')[idx]; if (ns) ns.remove();
   if (wasOn) { var first = $('.hero .slide'); if (first) first.classList.add('on'); }
+  syncNavSlides();
   renderHeroDots();
 }
 function startHero() {
@@ -61,7 +78,7 @@ function startHero() {
     for (var step = 1; step <= slides.length; step++) {
       var idx = (cur + step + slides.length) % slides.length;
       if (cur >= 0 && idx === cur) break;
-      if (slides[idx].complete === false) continue;
+      if (!slides[idx].getAttribute('src') || slides[idx].complete === false) continue;
       showHeroSlide(idx);
       return;
     }
@@ -100,8 +117,8 @@ var savedScroll = null;   /* где стояли на странице пере�
 var returnHash = null;    /* на какую страницу вернуться из читалки */
 var lastShellHash = '#/';
 
-/* страницы «О сайте», «Политика», «Авторские права»: закрываются крестиком и возвращают туда, откуда пришли */
-var DOC_PATHS = ['/about', '/policy', '/copyright'];
+/* страницы «О сайте», «Политика», «Авторские права», «Об авторе»: закрываются крестиком и возвращают туда, откуда пришли */
+var DOC_PATHS = ['/about', '/policy', '/copyright', '/author'];
 var docReturnHash = null, docReturnScroll = null, restoreScroll = null, currentPath = null;
 function isDocPath(p) { return DOC_PATHS.indexOf(p) >= 0; }
 function closeDoc() {
@@ -138,6 +155,7 @@ function route() {
     $('#main').innerHTML = page.render();
     updateTabs(path);
     var q = $('#q'); if (q && q.value) { q.value = ''; runSearch(''); }
+    if (typeof closeSearchBar === 'function') closeSearchBar();
     setMeta(page.title, page.desc);
     if (showHero) startHero();
     initCardAnimation();
@@ -146,7 +164,7 @@ function route() {
   var hadHero = !!$('.hero');
   $('#app').innerHTML = shell(path, page.render(), showHero);
   setMeta(page.title, page.desc);
-  if (showHero) { startHero(); heroFocusAll(); }
+  if (showHero) { startHero(); heroFocusAll(); loadHeroRest(); }
   if (restoreScroll !== null) { jumpTo(restoreScroll); restoreScroll = null; }
   else if (wasReader && savedScroll !== null) jumpTo(savedScroll);
   else if (hadShell && !wasReader && showHero && !hadHero) { var nv = $('#nav'); jumpTo(nv ? nv.offsetTop : 0); }
