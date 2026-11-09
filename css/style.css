@@ -1021,4 +1021,15 @@ html:has(#reader.gazette)::-webkit-scrollbar-button{display:none;width:0;height:
 #reader .tpop .sp-t{font-size:9px;letter-spacing:.18em;margin-bottom:5px}
 #reader .tpop .sp-chips{flex-wrap:nowrap;gap:4px}
 #reader .tpop .sp-chips .chip{padding:6px 9px;font-size:10.5px;letter-spacing:.2px;white-space:nowrap}
-@media (max-width:768px){#reader .tpop{left:auto;right:.75rem;width:auto;max-width:calc(100vw - 1.5rem);padding:9px 10px 8px}}
+@media (max-width:768px){#reader .tpop{top:4.25rem;bottom:auto;left:auto;right:4.4rem;width:auto;height:auto;max-height:none;overflow:visible;max-width:calc(100vw - 5.2rem);padding:9px 10px 8px}}
+
+/* кнопка в окнах читалки («Сохранить позицию») и остальные акценты — цветом темы, а не синим сайта */
+#overlay-root.scifi{--accent:var(--sf-acc)}
+#overlay-root.fantasy{--accent:var(--fa-acc)}
+#overlay-root.gazette{--accent:var(--gz-red)}
+#overlay-root.scifi .btn.outline{border-radius:0;border:1px solid var(--sf-acc);background:transparent;color:var(--sf-acc);font-family:var(--sf-mono);letter-spacing:.1em}
+#overlay-root.scifi .btn.outline:hover{background:var(--sf-chip-bg);border-color:var(--sf-acc2);color:var(--sf-chip-fg);box-shadow:var(--sf-glow)}
+#overlay-root.fantasy .btn.outline{border-radius:2px;border:1px solid var(--fa-gold);background:transparent;color:var(--fa-acc);font-family:var(--fa-head);font-size:14px;font-weight:700;letter-spacing:.14em}
+#overlay-root.fantasy .btn.outline:hover{background:var(--fa-on-bg);border-color:var(--fa-on-bg);color:var(--fa-on-fg)}
+#overlay-root.gazette .btn.outline{border-radius:2px;border:1.5px solid var(--gz-ink);background:transparent;color:var(--gz-ink);letter-spacing:.12em}
+#overlay-root.gazette .btn.outline:hover{background:var(--gz-ink);border-color:var(--gz-ink);color:var(--gz-paper)}
