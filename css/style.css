@@ -779,9 +779,9 @@ html.kbd .sp-keys{display:block}   /* подсказка по клавишам �
    Работает с тремя темами: ночь, день, свеча. Цвета — в переменных --sf-*.
    ===================================================================== */
 #reader.scifi{--sf-head:'Tektur',var(--font-display),sans-serif;--sf-mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--sf-bg);background-attachment:fixed}
-#reader.scifi.night{--sf-bg:radial-gradient(ellipse 70% 60% at 50% 40%,#0a2336 0%,#04101a 55%,#02060b 100%);--sf-panel:rgba(5,18,29,.94);--sf-line:rgba(79,209,255,.34);--sf-soft:rgba(79,209,255,.12);--sf-acc:#4fd1ff;--sf-acc2:#a6ecff;--sf-ink:#cfe9f5;--sf-dim:#78a0b6;--sf-glow:0 0 18px rgba(79,209,255,.35);--sf-tglow:0 0 22px rgba(79,209,255,.45);--sf-scan:rgba(0,0,0,.18);--sf-shadow:0 20px 60px rgba(0,0,0,.5);--sf-on:#02060b;--sf-chip-bg:rgba(79,209,255,.12);--sf-chip-fg:#a6ecff}
-#reader.scifi.night.candle{--sf-bg:radial-gradient(ellipse 70% 60% at 50% 42%,#2a1707 0%,#120a04 55%,#080402 100%);--sf-panel:rgba(26,15,7,.95);--sf-line:rgba(227,165,72,.38);--sf-soft:rgba(227,165,72,.11);--sf-acc:#e3a548;--sf-acc2:#ffd89a;--sf-ink:#e2cca6;--sf-dim:#a8906a;--sf-glow:0 0 18px rgba(227,150,50,.38);--sf-tglow:0 0 22px rgba(227,150,50,.5);--sf-scan:rgba(0,0,0,.2);--sf-on:#120a04;--sf-chip-bg:rgba(227,165,72,.11);--sf-chip-fg:#ffd89a}
-#reader.scifi.day{--sf-bg:radial-gradient(ellipse 70% 60% at 50% 40%,#f1f7fa 0%,#dfeaf0 55%,#d6e4ec 100%);--sf-panel:rgba(251,253,254,.97);--sf-line:rgba(10,100,140,.42);--sf-soft:rgba(10,100,140,.1);--sf-acc:#0a6f94;--sf-acc2:#07506b;--sf-ink:#14313f;--sf-dim:#4a6a7b;--sf-glow:0 0 0 transparent;--sf-tglow:none;--sf-scan:rgba(10,100,140,.035);--sf-shadow:0 18px 44px rgba(20,60,85,.16);--sf-on:#fff;--sf-chip-bg:#0a6f94;--sf-chip-fg:#fff}
+:is(#reader,#overlay-root).scifi.night{--sf-bg:radial-gradient(ellipse 70% 60% at 50% 40%,#0a2336 0%,#04101a 55%,#02060b 100%);--sf-panel:rgba(5,18,29,.94);--sf-line:rgba(79,209,255,.34);--sf-soft:rgba(79,209,255,.12);--sf-acc:#4fd1ff;--sf-acc2:#a6ecff;--sf-ink:#cfe9f5;--sf-dim:#78a0b6;--sf-glow:0 0 18px rgba(79,209,255,.35);--sf-tglow:0 0 22px rgba(79,209,255,.45);--sf-scan:rgba(0,0,0,.18);--sf-shadow:0 20px 60px rgba(0,0,0,.5);--sf-on:#02060b;--sf-chip-bg:rgba(79,209,255,.12);--sf-chip-fg:#a6ecff}
+:is(#reader,#overlay-root).scifi.night.candle{--sf-bg:radial-gradient(ellipse 70% 60% at 50% 42%,#2a1707 0%,#120a04 55%,#080402 100%);--sf-panel:rgba(26,15,7,.95);--sf-line:rgba(227,165,72,.38);--sf-soft:rgba(227,165,72,.11);--sf-acc:#e3a548;--sf-acc2:#ffd89a;--sf-ink:#e2cca6;--sf-dim:#a8906a;--sf-glow:0 0 18px rgba(227,150,50,.38);--sf-tglow:0 0 22px rgba(227,150,50,.5);--sf-scan:rgba(0,0,0,.2);--sf-on:#120a04;--sf-chip-bg:rgba(227,165,72,.11);--sf-chip-fg:#ffd89a}
+:is(#reader,#overlay-root).scifi.day{--sf-bg:radial-gradient(ellipse 70% 60% at 50% 40%,#f1f7fa 0%,#dfeaf0 55%,#d6e4ec 100%);--sf-panel:rgba(251,253,254,.97);--sf-line:rgba(10,100,140,.42);--sf-soft:rgba(10,100,140,.1);--sf-acc:#0a6f94;--sf-acc2:#07506b;--sf-ink:#14313f;--sf-dim:#4a6a7b;--sf-glow:0 0 0 transparent;--sf-tglow:none;--sf-scan:rgba(10,100,140,.035);--sf-shadow:0 18px 44px rgba(20,60,85,.16);--sf-on:#fff;--sf-chip-bg:#0a6f94;--sf-chip-fg:#fff}
 /* сетка и линии развёртки на фоне */
 #reader.scifi::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
   background-image:linear-gradient(var(--sf-soft) 1px,transparent 1px),linear-gradient(90deg,var(--sf-soft) 1px,transparent 1px),repeating-linear-gradient(0deg,var(--sf-scan) 0 1px,transparent 1px 3px);
@@ -834,9 +834,9 @@ html.kbd .sp-keys{display:block}   /* подсказка по клавишам �
    В тёмных темах та же картинка перекрашивается фильтром (--fa-filter).
    ===================================================================== */
 #reader.fantasy{--fa-head:'Cormorant Garamond',Georgia,'Times New Roman',serif;background:var(--fa-bg);background-attachment:fixed}
-#reader.fantasy.day{--fa-bg:radial-gradient(ellipse 80% 60% at 50% 25%,#3b2b1b 0%,#20160d 60%,#0f0a06 100%);--fa-panel:#ecd7a8;--fa-ink:#3a2814;--fa-title:#2a1a0b;--fa-acc:#7a2b16;--fa-gold:#97702c;--fa-line:rgba(122,84,30,.55);--fa-dim:#6b5233;--fa-on-bg:#7a2b16;--fa-on-fg:#f6e8c4;--fa-filter:none;--fa-art-op:1;--fa-shadow:0 20px 60px rgba(0,0,0,.6)}
-#reader.fantasy.night{--fa-bg:linear-gradient(rgba(3,6,12,.25),rgba(3,6,12,.5)),url('../art/fantasy-night.jpg') center/cover no-repeat,#03060c;--fa-panel:#0b1424;--fa-ink:#cdd8ee;--fa-title:#e9effc;--fa-acc:#b9caf2;--fa-gold:#8fa6d8;--fa-line:rgba(143,166,216,.4);--fa-dim:#8da1c9;--fa-on-bg:#b9caf2;--fa-on-fg:#0b1424;--fa-filter:invert(1) sepia(.55) hue-rotate(190deg) saturate(1.7) brightness(.78);--fa-art-op:.85;--fa-shadow:0 20px 60px rgba(0,0,0,.6)}
-#reader.fantasy.night.candle{--fa-bg:linear-gradient(rgba(4,10,6,.25),rgba(4,10,6,.5)),url('../art/fantasy-candle.jpg') center/cover no-repeat,#040a06;--fa-panel:#0b1a11;--fa-ink:#e0d8b8;--fa-title:#f2e2a8;--fa-acc:#e3c470;--fa-gold:#c9a24f;--fa-line:rgba(201,162,79,.42);--fa-dim:#a99d76;--fa-on-bg:#e3c470;--fa-on-fg:#0b1a11;--fa-filter:invert(1) sepia(.85) hue-rotate(35deg) saturate(1.5) brightness(.72)}
+:is(#reader,#overlay-root).fantasy.day{--fa-bg:radial-gradient(ellipse 80% 60% at 50% 25%,#3b2b1b 0%,#20160d 60%,#0f0a06 100%);--fa-panel:#ecd7a8;--fa-ink:#3a2814;--fa-title:#2a1a0b;--fa-acc:#7a2b16;--fa-gold:#97702c;--fa-line:rgba(122,84,30,.55);--fa-dim:#6b5233;--fa-on-bg:#7a2b16;--fa-on-fg:#f6e8c4;--fa-filter:none;--fa-art-op:1;--fa-shadow:0 20px 60px rgba(0,0,0,.6)}
+:is(#reader,#overlay-root).fantasy.night{--fa-bg:linear-gradient(rgba(3,6,12,.25),rgba(3,6,12,.5)),url('../art/fantasy-night.jpg') center/cover no-repeat,#03060c;--fa-panel:#0b1424;--fa-ink:#cdd8ee;--fa-title:#e9effc;--fa-acc:#b9caf2;--fa-gold:#8fa6d8;--fa-line:rgba(143,166,216,.4);--fa-dim:#8da1c9;--fa-on-bg:#b9caf2;--fa-on-fg:#0b1424;--fa-filter:invert(1) sepia(.55) hue-rotate(190deg) saturate(1.7) brightness(.78);--fa-art-op:.85;--fa-shadow:0 20px 60px rgba(0,0,0,.6)}
+:is(#reader,#overlay-root).fantasy.night.candle{--fa-bg:linear-gradient(rgba(4,10,6,.25),rgba(4,10,6,.5)),url('../art/fantasy-candle.jpg') center/cover no-repeat,#040a06;--fa-panel:#0b1a11;--fa-ink:#e0d8b8;--fa-title:#f2e2a8;--fa-acc:#e3c470;--fa-gold:#c9a24f;--fa-line:rgba(201,162,79,.42);--fa-dim:#a99d76;--fa-on-bg:#e3c470;--fa-on-fg:#0b1a11;--fa-filter:invert(1) sepia(.85) hue-rotate(35deg) saturate(1.5) brightness(.72)}
 /* страница-свиток с двойной рамкой и точками в углах */
 #reader.fantasy .rcontent{position:relative;z-index:1;container-type:inline-size;border-radius:3px;background-color:var(--fa-panel);border:1px solid var(--fa-gold);box-shadow:var(--fa-shadow);outline:1px solid var(--fa-line);outline-offset:-9px;overflow:hidden;padding-top:60px}
 #reader.fantasy.day .rcontent{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='2' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 .42 0 0 0 0 .3 0 0 0 0 .14 0 0 0 .2 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),linear-gradient(#f1dfb2,#e4cb94)}
@@ -920,9 +920,9 @@ html:has(#reader.scifi)::-webkit-scrollbar-button,html:has(#reader.fantasy)::-we
    заголовок с двойной линией, буквица. День — бумага; ночью — негатив (тёмная бумага, светлая краска); свеча — тёплая сепия.
    ===================================================================== */
 #reader.gazette{--gz-head:var(--font-display),'Playfair Display',Georgia,serif;--gz-body:Georgia,'Times New Roman',serif;background:var(--gz-desk);background-attachment:fixed}
-#reader.gazette.day{--gz-desk:radial-gradient(ellipse 80% 60% at 50% 25%,#2c2720 0%,#15120e 70%,#0a0907 100%);--gz-paper:#faf6e6;--gz-ink:#1c1a17;--gz-text:#241f18;--gz-red:#8a1c1c;--gz-dim:#5b5444;--gz-line:rgba(28,26,23,.55);--gz-shadow:0 22px 60px rgba(0,0,0,.65),0 3px 8px rgba(0,0,0,.4)}
-#reader.gazette.night{--gz-desk:radial-gradient(ellipse 80% 60% at 50% 25%,#12110f 0%,#080706 70%,#030302 100%);--gz-paper:#141210;--gz-ink:#ece6d4;--gz-text:#d9d2bf;--gz-red:#dc7b66;--gz-dim:#9b9482;--gz-line:rgba(236,230,212,.45);--gz-shadow:0 22px 60px rgba(0,0,0,.7),0 0 0 1px rgba(236,230,212,.05)}
-#reader.gazette.night.candle{--gz-desk:radial-gradient(ellipse 80% 60% at 50% 25%,#1d140b 0%,#0e0905 70%,#050302 100%);--gz-paper:#1b140c;--gz-ink:#f1dfb4;--gz-text:#e2cfa2;--gz-red:#e8a553;--gz-dim:#a8936a;--gz-line:rgba(241,223,180,.42)}
+:is(#reader,#overlay-root).gazette.day{--gz-desk:radial-gradient(ellipse 80% 60% at 50% 25%,#2c2720 0%,#15120e 70%,#0a0907 100%);--gz-paper:#faf6e6;--gz-ink:#1c1a17;--gz-text:#241f18;--gz-red:#8a1c1c;--gz-dim:#5b5444;--gz-line:rgba(28,26,23,.55);--gz-shadow:0 22px 60px rgba(0,0,0,.65),0 3px 8px rgba(0,0,0,.4)}
+:is(#reader,#overlay-root).gazette.night{--gz-desk:radial-gradient(ellipse 80% 60% at 50% 25%,#12110f 0%,#080706 70%,#030302 100%);--gz-paper:#141210;--gz-ink:#ece6d4;--gz-text:#d9d2bf;--gz-red:#dc7b66;--gz-dim:#9b9482;--gz-line:rgba(236,230,212,.45);--gz-shadow:0 22px 60px rgba(0,0,0,.7),0 0 0 1px rgba(236,230,212,.05)}
+:is(#reader,#overlay-root).gazette.night.candle{--gz-desk:radial-gradient(ellipse 80% 60% at 50% 25%,#1d140b 0%,#0e0905 70%,#050302 100%);--gz-paper:#1b140c;--gz-ink:#f1dfb4;--gz-text:#e2cfa2;--gz-red:#e8a553;--gz-dim:#a8936a;--gz-line:rgba(241,223,180,.42)}
 #reader.gazette .rcontent{border-radius:2px;background-color:var(--gz-paper);border:1px solid var(--gz-ink);box-shadow:var(--gz-shadow);outline:1px solid var(--gz-line);outline-offset:-8px;padding-top:44px;position:relative;overflow:hidden}
 #reader.gazette.day .rcontent{background-image:radial-gradient(ellipse at center,transparent 55%,rgba(150,118,50,.16) 100%),url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .28 0 0 0 0 .15 0 0 0 .1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 #reader.gazette.night .rcontent{background-image:radial-gradient(ellipse at center,transparent 60%,rgba(0,0,0,.35) 100%)}
@@ -979,3 +979,46 @@ html:has(#reader.gazette)::-webkit-scrollbar-button{display:none;width:0;height:
   .cont > div:first-child{min-width:0}
   .cont .tt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 }
+
+
+/* ===== окна «Содержание» и «Закладки» в теме читалки ===== */
+#overlay-root.scifi{--sf-head:'Tektur',var(--font-display),sans-serif;--sf-mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+#overlay-root.fantasy{--fa-head:'Cormorant Garamond',Georgia,'Times New Roman',serif}
+#overlay-root.gazette{--gz-head:var(--font-display),'Playfair Display',Georgia,serif;--gz-body:Georgia,'Times New Roman',serif}
+#overlay-root.scifi .v3modal,#overlay-root.fantasy .v3modal,#overlay-root.gazette .v3modal{background:rgba(0,0,0,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+/* Sci-Fi */
+#overlay-root.scifi .modal-box{border-radius:0;border:1px solid var(--sf-line);background:var(--sf-panel);color:var(--sf-ink);box-shadow:var(--sf-shadow),var(--sf-glow)}
+#overlay-root.scifi .modal-title{color:var(--sf-acc);font-family:var(--sf-mono);letter-spacing:.22em}
+#overlay-root.scifi .modal-x{color:var(--sf-dim)}
+#overlay-root.scifi .modal-x:hover,#overlay-root.scifi .toc-list button:hover{color:var(--sf-acc2)}
+#overlay-root.scifi .toc-list button{border-radius:0;font-family:var(--sf-mono);font-size:.8em;color:var(--sf-ink);text-transform:uppercase;letter-spacing:.04em}
+#overlay-root.scifi .toc-list button:hover{border-left-color:var(--sf-acc);background:var(--sf-soft)}
+#overlay-root.scifi .bookmark-item{border-radius:0;border-left-color:var(--sf-acc);background:var(--sf-soft);color:var(--sf-ink);font-family:var(--sf-mono)}
+#overlay-root.scifi .modal-empty{color:var(--sf-dim)}
+/* Фэнтези */
+#overlay-root.fantasy .modal-box{border-radius:3px;border:1px solid var(--fa-gold);outline:1px solid var(--fa-line);outline-offset:-6px;background:var(--fa-panel);color:var(--fa-ink);box-shadow:var(--fa-shadow,0 20px 60px rgba(0,0,0,.6))}
+#overlay-root.fantasy .modal-title{color:var(--fa-acc);font-family:var(--fa-head);font-size:15px;font-weight:700;letter-spacing:.2em}
+#overlay-root.fantasy .modal-x{color:var(--fa-dim)}
+#overlay-root.fantasy .modal-x:hover{color:var(--fa-acc)}
+#overlay-root.fantasy .toc-list button{border-radius:2px;font-family:var(--fa-head);font-size:1.05em;font-weight:600;color:var(--fa-ink)}
+#overlay-root.fantasy .toc-list button:hover{border-left-color:var(--fa-gold);background:color-mix(in srgb,var(--fa-line) 22%,transparent);color:var(--fa-acc)}
+#overlay-root.fantasy .bookmark-item{border-radius:2px;border-left-color:var(--fa-gold);background:color-mix(in srgb,var(--fa-line) 18%,transparent);color:var(--fa-ink);font-family:var(--fa-head);font-size:1.05em}
+#overlay-root.fantasy .modal-empty{color:var(--fa-dim);opacity:1}
+/* Газета */
+#overlay-root.gazette .modal-box{border-radius:2px;border:1.5px solid var(--gz-ink);outline:1px solid var(--gz-line);outline-offset:-6px;background:var(--gz-paper);color:var(--gz-text);box-shadow:var(--gz-shadow)}
+#overlay-root.gazette .modal-title{color:var(--gz-red);font-weight:700;letter-spacing:.24em}
+#overlay-root.gazette .modal-x{color:var(--gz-dim)}
+#overlay-root.gazette .modal-x:hover{color:var(--gz-red)}
+#overlay-root.gazette .toc-list button{border-radius:2px;font-family:var(--gz-body);color:var(--gz-text)}
+#overlay-root.gazette .toc-list button:hover{border-left-color:var(--gz-red);background:color-mix(in srgb,var(--gz-ink) 8%,transparent);color:var(--gz-red)}
+#overlay-root.gazette .bookmark-item{border-radius:2px;border-left-color:var(--gz-red);background:color-mix(in srgb,var(--gz-ink) 7%,transparent);color:var(--gz-text);font-family:var(--gz-body)}
+#overlay-root.gazette .modal-empty{color:var(--gz-dim);opacity:1}
+
+/* ===== окно выбора темы — компактное (втрое меньше по площади) ===== */
+#reader .tpop{width:auto;min-width:0;max-width:calc(100vw - 6rem);padding:9px 10px 8px;border-radius:12px}
+#reader .tpop .sp-sec{margin-bottom:8px}
+#reader .tpop .sp-sec:last-child{margin-bottom:0}
+#reader .tpop .sp-t{font-size:9px;letter-spacing:.18em;margin-bottom:5px}
+#reader .tpop .sp-chips{flex-wrap:nowrap;gap:4px}
+#reader .tpop .sp-chips .chip{padding:6px 9px;font-size:10.5px;letter-spacing:.2px;white-space:nowrap}
+@media (max-width:768px){#reader .tpop{left:auto;right:.75rem;width:auto;max-width:calc(100vw - 1.5rem);padding:9px 10px 8px}}

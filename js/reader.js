@@ -10,7 +10,7 @@ var TRASH = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><polyline p
 
 /* темы, шрифт, ширина строки, интервал */
 var THEMES = ['night', 'day', 'candle'];
-var THEME_NAMES = { night: 'Ночь', day: 'День', candle: 'Свеча' };
+var THEME_NAMES = { night: 'Ночь', day: 'День', candle: 'Тёплый' };
 /* стиль оформления читалки: «Стандартная» и «Sci-Fi» (терминал будущего). Какой стиль у текста — задаётся в админке (readerStyle, readerStyleChoice) */
 var STYLES = [['standard', 'Стандартная'], ['scifi', 'Sci-Fi'], ['fantasy', 'Фэнтези']];
 function styleName(id) { for (var i = 0; i < STYLES.length; i++) if (STYLES[i][0] === id) return STYLES[i][1]; return id; }
@@ -61,7 +61,7 @@ function readerClass(w) {
   var t = Store.s.readerTheme;
   return 'reader ' + (t === 'day' ? 'day' : 'night' + (t === 'candle' ? ' candle' : '')) + (workStyle(w) !== 'standard' ? ' ' + workStyle(w) : '');
 }
-/* окно под кнопкой смены темы: Ночь / День / Свеча, а ниже — стиль (если у текста их несколько) */
+/* окно под кнопкой смены темы: Ночь / День / Тёплый, а ниже — стиль (если у текста их несколько) */
 function themePanelHtml(w) {
   var h = '<div class="spop tpop" id="themepop" hidden><div class="sp-sec"><div class="sp-t">Тема</div><div class="sp-chips">' +
     chipsHtml('readerTheme', THEMES.map(function (t) { return [t, THEME_NAMES[t]]; })) + '</div></div>';
@@ -249,9 +249,13 @@ function openDialog(kind) {
       '</div><div class="modal-actions"><button type="button" class="btn outline" data-act="bm-save">+ Сохранить позицию</button></div>';
   }
   R.dialog = kind;
-  $('#overlay-root').innerHTML = modalHtml(body);
+  var ov = $('#overlay-root');
+  ov.innerHTML = modalHtml(body);
+  /* окна содержания и закладок одеваются в стиль и тему читалки (scifi/fantasy/gazette + day/night/candle) */
+  var rd = $('#reader');
+  ov.className = rd ? ['scifi', 'fantasy', 'gazette', 'day', 'night', 'candle'].filter(function (c) { return rd.classList.contains(c); }).join(' ') : '';
 }
-function closeDialog() { $('#overlay-root').innerHTML = ''; if (R) R.dialog = null; }
+function closeDialog() { $('#overlay-root').innerHTML = ''; $('#overlay-root').className = ''; if (R) R.dialog = null; }
 
 function openReader(path, params) {
   var slug = path.slice('/read/'.length), w = getWork(slug);
