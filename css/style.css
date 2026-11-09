@@ -435,8 +435,8 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;bor
 /* прогресс чтения вдоль корешка и закладка сверху */
 .bk-prog{position:absolute!important;left:0;top:0;bottom:0;width:3px;z-index:4!important;background:rgba(255,255,255,.1)}
 .bk-prog i{position:absolute;left:0;right:0;bottom:0;background:var(--accent);box-shadow:0 0 8px var(--accent)}
-.bk-ribbon{position:absolute!important;top:-11px;left:50%;margin-left:-5px;width:10px;height:18px;z-index:1!important;
-  background:linear-gradient(90deg,#a84545,#d36a6a 60%,#a84545);clip-path:polygon(0 0,100% 0,100% 100%,50% 76%,0 100%)}
+.bk-ribbon{position:absolute!important;top:-14px;left:50%;margin-left:-5px;width:10px;height:21px;z-index:1!important;
+  background:linear-gradient(90deg,#a84545,#d36a6a 60%,#a84545);clip-path:polygon(0 0,50% 24%,100% 0,100% 100%,0 100%)}   /* лента торчит из книги вверх: срез-«ласточкин хвост» на свободном конце */
 
 /* --- ОБЛОЖКА --- */
 .bk-front{inset:0;transform:translateZ(calc(var(--bd) / 2));overflow:hidden;background:#0b1018;border-radius:3px;
@@ -835,8 +835,8 @@ html.kbd .sp-keys{display:block}   /* подсказка по клавишам �
    ===================================================================== */
 #reader.fantasy{--fa-head:'Cormorant Garamond',Georgia,'Times New Roman',serif;background:var(--fa-bg);background-attachment:fixed}
 #reader.fantasy.day{--fa-bg:radial-gradient(ellipse 80% 60% at 50% 25%,#3b2b1b 0%,#20160d 60%,#0f0a06 100%);--fa-panel:#ecd7a8;--fa-ink:#3a2814;--fa-title:#2a1a0b;--fa-acc:#7a2b16;--fa-gold:#97702c;--fa-line:rgba(122,84,30,.55);--fa-dim:#6b5233;--fa-on-bg:#7a2b16;--fa-on-fg:#f6e8c4;--fa-filter:none;--fa-art-op:1;--fa-shadow:0 20px 60px rgba(0,0,0,.6)}
-#reader.fantasy.night{--fa-bg:radial-gradient(ellipse 80% 60% at 50% 25%,#10203a 0%,#08101e 60%,#03060c 100%);--fa-panel:#0b1424;--fa-ink:#cdd8ee;--fa-title:#e9effc;--fa-acc:#b9caf2;--fa-gold:#8fa6d8;--fa-line:rgba(143,166,216,.4);--fa-dim:#8da1c9;--fa-on-bg:#b9caf2;--fa-on-fg:#0b1424;--fa-filter:invert(1) sepia(.55) hue-rotate(190deg) saturate(1.7) brightness(.78);--fa-art-op:.85;--fa-shadow:0 20px 60px rgba(0,0,0,.6)}
-#reader.fantasy.night.candle{--fa-bg:radial-gradient(ellipse 80% 60% at 50% 25%,#12261a 0%,#09140d 60%,#040a06 100%);--fa-panel:#0b1a11;--fa-ink:#e0d8b8;--fa-title:#f2e2a8;--fa-acc:#e3c470;--fa-gold:#c9a24f;--fa-line:rgba(201,162,79,.42);--fa-dim:#a99d76;--fa-on-bg:#e3c470;--fa-on-fg:#0b1a11;--fa-filter:invert(1) sepia(.85) hue-rotate(35deg) saturate(1.5) brightness(.72)}
+#reader.fantasy.night{--fa-bg:linear-gradient(rgba(3,6,12,.25),rgba(3,6,12,.5)),url('../art/fantasy-night.jpg') center/cover no-repeat,#03060c;--fa-panel:#0b1424;--fa-ink:#cdd8ee;--fa-title:#e9effc;--fa-acc:#b9caf2;--fa-gold:#8fa6d8;--fa-line:rgba(143,166,216,.4);--fa-dim:#8da1c9;--fa-on-bg:#b9caf2;--fa-on-fg:#0b1424;--fa-filter:invert(1) sepia(.55) hue-rotate(190deg) saturate(1.7) brightness(.78);--fa-art-op:.85;--fa-shadow:0 20px 60px rgba(0,0,0,.6)}
+#reader.fantasy.night.candle{--fa-bg:linear-gradient(rgba(4,10,6,.25),rgba(4,10,6,.5)),url('../art/fantasy-candle.jpg') center/cover no-repeat,#040a06;--fa-panel:#0b1a11;--fa-ink:#e0d8b8;--fa-title:#f2e2a8;--fa-acc:#e3c470;--fa-gold:#c9a24f;--fa-line:rgba(201,162,79,.42);--fa-dim:#a99d76;--fa-on-bg:#e3c470;--fa-on-fg:#0b1a11;--fa-filter:invert(1) sepia(.85) hue-rotate(35deg) saturate(1.5) brightness(.72)}
 /* страница-свиток с двойной рамкой и точками в углах */
 #reader.fantasy .rcontent{position:relative;z-index:1;container-type:inline-size;border-radius:3px;background-color:var(--fa-panel);border:1px solid var(--fa-gold);box-shadow:var(--fa-shadow);outline:1px solid var(--fa-line);outline-offset:-9px;overflow:hidden;padding-top:60px}
 #reader.fantasy.day .rcontent{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='2' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 .42 0 0 0 0 .3 0 0 0 0 .14 0 0 0 .2 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),linear-gradient(#f1dfb2,#e4cb94)}
@@ -965,4 +965,17 @@ html:has(#reader.gazette)::-webkit-scrollbar-button{display:none;width:0;height:
   #reader.gazette .rcontent{padding-top:34px}
   #reader.gazette .reader-body h1{font-size:2rem}
   #reader.gazette .reader-body h2{font-size:1.4em}
+}
+
+
+/* блок «Продолжить чтение» на главной — компактный */
+.cont{margin-bottom:1.25rem;gap:.5rem;padding:.7rem 1rem;border-radius:.9rem}
+.cont .eyebrow{font-size:.62rem;margin:0;letter-spacing:.22em}
+.cont .tt{margin-top:.1rem;font-size:.95rem;line-height:1.25}
+.cont .pc{margin:0;font-size:.8rem}
+.cont .btn,.cont a.btn{padding:.55rem 1.1rem;font-size:.72rem;min-height:0}
+@media (max-width:639px){
+  .cont{display:grid;grid-template-columns:1fr auto;align-items:center;column-gap:.75rem;row-gap:0}
+  .cont > div:first-child{min-width:0}
+  .cont .tt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 }
