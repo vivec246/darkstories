@@ -13,7 +13,7 @@ var SITE = {
   dzen: "https://dzen.ru/slovo_lanceva",
   dzenHandle: "slovo_lanceva",
   year: 2026,
-  version: "4.0",
+  version: "4.2",
   metrikaId: "108542095",
   metrikaWebvisor: true
 };
