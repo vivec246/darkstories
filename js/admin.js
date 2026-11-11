@@ -222,6 +222,16 @@ function removeFile(path) {
   delete texts[path]; delete origTexts[path];
 }
 
+/* картинки-карточки для шаринга: рисуются заранее (async), а outgoing() только берёт готовые */
+var shareImgs = {};
+function shareSig(w) { return [w.slug, w.title, w.genre, w.age, w.year, w.kind, w.cover, (files[w.cover] && files[w.cover].blob ? files[w.cover].blob.size : '')].join('|'); }
+async function buildShareImages() {
+  for (var i = 0; i < S.WORKS.length; i++) {
+    var w = S.WORKS[i], k = shareSig(w);
+    if (shareImgs[k]) continue;
+    try { shareImgs[k] = await shareImageBlob(w, imgUrl(w.cover), S.SITE.name); } catch (e) {}
+  }
+}
 /* список файлов к отправке (data.js собирается из рабочей копии) */
 function outgoing() {
   var list = [];
@@ -230,8 +240,10 @@ function outgoing() {
   var base = location.origin + location.pathname.replace(/[^\/]*$/, '');
   S.WORKS.forEach(function (w) {
     var b = null; BASE.WORKS.forEach(function (x) { if (x.slug === w.slug) b = x; });
-    if (b && b.title === w.title && b.description === w.description && b.cover === w.cover) return;
+    if (b && b.title === w.title && b.description === w.description && b.cover === w.cover && b.genre === w.genre && b.age === w.age && b.year === w.year && b.kind === w.kind) return;
     list.push({ path: 's/' + w.slug + '.html', type: 'text', text: sharePageHtml(w, S.SITE.name, base), share: true });
+    var im = shareImgs[shareSig(w)];
+    if (im) list.push({ path: 's/' + w.slug + '.jpg', type: 'bin', blob: im, share: true });
   });
   Object.keys(files).forEach(function (p) { list.push(Object.assign({ path: p }, files[p])); });
   return list;
@@ -673,6 +685,7 @@ async function ghTest() {
   logLine('✓ Ветка «' + c.branch + '» на месте. Можно публиковать.', 'o');
 }
 async function ghPublish() {
+  await buildShareImages();
   var c = ghCheckFields(), list = outgoing(), pre = c.prefix ? c.prefix + '/' : '';
   var br = c.branch.split('/').map(encodeURIComponent).join('/');
   var msg = (CONN.gh.msg || '').trim() || ('Админка: ' + (summary().slice(0, 3).join('; ') || 'обновление файлов'));
@@ -709,6 +722,7 @@ async function dirPick() {
   render();
 }
 async function dirWrite() {
+  await buildShareImages();
   var list = outgoing(); if (!CONN.dir) throw new Error('Сначала выберите папку сайта.');
   for (var i = 0; i < list.length; i++) {
     var f = list[i], parts = splitPath(f.path), name = parts.pop();
@@ -734,7 +748,7 @@ function loadJSZip() {
   });
 }
 async function zipDl() {
-  await loadJSZip();
+  await loadJSZip(); await buildShareImages();
   var list = outgoing(), z = new JSZip(), del = [];
   list.forEach(function (f) { if (f.type === 'del') del.push(f.path); else z.file(f.path, f.type === 'text' ? f.text : f.blob); });
   if (del.length) z.file('_УДАЛИТЬ.txt', 'Эти файлы нужно удалить из папки сайта:\n\n' + del.join('\n') + '\n');
