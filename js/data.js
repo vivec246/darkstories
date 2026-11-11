@@ -156,7 +156,7 @@ var WORKS = [
     "age": "16+",
     "year": "2025",
     "status": "published",
-    "minutes": 10
+    "minutes": 8
   },
   {
     "slug": "cuckoos-nest",
