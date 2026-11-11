@@ -602,7 +602,7 @@ input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;bor
 .pp-read{flex:none;color:#14120f;padding:4px 0;border-bottom:2px solid #8a1c1c;transition:color .2s,border-color .2s}
 .pp-read:hover{color:#8a1c1c}
 @media (hover:hover){
-  .paper:hover{--rot:0deg;transform:translateY(-8px) rotate(0deg) scale(1.02)}
+  .paper:hover{--rot:0deg;transform:translateY(-10px) rotate(0deg)}   /* без scale: увеличение через transform размывало текст на карточке */
   .paper:hover .pp-sheet{box-shadow:0 26px 46px rgba(0,0,0,.6),0 4px 10px rgba(0,0,0,.4)}
   .paper:hover .pp-photo img{filter:grayscale(0) contrast(1.05) brightness(1)}
   .paper:hover .pp-tint{opacity:0}
