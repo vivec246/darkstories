@@ -410,7 +410,7 @@ function editorHtml(w, t) {
   return '<div class="tb"' + (prev ? ' style="display:none"' : '') + ' id="tb">' +
     '<button type="button" data-act="md" data-m="h2" title="Заголовок раздела">H2</button><button type="button" data-act="md" data-m="h3" title="Подзаголовок">H3</button><span class="sep"></span>' +
     '<button type="button" data-act="md" data-m="b" title="Жирный (Ctrl+B)"><b>Ж</b></button><button type="button" data-act="md" data-m="i" title="Курсив (Ctrl+I)"><i>К</i></button><span class="sep"></span>' +
-    '<button type="button" data-act="md" data-m="q" title="Цитата">❝</button><button type="button" data-act="md" data-m="c" title="По центру">⟷</button><button type="button" data-act="md" data-m="hr" title="Разделитель">—</button></div>' +
+    '<button type="button" data-act="md" data-m="q" title="Цитата">❝</button><button type="button" data-act="md" data-m="c" title="По центру">⟷</button><button type="button" data-act="md" data-m="hr" title="Разделитель">—</button><span class="sep"></span><button type="button" data-act="md" data-m="para" title="Разделить строки на абзацы (всё или выделенное)">¶</button></div>' +
     (prev ? '<div class="prev" id="prev"></div>' : '<textarea class="ta ed" id="ed" spellcheck="true" aria-label="Текст"></textarea>') +
     '<div class="counts" id="counts"></div>';
 }
@@ -490,9 +490,28 @@ function insertAt(s, e, text) {
   var t = document.getElementById('ed'); t.focus(); t.setSelectionRange(s, e);
   if (!document.execCommand('insertText', false, text)) { t.setRangeText(text, s, e, 'end'); t.dispatchEvent(new Event('input', { bubbles: true })); }
 }
+/* Абзацы: в Google Docs и Word абзац — это просто перевод строки, а в Markdown абзацы разделяет пустая строка.
+   Эта функция расставляет пустые строки между строками (списки «- … / 1. …» остаются списками). */
+function normalizeParas(text) {
+  var out = [], prev = '';
+  text.replace(/\r\n?/g, '\n').split('\n').forEach(function (raw) {
+    var l = raw.replace(/\s+$/, ''); if (!l.trim()) return;
+    var item = /^\s*([-*+]|\d+\.)\s+/;
+    out.push(prev && item.test(prev) && item.test(l) ? '\n' + l : (prev ? '\n\n' + l : l));
+    prev = l;
+  });
+  return out.join('').replace(/\n\n\n/g, '\n\n');
+}
 function mdAction(m) {
   var t = document.getElementById('ed'); if (!t) return;
   var s = t.selectionStart, e = t.selectionEnd, v = t.value, sel = v.slice(s, e);
+  if (m === 'para') {
+    /* без выделения — весь текст, с выделением — только выбранное */
+    if (e > s) insertAt(s, e, normalizeParas(sel));
+    else { insertAt(0, v.length, normalizeParas(v)); }
+    toast('Абзацы разделены пустыми строками');
+    return;
+  }
   if (m === 'b' || m === 'i' || m === 'c') {
     var a = m === 'b' ? '**' : m === 'i' ? '*' : '<center>', b = m === 'b' ? '**' : m === 'i' ? '*' : '</center>';
     insertAt(s, e, a + (sel || 'текст') + b);
@@ -904,6 +923,14 @@ function bindEvents() {
     var a = e.target.closest('[data-act]');
     if (a) { e.preventDefault(); if (ACT[a.dataset.act]) ACT[a.dataset.act](a); return; }
     var r = e.target.closest('.row[data-href]'); if (r && !e.target.closest('button,a')) location.hash = r.dataset.href;
+  });
+  /* вставка в редактор из Google Docs / Word: каждая строка — абзац */
+  document.addEventListener('paste', function (e) {
+    var t = e.target; if (!t || t.id !== 'ed') return;
+    var txt = (e.clipboardData || window.clipboardData).getData('text/plain');
+    if (!txt || txt.indexOf('\n') < 0) return;
+    e.preventDefault();
+    insertAt(t.selectionStart, t.selectionEnd, normalizeParas(txt));
   });
   document.addEventListener('input', function (e) {
     var t = e.target;
