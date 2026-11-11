@@ -912,7 +912,9 @@ html:has(#reader.scifi)::-webkit-scrollbar-button,html:has(#reader.fantasy)::-we
 /* кнопка «Скачать приложение» в подвале — выглядит как соседние ссылки */
 .footer .links .install{font:inherit;letter-spacing:inherit;text-transform:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;transition:color .3s ease,text-shadow .3s ease}
 .footer .links .install:hover,.footer .links .install:focus-visible{color:#fff;text-shadow:0 0 8px rgba(255,255,255,.9),0 0 20px rgba(255,255,255,.35)}
-@media (display-mode:standalone){.footer .links .install{display:none}}
+@media (display-mode:standalone){.footer .links .install,.footer .links .install-dot{display:none}}
+/* на компьютере (мышь) кнопку установки не показываем */
+@media (hover:hover) and (pointer:fine){.footer .links .install,.footer .links .install-dot{display:none}}
 
 
 /* =====================================================================
@@ -1021,7 +1023,14 @@ html:has(#reader.gazette)::-webkit-scrollbar-button{display:none;width:0;height:
 #reader .tpop .sp-t{font-size:9px;letter-spacing:.18em;margin-bottom:5px}
 #reader .tpop .sp-chips{flex-wrap:nowrap;gap:4px}
 #reader .tpop .sp-chips .chip{padding:6px 9px;font-size:10.5px;letter-spacing:.2px;white-space:nowrap}
-@media (max-width:768px){#reader .tpop{top:4.25rem;bottom:auto;left:auto;right:4.4rem;width:auto;height:auto;max-height:none;overflow:visible;max-width:calc(100vw - 5.2rem);padding:9px 10px 8px}}
+@media (max-width:768px){#reader .tpop{top:4.25rem;bottom:auto;left:.6rem;right:4.4rem;width:auto;height:auto;max-height:none;overflow:visible;max-width:none;padding:11px 12px 10px}
+#reader .tpop .sp-chips .chip{flex:1 1 0;text-align:center;padding:9px 6px;font-size:11px}}
+/* выбранный пункт — явная подсветка в любой теме */
+#reader .tpop .chip.on{background:#88aadd;border-color:#88aadd;color:#0a1020;font-weight:700;box-shadow:0 0 0 1px rgba(255,255,255,.25)}
+#reader.fantasy .tpop .chip.on{background:var(--fa-on-bg);border-color:var(--fa-on-bg);color:var(--fa-on-fg);font-weight:700;box-shadow:0 0 0 2px var(--fa-line)}
+#reader.scifi .tpop .chip.on{background:var(--sf-acc);border-color:var(--sf-acc);color:#04101a;font-weight:700;box-shadow:var(--sf-glow)}
+#reader.gazette .tpop .chip.on{background:var(--gz-ink);border-color:var(--gz-ink);color:var(--gz-paper);font-weight:700}
+#reader .tpop .chip.on::before{content:"✓ ";opacity:.8}
 
 /* кнопка в окнах читалки («Сохранить позицию») и остальные акценты — цветом темы, а не синим сайта */
 #overlay-root.scifi{--accent:var(--sf-acc)}

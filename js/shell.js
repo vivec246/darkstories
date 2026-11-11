@@ -53,7 +53,7 @@ function shell(path, inner, showHero) {
     '<button type="button" class="side" id="qicon" aria-label="Поиск" aria-expanded="false">' + icon('search') + '</button></div><div class="results" id="results" hidden></div></div></div></nav>';
   h += '<main id="main">' + inner + '</main>' +
     '<footer class="footer"><div class="footer-in"><div><p class="name">' + SITE.name + '</p><p class="au"><a href="#/author">' + SITE.author + '</a></p></div>' +
-    '<div class="links"><a href="#/policy">Политика</a><span aria-hidden="true">·</span><a href="#/copyright">Авторские права</a><span aria-hidden="true">·</span><a href="#/about">' + SITE.year + '</a>' + (isStandalone() ? '' : '<span aria-hidden="true">·</span><button type="button" class="install" id="installApp">Скачать приложение</button>') + '</div></div></footer></div>';
+    '<div class="links"><a href="#/policy">Политика</a><span aria-hidden="true">·</span><a href="#/copyright">Авторские права</a><span aria-hidden="true">·</span><a href="#/about">' + SITE.year + '</a>' + (isStandalone() ? '' : '<span aria-hidden="true" class="install-dot">·</span><button type="button" class="install" id="installApp">Скачать приложение</button>') + '</div></div></footer></div>';
   return h;
 }
 
