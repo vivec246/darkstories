@@ -1049,3 +1049,9 @@ html:has(#reader.gazette)::-webkit-scrollbar-button{display:none;width:0;height:
   .rscroll.on i{opacity:.8}
   .rscroll.drag i{width:8px;right:2px;opacity:1}
 }
+
+/* на телефоне системный скроллбар страницы в читалке прячем — остаётся только наш ползунок (.rscroll) */
+@media (hover:none){
+  html:has(#reader){scrollbar-width:none!important}
+  html:has(#reader)::-webkit-scrollbar{display:none!important;width:0!important;height:0!important;background:transparent!important}
+}
