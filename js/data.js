@@ -6,7 +6,7 @@ var SITE = {
   name: "Dark Stories",
   author: "Дмитрий Ланцев",
   tagline: "Цифровое издание",
-  description: "Тёмные истории от Дмитрия Ланцева — рассказы и статьи в жанре мистика и тёмное фэнтези",
+  description: "Тёмные истории от Дмитрия Ланцева — рассказы и статьи в жанре тёмное фэнтези и научная фантастика",
   email: "lancev.dmitrij.avtor@gmail.com",
   telegram: "https://t.me/lancev_dark",
   telegramHandle: "@lancev_dark",
@@ -156,7 +156,7 @@ var WORKS = [
     "age": "16+",
     "year": "2025",
     "status": "published",
-    "minutes": 2
+    "minutes": 10
   },
   {
     "slug": "cuckoos-nest",
