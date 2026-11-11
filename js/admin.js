@@ -422,7 +422,7 @@ function editorHtml(w, t) {
   return '<div class="tb"' + (prev ? ' style="display:none"' : '') + ' id="tb">' +
     '<button type="button" data-act="md" data-m="h2" title="Заголовок раздела">H2</button><button type="button" data-act="md" data-m="h3" title="Подзаголовок">H3</button><span class="sep"></span>' +
     '<button type="button" data-act="md" data-m="b" title="Жирный (Ctrl+B)"><b>Ж</b></button><button type="button" data-act="md" data-m="i" title="Курсив (Ctrl+I)"><i>К</i></button><span class="sep"></span>' +
-    '<button type="button" data-act="md" data-m="q" title="Цитата">❝</button><button type="button" data-act="md" data-m="c" title="По центру">⟷</button><button type="button" data-act="md" data-m="hr" title="Разделитель">—</button><span class="sep"></span><button type="button" data-act="md" data-m="para" title="Разделить строки на абзацы (всё или выделенное)">¶</button></div>' +
+    '<button type="button" data-act="md" data-m="q" title="Цитата">❝</button><button type="button" data-act="md" data-m="c" title="По центру">⟷</button><button type="button" data-act="md" data-m="hr" title="Разделитель">—</button><span class="sep"></span><button type="button" data-act="md" data-m="link" title="Ссылка (Ctrl+K): [текст](адрес)">🔗</button><button type="button" data-act="md" data-m="para" title="Разделить строки на абзацы (всё или выделенное)">¶</button></div>' +
     (prev ? '<div class="prev" id="prev"></div>' : '<textarea class="ta ed" id="ed" spellcheck="true" aria-label="Текст"></textarea>') +
     '<div class="counts" id="counts"></div>';
 }
@@ -464,7 +464,7 @@ VIEWS.work = function (slug) {
       '<textarea class="ta" id="f_work_cycleText" data-bind="work:cycleText" rows="4" placeholder="Сказ первый. Глина">' + esc((w.cycle || []).join('\n')) + '</textarea></div>' : '') +
     '<div class="card"><div class="card-h"><h2>Текст</h2><div class="seg" role="tablist"><button type="button" data-act="ed-tab" data-v="edit" class="' + (UI.tab === 'edit' ? 'on' : '') + '">' + icon('pen') + 'Редактор</button><button type="button" data-act="ed-tab" data-v="prev" class="' + (UI.tab === 'prev' ? 'on' : '') + '">' + icon('eye') + 'Просмотр</button></div>' +
     '<button class="btn ghost sm" data-act="txt-pick">' + icon('upload') + 'Загрузить .md</button><input type="file" accept=".md,.txt,text/plain,text/markdown" data-file="txt" hidden></div>' +
-    '<p class="small muted" style="margin-bottom:.9rem">Файл <code>' + esc(w.path) + '</code>. Разметка как на сайте: <code>## Глава</code>, <code>**жирный**</code>, <code>*курсив*</code>, <code>&gt; цитата</code>, <code>---</code> разделитель, <code>&lt;center&gt;…&lt;/center&gt;</code> по центру.</p>' +
+    '<p class="small muted" style="margin-bottom:.9rem">Файл <code>' + esc(w.path) + '</code>. Разметка как на сайте: <code>## Глава</code>, <code>**жирный**</code>, <code>*курсив*</code>, <code>[текст](https://адрес)</code> ссылка, <code>&gt; цитата</code>, <code>---</code> разделитель, <code>&lt;center&gt;…&lt;/center&gt;</code> по центру.</p>' +
     '<div id="edWrap"><p class="muted">Загрузка текста…</p></div></div>' };
 };
 async function loadEditor() {
@@ -522,6 +522,14 @@ function mdAction(m) {
     if (e > s) insertAt(s, e, normalizeParas(sel));
     else { insertAt(0, v.length, normalizeParas(v)); }
     toast('Абзацы разделены пустыми строками');
+    return;
+  }
+  if (m === 'link') {
+    var lt = sel || 'текст', isUrl = /^(https?:\/\/|www\.)\S+$/i.test(sel);
+    var url = isUrl ? sel : 'https://', label = isUrl ? 'ссылка' : lt;
+    insertAt(s, e, '[' + label + '](' + url + ')');
+    if (isUrl) t.setSelectionRange(s + 1, s + 1 + label.length);
+    else t.setSelectionRange(s + label.length + 3, s + label.length + 3 + url.length);
     return;
   }
   if (m === 'b' || m === 'i' || m === 'c') {
@@ -959,7 +967,7 @@ function bindEvents() {
   });
   document.addEventListener('keydown', function (e) {
     if (e.target.id === 'ed' && (e.ctrlKey || e.metaKey)) {
-      if (e.code === 'KeyB') { e.preventDefault(); mdAction('b'); } else if (e.code === 'KeyI') { e.preventDefault(); mdAction('i'); }
+      if (e.code === 'KeyB') { e.preventDefault(); mdAction('b'); } else if (e.code === 'KeyI') { e.preventDefault(); mdAction('i'); } else if (e.code === 'KeyK') { e.preventDefault(); mdAction('link'); } else if (e.code === 'KeyK') { e.preventDefault(); mdAction('link'); }
     }
     if (e.target.id === 'ed' && e.key === 'Tab') { e.preventDefault(); var t = e.target; insertAt(t.selectionStart, t.selectionEnd, '  '); }
   });

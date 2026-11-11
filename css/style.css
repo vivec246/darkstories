@@ -1064,3 +1064,10 @@ html:has(#reader.gazette)::-webkit-scrollbar-button{display:none;width:0;height:
   html:has(#reader){scrollbar-width:none!important}
   html:has(#reader)::-webkit-scrollbar{display:none!important;width:0!important;height:0!important;background:transparent!important}
 }
+
+/* ССЫЛКИ В ТЕКСТЕ */
+.reader-body a.md-link{color:var(--accent);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;text-decoration-color:currentColor;overflow-wrap:anywhere;transition:opacity .2s}
+.reader-body a.md-link:hover{opacity:.75}
+#reader.scifi .reader-body a.md-link{color:var(--sf-acc)}
+#reader.fantasy .reader-body a.md-link{color:var(--fa-acc);text-decoration-style:dotted;text-decoration-thickness:2px}
+#reader.gazette .reader-body a.md-link{color:var(--gz-red);text-decoration-style:solid}
