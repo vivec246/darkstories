@@ -79,6 +79,7 @@ function readerShell(w) {
   ensureStyleFonts(workStyle(w));
   return '<div class="' + readerClass(w) + '" id="reader"' + (w.art ? ' style="--art:url(\'' + esc(w.art) + '\')"' : '') + ' data-font="' + S.readerFont + '" data-width="' + S.readerWidth + '" data-lead="' + S.readerLead + '">' +
     '<div class="rbar" aria-hidden="true"><i id="rbar"></i></div>' +
+    '<div class="rscroll" id="rscroll" aria-hidden="true"><i></i></div>' +
     '<div class="rtools" id="rtools">' +
     '<button type="button" class="btn control" data-act="close" aria-label="Закрыть читалку">' + icon('back') + '</button>' +
     '<button type="button" class="btn control" data-act="theme" aria-label="Сменить тему">' + icon('moon') + '</button>' +
@@ -210,11 +211,45 @@ function textMax() {
   var end = body.getBoundingClientRect().bottom + el.scrollTop + 40;
   return Math.max(1, Math.min(full, end - el.clientHeight));
 }
+/* СКРОЛЛБАР НА ТЕЛЕФОНЕ: тонкий ползунок у правого края. Показывается при прокрутке, его можно взять пальцем и тянуть. */
+var rsTimer = null, rsDrag = false;
+function rsGeom() {
+  var tr = $('#rscroll'); if (!tr) return null;
+  var th = tr.firstElementChild, h = tr.clientHeight, ratio = window.innerHeight / Math.max(window.innerHeight, textMax() + window.innerHeight);
+  var tH = Math.max(46, Math.min(h * 0.5, h * ratio * 6));
+  return { tr: tr, th: th, h: h, tH: tH };
+}
+function placeRScroll(frac) {
+  var g = rsGeom(); if (!g || g.h === 0) return;
+  g.th.style.height = g.tH + 'px';
+  g.th.style.transform = 'translateY(' + (frac * (g.h - g.tH)).toFixed(1) + 'px)';
+  g.tr.classList.add('on');
+  clearTimeout(rsTimer);
+  if (!rsDrag) rsTimer = setTimeout(function () { var t = $('#rscroll'); if (t) t.classList.remove('on'); }, 1300);
+}
+function bindRScroll() {
+  var tr = $('#rscroll'); if (!tr) return;
+  function jump(e) {
+    var g = rsGeom(); if (!g) return;
+    var y = e.clientY - g.tr.getBoundingClientRect().top - g.tH / 2;
+    var frac = Math.min(1, Math.max(0, y / Math.max(1, g.h - g.tH)));
+    window.scrollTo({ top: frac * textMax(), behavior: 'instant' });   /* instant: на странице включена плавная прокрутка */
+  }
+  tr.addEventListener('pointerdown', function (e) {
+    rsDrag = true; tr.classList.add('on', 'drag'); clearTimeout(rsTimer);
+    try { tr.setPointerCapture(e.pointerId); } catch (x) {}
+    jump(e); e.preventDefault();
+  });
+  tr.addEventListener('pointermove', function (e) { if (rsDrag) { jump(e); e.preventDefault(); } });
+  function end() { if (!rsDrag) return; rsDrag = false; tr.classList.remove('drag'); rsTimer = setTimeout(function () { tr.classList.remove('on'); }, 1300); }
+  tr.addEventListener('pointerup', end); tr.addEventListener('pointercancel', end);
+}
 function updateProgressBar() {
   var el = document.documentElement, max = textMax();
   var frac = Math.min(1, el.scrollTop / max);
   var pct = max > 1 ? Math.round(frac * 100) : 0;
   var bar = $('#rbar'); if (bar) bar.style.width = pct + '%';
+  placeRScroll(frac);
   var rt = $('#rtime');
   if (rt && R && R.words) {
     var left = Math.round(R.words / 190 * (1 - frac));   /* ~190 слов в минуту */
@@ -265,6 +300,7 @@ function openReader(path, params) {
   Store.addRecent(w.slug);
   $('#app').innerHTML = readerShell(w);
   playOpenFx(w);
+  bindRScroll();
   setMeta(w.title + ' — ' + SITE.name, w.description, w.cover);
   $('#ldWork').textContent = JSON.stringify({ '@context': 'https://schema.org', '@type': w.kind === 'article' ? 'Article' : 'Book', name: w.title, headline: w.title, description: w.description, datePublished: w.year + '-01-01', inLanguage: 'ru', image: w.cover, author: { '@type': 'Person', name: SITE.author }, isAccessibleForFree: true });
   var token = R;

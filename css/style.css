@@ -1033,3 +1033,19 @@ html:has(#reader.gazette)::-webkit-scrollbar-button{display:none;width:0;height:
 #overlay-root.fantasy .btn.outline:hover{background:var(--fa-on-bg);border-color:var(--fa-on-bg);color:var(--fa-on-fg)}
 #overlay-root.gazette .btn.outline{border-radius:2px;border:1.5px solid var(--gz-ink);background:transparent;color:var(--gz-ink);letter-spacing:.12em}
 #overlay-root.gazette .btn.outline:hover{background:var(--gz-ink);border-color:var(--gz-ink);color:var(--gz-paper)}
+
+
+/* ===== скроллбар читалки на телефоне (вместо тонкой полоски прогресса сверху) ===== */
+.rscroll{display:none}
+#reader{--rs:var(--accent)}
+#reader.candle{--rs:#d6963f}
+#reader.scifi{--rs:var(--sf-acc)}
+#reader.fantasy{--rs:var(--fa-gold)}
+#reader.gazette{--rs:var(--gz-red)}
+@media (hover:none){
+  .rbar{display:none!important}
+  .rscroll{display:block;position:fixed;right:0;top:4.2rem;bottom:4.2rem;width:28px;z-index:39;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+  .rscroll i{position:absolute;right:3px;top:0;width:4px;border-radius:4px;background:var(--rs);opacity:0;box-shadow:0 0 8px color-mix(in srgb,var(--rs) 55%,transparent);transition:opacity .25s ease,width .15s ease,right .15s ease;will-change:transform}
+  .rscroll.on i{opacity:.8}
+  .rscroll.drag i{width:8px;right:2px;opacity:1}
+}
