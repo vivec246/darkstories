@@ -176,6 +176,20 @@ var WORKS = [
     "year": "2025",
     "status": "published",
     "minutes": 12
+  },
+  {
+    "slug": "vedmak-ot-sapkovskogo-do-netflix",
+    "kind": "article",
+    "path": "stories/vedmak_ot_sapkovskogo_do_netflix/vedmak_ot_sapkovskogo_do_netflix.md",
+    "cover": "covers/vedmak_ot_sapkovskogo_do_netflix.jpg",
+    "title": "Ведьмак. От Сапковского до Netflix",
+    "shortTitle": "Ведьмак. От Сапковского до Netflix",
+    "description": "От книг Сапковского до провала Netflix: разбор трех этапов жизни «Ведьмака». Почему CD Projekt RED удалось сохранить душу, а сериал потерял всё.",
+    "genre": "критика/анализ",
+    "age": "16+",
+    "year": "2026",
+    "status": "published",
+    "minutes": 10
   }
 ];
 
