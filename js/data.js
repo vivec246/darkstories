@@ -15,7 +15,11 @@ var SITE = {
   year: 2026,
   version: "4.2",
   metrikaId: "108542095",
-  metrikaWebvisor: true
+  metrikaWebvisor: true,
+  heroFx: "pixel",
+  heroFxIntensity: 1,
+  heroFxSpeed: 1,
+  heroFxColor: "blood"
 };
 var HERO = [
   "cap/header_1.jpg",
