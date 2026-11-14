@@ -218,7 +218,7 @@ var Ach = (function () {
     defs();
     var vis = ACH.filter(function (a) { return !a.hidden || st.got[a.id]; }), n = ACH.filter(function (a) { return st.got[a.id]; }).length;
     var hiddenLeft = ACH.filter(function (a) { return a.hidden && !st.got[a.id]; }).length;
-    var cards = vis.map(function (a) {
+    function card(a) {
       var got = !!st.got[a.id], extra = '';
       if (a.id === 'collector' && !got) extra = '<div class="ap">' + Math.min(doneStories().length, ACH_COLLECTOR) + ' из ' + ACH_COLLECTOR + '</div>';
       if (a.id === 'club' && !got) extra = '<div class="ap">' + Math.min(st.shared.length, 3) + ' из 3</div>';
@@ -227,8 +227,14 @@ var Ach = (function () {
       if (a.id === 'shelf' && !got) extra = '<div class="ap">' + Math.min(favCount(), 3) + ' из 3</div>';
       return '<div class="ach-card' + (got ? ' got' : '') + '">' + medal(a, !got) + '<div class="an">' + esc(a.name) + '</div><div class="ad">' + esc(a.desc) + '</div>' +
         (got ? '<div class="ap ok">Получено ' + new Date(st.got[a.id]).toLocaleDateString('ru-RU') + '</div>' : (extra || '<div class="ap">Пока не получено</div>')) + '</div>';
+    }
+    var TN = { bronze: 'Бронза', silver: 'Серебро', gold: 'Золото' };
+    var sections = ['bronze', 'silver', 'gold'].map(function (t) {
+      var list = vis.filter(function (a) { return a.tier === t; }); if (!list.length) return '';
+      var have = list.filter(function (a) { return st.got[a.id]; }).length;
+      return '<section class="ach-tier ' + t + '"><h2 class="ach-th"><span class="ach-dot"></span>' + TN[t] + '<em>' + have + ' / ' + list.length + '</em></h2><div class="ach-grid">' + list.map(card).join('') + '</div></section>';
     }).join('');
-    return '<article class="doc ach-page">' + docCloseBtn() + '<h1>Достижения</h1><p class="ach-sub">Получено: ' + n + ' из ' + vis.length + (hiddenLeft ? ' (+ секретные: ' + hiddenLeft + ')' : '') + '. Прогресс хранится только в вашем браузере.</p><div class="ach-grid">' + cards + '</div></article>';
+    return '<article class="doc ach-page">' + docCloseBtn() + '<h1>Достижения</h1><p class="ach-sub">Получено: ' + n + ' из ' + vis.length + (hiddenLeft ? ' (+ секретные: ' + hiddenLeft + ')' : '') + '. Прогресс хранится только в вашем браузере.</p>' + sections + '</article>';
   }
   return { init: init, unlock: unlock, markDone: markDone, pageHtml: pageHtml };
 })();

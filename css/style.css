@@ -1117,3 +1117,11 @@ html:has(#reader.gazette)::-webkit-scrollbar-button{display:none;width:0;height:
 #selbar.scifi button{color:var(--sf-ink);border-radius:0}#selbar.scifi button:active{background:var(--sf-chip-bg);color:var(--sf-chip-fg)}
 #selbar.gazette{background:var(--gz-paper);border:1.5px solid var(--gz-ink);outline:1px solid var(--gz-line);outline-offset:-4px;border-radius:2px;box-shadow:var(--gz-shadow)}
 #selbar.gazette button{color:var(--gz-text);border-radius:0}#selbar.gazette button:active{background:var(--gz-ink);color:var(--gz-paper)}
+
+.ach-tier{margin-top:1.6rem}
+.ach-th{display:flex;align-items:center;gap:.6rem;margin:0 0 1rem;font-size:.8rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--tc,#e6eefc)}
+.ach-th em{margin-left:auto;font-style:normal;font-weight:600;letter-spacing:.08em;opacity:.55;font-size:.75rem}
+.ach-dot{width:10px;height:10px;border-radius:50%;background:var(--tc);box-shadow:0 0 10px var(--tc)}
+.ach-th::after{content:"";order:1;flex:1;height:1px;background:linear-gradient(90deg,var(--tc),transparent);opacity:.4}
+.ach-th em{order:2;margin-left:0}
+.ach-tier.bronze{--tc:#e0a070}.ach-tier.silver{--tc:#d5dce8}.ach-tier.gold{--tc:#e3c470}
