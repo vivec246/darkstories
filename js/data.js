@@ -161,7 +161,8 @@ var WORKS = [
     "age": "16+",
     "year": "2025",
     "status": "published",
-    "minutes": 8
+    "minutes": 8,
+    "coverX": 25
   },
   {
     "slug": "cuckoos-nest",
@@ -189,7 +190,9 @@ var WORKS = [
     "age": "16+",
     "year": "2026",
     "status": "published",
-    "minutes": 10
+    "minutes": 10,
+    "coverX": 47,
+    "coverY": 42
   }
 ];
 
