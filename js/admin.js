@@ -171,7 +171,7 @@ function validate() {
     if (!(w.description || '').trim()) errs.push({ t: name + ': нет описания', at: at });
     if (!(w.genre || '').trim()) errs.push({ t: name + ': не указан жанр', at: at });
     var hasText = (files[w.path] && files[w.path].type === 'text' && files[w.path].text.trim()) || (REPO.has(w.path) && !(files[w.path] && files[w.path].type === 'del'));
-    if (!hasText) errs.push({ t: name + ': нет текста (файл ' + w.path + ' пуст или не создан)', at: at });
+    if (!hasText && w.status !== 'soon') errs.push({ t: name + ': нет текста (файл ' + w.path + ' пуст или не создан)', at: at });
     if (!(files[w.cover] && files[w.cover].type === 'bin') && !REPO.has(w.cover)) warns.push({ t: name + ': нет обложки — на сайте будет заглушка', at: at });
     if (!(w.shortTitle || '').trim()) warns.push({ t: name + ': нет короткого названия для корешка', at: at });
   });
@@ -224,7 +224,7 @@ function removeFile(path) {
 
 /* картинки-карточки для шаринга: рисуются заранее (async), а outgoing() только берёт готовые */
 var shareImgs = {};
-function shareSig(w) { return [w.slug, w.title, w.genre, w.age, w.year, w.kind, w.cover, (files[w.cover] && files[w.cover].blob ? files[w.cover].blob.size : '')].join('|'); }
+function shareSig(w) { return [w.slug, w.status, w.title, w.genre, w.age, w.year, w.kind, w.cover, (files[w.cover] && files[w.cover].blob ? files[w.cover].blob.size : '')].join('|'); }
 async function buildShareImages() {
   for (var i = 0; i < S.WORKS.length; i++) {
     var w = S.WORKS[i], k = shareSig(w);
@@ -240,7 +240,7 @@ function outgoing() {
   var base = location.origin + location.pathname.replace(/[^\/]*$/, '');
   S.WORKS.forEach(function (w) {
     var b = null; BASE.WORKS.forEach(function (x) { if (x.slug === w.slug) b = x; });
-    if (b && b.title === w.title && b.description === w.description && b.cover === w.cover && b.genre === w.genre && b.age === w.age && b.year === w.year && b.kind === w.kind) return;
+    if (b && b.title === w.title && b.status === w.status && b.description === w.description && b.cover === w.cover && b.genre === w.genre && b.age === w.age && b.year === w.year && b.kind === w.kind) return;
     list.push({ path: 's/' + w.slug + '.html', type: 'text', text: sharePageHtml(w, S.SITE.name, base), share: true });
     var im = shareImgs[shareSig(w)];
     if (im) list.push({ path: 's/' + w.slug + '.jpg', type: 'bin', blob: im, share: true });
@@ -394,6 +394,7 @@ function listHtml() {
     if (flt === 'story' && w.kind !== 'story') return false;
     if (flt === 'article' && w.kind !== 'article') return false;
     if (flt === 'wip' && w.status !== 'wip') return false;
+    if (flt === 'soon' && w.status !== 'soon') return false;
     return !q || (w.title + ' ' + w.genre + ' ' + w.slug).toLowerCase().indexOf(q) >= 0;
   });
   if (!rows.length) return '<div class="empty">Ничего не найдено</div>';
@@ -401,7 +402,7 @@ function listHtml() {
     var w = o.w, isNew = !BASE.WORKS.some(function (b) { return b.slug === w.slug; });
     return '<div class="row" data-href="#/works/' + esc(w.slug) + '"><div class="thumb"><img src="' + esc(imgUrl(w.cover)) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'"></div>' +
       '<div style="min-width:0"><h3>' + esc(w.title) + '</h3><div class="meta"><span>' + kindName(w.kind) + '</span><span>·</span><span>' + esc(w.genre) + '</span><span>·</span><span>' + esc(w.year) + '</span><span>·</span><span>' + esc(w.age) + '</span><span>·</span><span>~' + esc(w.minutes) + ' мин</span></div></div>' +
-      '<div class="bds">' + (isNew ? '<span class="badge acc">новый</span>' : '') + (w.cycle && w.cycle.length ? '<span class="badge">цикл · ' + w.cycle.length + '</span>' : '') + (w.readerStyle === 'scifi' ? '<span class="badge acc">Sci-Fi</span>' : w.readerStyle === 'fantasy' ? '<span class="badge acc">Фэнтези</span>' : '') + '<span class="badge ' + (w.status === 'wip' ? 'wip' : 'ok') + '">' + (w.status === 'wip' ? 'Пишется' : 'Опубликован') + '</span></div>' +
+      '<div class="bds">' + (isNew ? '<span class="badge acc">новый</span>' : '') + (w.status === 'soon' ? '<span class="badge acc">анонс</span>' : '') + (w.cycle && w.cycle.length ? '<span class="badge">цикл · ' + w.cycle.length + '</span>' : '') + (w.readerStyle === 'scifi' ? '<span class="badge acc">Sci-Fi</span>' : w.readerStyle === 'fantasy' ? '<span class="badge acc">Фэнтези</span>' : '') + '<span class="badge ' + (w.status === 'wip' ? 'wip' : 'ok') + '">' + (w.status === 'wip' ? 'Пишется' : 'Опубликован') + '</span></div>' +
       (movable ? '<div class="mv"><button type="button" class="btn ghost sm ico-only" data-act="mv-work" data-i="' + o.i + '" data-d="-1" aria-label="Выше"' + (o.i === 0 ? ' disabled' : '') + '>' + icon('up') + '</button><button type="button" class="btn ghost sm ico-only" data-act="mv-work" data-i="' + o.i + '" data-d="1" aria-label="Ниже"' + (o.i === S.WORKS.length - 1 ? ' disabled' : '') + '>' + icon('down') + '</button></div>' : '<span></span>') + '</div>';
   }).join('') + '</div>';
 }
@@ -410,7 +411,7 @@ VIEWS.works = function (arg) {
   return { title: 'Тексты', html:
     '<div class="page-h"><div><span class="eyebrow">Полка</span><h2>Рассказы и статьи</h2></div><span class="sp"></span><button class="btn" data-act="new-work">' + icon('plus') + 'Новый текст</button></div>' +
     '<div class="tools"><input class="in" id="wq" type="search" placeholder="Поиск по названию, жанру…" aria-label="Поиск" value="' + esc(UI.q) + '"><div class="chips" id="wf">' +
-    [['all', 'Все'], ['story', 'Рассказы'], ['article', 'Статьи'], ['wip', 'Пишутся']].map(function (c) { return '<button type="button" class="chip' + (UI.filter === c[0] ? ' on' : '') + '" data-act="filter" data-v="' + c[0] + '">' + c[1] + '</button>'; }).join('') + '</div></div>' +
+    [['all', 'Все'], ['story', 'Рассказы'], ['article', 'Статьи'], ['wip', 'Пишутся'], ['soon', 'Анонсы']].map(function (c) { return '<button type="button" class="chip' + (UI.filter === c[0] ? ' on' : '') + '" data-act="filter" data-v="' + c[0] + '">' + c[1] + '</button>'; }).join('') + '</div></div>' +
     '<div class="acts" style="margin-bottom:1rem"><button class="btn outline sm" data-act="scifi-all">Sci-Fi для всей научной фантастики</button><button class="btn outline sm" data-act="fantasy-all">«Фэнтези» для всего фэнтези</button></div>' +
     '<p class="small muted" style="margin-bottom:1rem">Порядок здесь — порядок на сайте. Стрелки доступны, когда включён фильтр «Все» и поиск пуст.</p>' +
     '<div id="list">' + listHtml() + '</div>' };
@@ -450,7 +451,7 @@ VIEWS.work = function (slug) {
     field('Жанр', 'work:genre', w.genre, { list: 'genres' }) +
     field('Описание', 'work:description', w.description, { area: true, rows: 4, cls: 'grid-column:1/-1', hint: 'Показывается на обороте карточки и в поиске' }) +
     field('Тип', 'work:kind', w.kind, { options: [['story', 'Рассказ / книга'], ['article', 'Статья']] }) +
-    field('Статус', 'work:status', w.status, { options: [['published', 'Опубликован'], ['wip', 'Пишется (анонс)']] }) +
+    field('Статус', 'work:status', w.status, { options: [['published', 'Опубликован'], ['wip', 'Пишется (читать уже можно)'], ['soon', 'Анонс (текста пока нет, без кнопки «Читать»)']] }) +
     field('Возраст', 'work:age', w.age, { options: ['0+', '6+', '12+', '16+', '18+'].map(function (a) { return [a, a]; }) }) +
     field('Год', 'work:year', w.year, { attrs: ' inputmode="numeric" maxlength="4"' }) +
     '<div class="f"><label for="f_work_minutes">Время чтения, минут</label><div class="in-row"><input class="in" id="f_work_minutes" data-bind="work:minutes" type="number" min="1" value="' + esc(w.minutes) + '"><button type="button" class="btn ghost sm" style="height:auto" data-act="calc-min">По тексту</button></div></div>' +
@@ -464,6 +465,7 @@ VIEWS.work = function (slug) {
       '<textarea class="ta" id="f_work_cycleText" data-bind="work:cycleText" rows="4" placeholder="Сказ первый. Глина">' + esc((w.cycle || []).join('\n')) + '</textarea></div>' : '') +
     '<div class="card"><div class="card-h"><h2>Текст</h2><div class="seg" role="tablist"><button type="button" data-act="ed-tab" data-v="edit" class="' + (UI.tab === 'edit' ? 'on' : '') + '">' + icon('pen') + 'Редактор</button><button type="button" data-act="ed-tab" data-v="prev" class="' + (UI.tab === 'prev' ? 'on' : '') + '">' + icon('eye') + 'Просмотр</button></div>' +
     '<button class="btn ghost sm" data-act="txt-pick">' + icon('upload') + 'Загрузить .md</button><input type="file" accept=".md,.txt,text/plain,text/markdown" data-file="txt" hidden></div>' +
+    (w.status === 'soon' ? '<p class="small" style="margin-bottom:.9rem;padding:.7rem .9rem;border:1px solid var(--line);border-radius:12px;background:rgba(136,170,221,.08)">Сейчас статус «Анонс»: на сайте будет карточка с описанием и меткой «Скоро», без кнопки «Читать». Текст пока не нужен. Когда он будет готов, вставьте его ниже и поменяйте статус на «Опубликован».</p>' : '') +
     '<p class="small muted" style="margin-bottom:.9rem">Файл <code>' + esc(w.path) + '</code>. Разметка как на сайте: <code>## Глава</code>, <code>**жирный**</code>, <code>*курсив*</code>, <code>[текст](https://адрес)</code> ссылка, <code>&gt; цитата</code>, <code>---</code> разделитель, <code>&lt;center&gt;…&lt;/center&gt;</code> по центру.</p>' +
     '<div id="edWrap"><p class="muted">Загрузка текста…</p></div></div>' };
 };

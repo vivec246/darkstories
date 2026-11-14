@@ -1125,3 +1125,11 @@ html:has(#reader.gazette)::-webkit-scrollbar-button{display:none;width:0;height:
 .ach-th::after{content:"";order:1;flex:1;height:1px;background:linear-gradient(90deg,var(--tc),transparent);opacity:.4}
 .ach-th em{order:2;margin-left:0}
 .ach-tier.bronze{--tc:#e0a070}.ach-tier.silver{--tc:#d5dce8}.ach-tier.gold{--tc:#e3c470}
+
+/* АНОНС: карточка без кнопки «Читать» */
+.bcard.soon,.paper.soon{cursor:default}
+.btn-soon,.pp-soon{cursor:default;pointer-events:none;opacity:.75}
+.btn-soon{display:inline-flex;align-items:center;padding:.5rem .9rem;border:1px dashed var(--accent);border-radius:999px;font:700 10px/1 var(--font-sans);letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+.pp-soon{color:#8a1c1c;border-bottom:2px dashed #8a1c1c}
+.bk-soon{background:rgba(227,196,112,.2);color:#e3c470;border:1px solid rgba(227,196,112,.45)}
+.bcard.soon .bk-cover,.paper.soon .pp-photo img{filter:saturate(.8) brightness(.9)}

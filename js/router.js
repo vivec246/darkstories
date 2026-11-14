@@ -135,6 +135,8 @@ function route() {
   var r = parseHash(), path = r.path;
   if (path === '/shelf') { location.replace('#/'); return; }
   if (path.indexOf('/read/') === 0) {
+    var sw = getWork(path.slice(6));
+    if (sw && isSoon(sw)) { toast('«' + sw.title + '» — скоро на сайте'); location.replace(hadShell && lastShellHash && lastShellHash.indexOf('#/read/') !== 0 ? lastShellHash : (sw.kind === 'article' ? '#/articles' : '#/books')); return; }
     if (!wasReader && hadShell) { savedScroll = window.scrollY; returnHash = lastShellHash; }
     jumpTo(0);
     if (openReader(path, r.params)) return;
