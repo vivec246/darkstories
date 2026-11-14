@@ -40,7 +40,7 @@ var origTexts = {};     // тексты, какими они лежат на с�
 var URLS = {};          // путь → blob-адрес только что загруженной картинки (для предпросмотра)
 var UI = { q: '', filter: 'all', tab: 'edit' };
 var CONN = { mode: localGet('ds-admin-mode') || 'github', dir: null, dirName: '', gh: loadGh() };
-var KEYS = ['slug', 'kind', 'path', 'cover', 'title', 'shortTitle', 'description', 'genre', 'age', 'year', 'status', 'minutes', 'readerStyle', 'readerStyleChoice', 'art', 'cycle', 'coverX', 'coverY'];
+var KEYS = ['slug', 'kind', 'path', 'cover', 'title', 'shortTitle', 'description', 'genre', 'age', 'year', 'status', 'minutes', 'readerStyle', 'readerStyleChoice', 'art', 'cycle', 'coverX', 'coverY', 'month'];
 var MONTHS = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
 
 function localGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
@@ -78,6 +78,14 @@ function toSlug(s) {
 }
 function fmtSize(n) { return n < 1024 ? n + ' Б' : n < 1048576 ? Math.round(n / 1024) + ' КБ' : (n / 1048576).toFixed(1) + ' МБ'; }
 function calcMinutes(t) { return Math.max(1, Math.round(stripMd(t).length / 1090)); }
+function yearMonthHtml(w) {
+  var cy = new Date().getFullYear(), ys = [], y;
+  for (y = cy + 1; y >= 2020; y--) ys.push(String(y));
+  if (w.year && ys.indexOf(String(w.year)) < 0) ys.push(String(w.year));
+  var mo = String(w.month || '').toLowerCase();
+  return '<select class="sel" id="f_work_year" data-bind="work:year" style="flex:1">' + ys.map(function (v) { return '<option' + (v === String(w.year) ? ' selected' : '') + '>' + v + '</option>'; }).join('') + '</select>' +
+    '<select class="sel" data-bind="work:month" style="flex:1.3"><option value="">месяц</option>' + MONTHS.map(function (m) { var l = m.toLowerCase(); return '<option value="' + l + '"' + (l === mo ? ' selected' : '') + '>' + l + '</option>'; }).join('') + '</select>';
+}
 function monthNow() { var d = new Date(); return MONTHS[d.getMonth()] + ' ' + d.getFullYear(); }
 function wordsN(n, a, b, c) { var m = n % 100, k = n % 10; return n + ' ' + (m > 10 && m < 20 ? c : k === 1 ? a : k > 1 && k < 5 ? b : c); }
 function kindName(k) { return k === 'article' ? 'Статья' : 'Рассказ'; }
@@ -109,6 +117,7 @@ function serialize() {
       var custom = w.readerStyle === 'scifi' || w.readerStyle === 'fantasy';
       if (k === 'readerStyle' && !custom) return;
       if (k === 'readerStyleChoice' && !(w.readerStyleChoice && custom)) return;
+      if (k === 'month' && !w.month) return;
       if (k === 'art' && !(w.art && w.readerStyle === 'fantasy')) return;
       if (k === 'coverX' && !(w.kind === 'article' && Number(w.coverX) !== 50 && w.coverX !== undefined && w.coverX !== '')) return;
       if (k === 'coverY' && !(w.kind === 'article' && Number(w.coverY) !== 0 && w.coverY !== undefined && w.coverY !== '')) return;
@@ -446,7 +455,7 @@ VIEWS.work = function (slug) {
     '<button class="btn outline sm" data-act="preview">' + icon('eye') + 'Предпросмотр</button>' +
     '<button class="btn danger sm" data-act="del-work">' + icon('trash') + 'Удалить</button></div></div>' +
     '<div class="card"><div class="edit-top"><div class="cover-col"><div class="cover"><div class="ph">Нет обложки</div><img id="coverImg" src="' + esc(imgUrl(w.cover)) + '" alt="Обложка" onerror="this.style.display=\'none\'"></div>' +
-    '<div style="display:grid;gap:.5rem;align-content:start"><button class="btn outline sm" data-act="cover-pick">' + icon('upload') + 'Обложка</button><input type="file" accept="image/*" data-file="cover" hidden><p class="small muted">3:4, лучше от 600×800</p></div></div>' +
+    '<div style="display:grid;gap:.5rem;align-content:start"><div style="display:flex;gap:.4rem"><button class="btn outline sm" style="padding-inline:.7rem" data-act="cover-pick">' + icon('upload') + 'Обложка</button>' + (w.kind === 'article' ? '<button class="btn ghost sm" style="padding-inline:.7rem" data-act="cover-pos" title="Какая часть картинки попадёт в рамку газеты">настройка</button>' : '') + '</div><input type="file" accept="image/*" data-file="cover" hidden><p class="small muted">3:4, лучше от 600×800</p></div></div>' +
     '<div class="grid g2">' +
     field('Название', 'work:title', w.title, { cls: 'grid-column:1/-1' }) +
     field('Короткое название', 'work:shortTitle', w.shortTitle, { hint: 'Для корешка книги и списков' }) +
@@ -455,18 +464,10 @@ VIEWS.work = function (slug) {
     field('Тип', 'work:kind', w.kind, { options: [['story', 'Рассказ / книга'], ['article', 'Статья']] }) +
     field('Статус', 'work:status', w.status, { options: [['published', 'Опубликован'], ['wip', 'Пишется (читать уже можно)'], ['soon', 'Анонс (текста пока нет, без кнопки «Читать»)']] }) +
     field('Возраст', 'work:age', w.age, { options: ['0+', '6+', '12+', '16+', '18+'].map(function (a) { return [a, a]; }) }) +
-    field('Год', 'work:year', w.year, { attrs: ' inputmode="numeric" maxlength="4"' }) +
+    '<div class="f"><label for="f_work_year">Год и месяц</label><div class="in-row" style="gap:.5rem">' + yearMonthHtml(w) + '</div></div>' +
     '<div class="f"><label for="f_work_minutes">Время чтения, минут</label><div class="in-row"><input class="in" id="f_work_minutes" data-bind="work:minutes" type="number" min="1" value="' + esc(w.minutes) + '"><button type="button" class="btn ghost sm" style="height:auto" data-act="calc-min">По тексту</button></div></div>' +
     field('Адрес', 'work:slug', w.slug, { ro: true, hint: 'index.html#/read/' + esc(w.slug) + ' · после создания не меняется — по нему хранятся закладки читателей' }) +
     '</div></div><datalist id="genres">' + genres.map(function (g) { return '<option value="' + esc(g) + '">'; }).join('') + '</datalist></div>' +
-    (w.kind === 'article' ? (function () {
-      var cx = w.coverX == null || w.coverX === '' ? 50 : Number(w.coverX), cy = w.coverY == null || w.coverY === '' ? 0 : Number(w.coverY);
-      var sl = function (key, label, v, hint) { return '<div class="f"><label>' + label + '</label><div class="in-row"><input type="range" min="0" max="100" step="1" value="' + v + '" data-bind="work:' + key + '" style="flex:1"><output style="min-width:2.5em;text-align:right">' + v + '</output></div><small>' + hint + '</small></div>'; };
-      return '<div class="card"><h2>Кадр на обложке газеты</h2><p class="lead">Картинка на карточке обрезается под рамку газеты. Подвиньте кадр, чтобы в рамку попало главное. Тот же кадр будет в картинке для соцсетей.</p>' +
-        '<div class="edit-top"><div class="hero-pic" style="max-width:340px;aspect-ratio:3/2;position:relative;overflow:hidden;border:1px solid var(--line);border-radius:10px"><img id="coverFrame" src="' + esc(imgUrl(w.cover)) + '" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:' + cx + '% ' + cy + '%"></div>' +
-        '<div style="display:grid;gap:.8rem;align-content:start">' + sl('coverY', 'По вертикали', cy, '0 — верх картинки (как сейчас), 100 — низ') + sl('coverX', 'По горизонтали', cx, '0 — левый край, 100 — правый') +
-        '<div><button type="button" class="btn ghost sm" data-act="cover-pos-reset">Сбросить</button></div></div></div></div>';
-    })() : '') +
     '<div class="card"><h2>Стиль читалки</h2><p class="lead">Как выглядит страница чтения. «Sci-Fi» — терминал будущего (названия глав справа, большими буквами). «Фэнтези» — пергамент, золотые рамки и иллюстрация вверху. Оба стиля работают в темах «Ночь», «День» и «Тёплый».</p><div class="grid g2">' +
     field('Стиль по умолчанию', 'work:readerStyle', w.readerStyle || 'standard', { options: [['standard', 'Dark Stories (основная)'], ['scifi', 'Sci-Fi (терминал будущего)'], ['fantasy', 'Фэнтези (пергамент)']] }) +
     '<div class="f"><label>Выбор читателя</label><label class="check" style="padding:.75rem 0' + (!w.readerStyle || w.readerStyle === 'standard' ? ';opacity:.5' : '') + '"><input type="checkbox" data-bind="work:readerStyleChoice"' + (w.readerStyleChoice ? ' checked' : '') + (!w.readerStyle || w.readerStyle === 'standard' ? ' disabled' : '') + '> Показывать переключатель стиля в окне смены темы</label><small>Читатель увидит под «Ночь / День / Тёплый» кнопки «Стандартная» и выбранный вами стиль, его выбор запомнится.</small></div>' +
@@ -928,7 +929,20 @@ var ACT = {
     var cleared = 0; S.NEWS.forEach(function (n) { if (n.slug === w.slug) { delete n.slug; cleared++; } });
     notify('Текст удалён' + (cleared ? '; ссылки в новостях очищены' : '')); location.hash = '#/works';
   },
-  'cover-pos-reset': function () { var w = curWork(); if (!w) return; delete w.coverX; delete w.coverY; render(true); },
+  'cover-pos': function () {
+    var w = curWork(); if (!w) return;
+    var cx = w.coverX == null || w.coverX === '' ? 50 : Number(w.coverX), cy = w.coverY == null || w.coverY === '' ? 0 : Number(w.coverY);
+    var sl = function (key, label, v, hint) { return '<div class="f"><label>' + label + '</label><div class="in-row"><input type="range" min="0" max="100" step="1" value="' + v + '" data-bind="work:' + key + '" style="flex:1"><output style="min-width:2.5em;text-align:right">' + v + '</output></div><small>' + hint + '</small></div>'; };
+    modal({ title: 'Кадр обложки', body: '<p class="small muted" style="margin-bottom:.8rem">Картинка на карточке газеты обрезается под квадратную рамку. Подвиньте кадр, чтобы в рамку попало главное. Тот же кадр будет в картинке для соцсетей.</p>' +
+      '<div style="width:240px;height:240px;margin:0 auto .9rem;position:relative;overflow:hidden;border:1px solid var(--line);border-radius:10px"><img id="coverFrame" src="' + esc(imgUrl(w.cover)) + '" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:' + cx + '% ' + cy + '%"></div>' +
+      sl('coverY', 'По вертикали', cy, '0 — верх картинки, 100 — низ') + sl('coverX', 'По горизонтали', cx, '0 — левый край, 100 — правый'),
+      actions: [{ label: 'Сбросить', cls: 'ghost', run: function (ov) {
+        delete w.coverX; delete w.coverY;
+        var y = ov.querySelector('[data-bind="work:coverY"]'), x = ov.querySelector('[data-bind="work:coverX"]');
+        y.value = 0; x.value = 50; y.parentNode.querySelector('output').textContent = 0; x.parentNode.querySelector('output').textContent = 50;
+        var fr = ov.querySelector('#coverFrame'); if (fr) fr.style.objectPosition = '50% 0%'; return false; } },
+        { label: 'Готово', value: true }] });
+  },
   'cover-pick': function (el) { el.parentNode.querySelector('input[type=file]').click(); },
   'calc-min': function () { var w = curWork(); if (!w) return; w.minutes = calcMinutes(texts[w.path] || ''); document.getElementById('f_work_minutes').value = w.minutes; chrome(); },
   'cycle-from-h': function () {

@@ -62,12 +62,12 @@ function paperHtml(w) {
   var readLink = soon ? '<span class="pp-read pp-soon">Скоро</span>' : '<a class="pp-read" href="' + href + '">Читать →</a>';
   var text = String(w.description || '');
   var shortInfo = soon ? 'Скоро на сайте' : pct >= 1 ? pct + '%' : (w.minutes ? esc(w.minutes) + ' мин' : '');
-  var backInfo = [esc(w.year), esc(w.age), (!soon && w.minutes) ? esc(w.minutes) + ' мин чтения' : '', pct >= 1 ? 'прочитано ' + pct + '%' : ''].filter(Boolean).join(' · ');
+  var backInfo = [ymLabel(w), esc(w.age), (!soon && w.minutes) ? esc(w.minutes) + ' мин чтения' : '', pct >= 1 ? 'прочитано ' + pct + '%' : ''].filter(Boolean).join(' · ');
   return '<article class="paper' + (soon ? ' soon' : '') + '"' + (soon ? '' : ' data-href="' + href + '" tabindex="0"') + ' aria-label="' + (soon ? 'Скоро: ' : 'Читать: ') + esc(w.title) + '">' +
     '<div class="pp-flip">' +
     /* лицевая сторона */
     '<div class="pp-sheet">' +
-      '<div class="pp-meta"><span>' + (soon ? 'Скоро · ' : 'Выпуск ') + esc(w.year) + '</span><span class="pp-genre">' + esc(w.genre) + '</span></div>' +
+      '<div class="pp-meta"><span>' + (soon ? 'Скоро · ' : w.month ? '' : 'Выпуск ') + ymLabel(w) + '</span><span class="pp-genre">' + esc(w.genre) + '</span></div>' +
       '<h3 class="pp-mast">' + esc(w.title) + '</h3>' +
       '<div class="pp-rule"></div>' +
       '<figure class="pp-photo"><img src="' + esc(w.cover) + '" alt=""' + (w.coverX != null || w.coverY != null ? ' style="object-position:' + (w.coverX == null ? 50 : Number(w.coverX) || 0) + '% ' + (w.coverY == null ? 0 : Number(w.coverY) || 0) + '%"' : '') + ' loading="lazy" decoding="async" onerror="coverFail(this)"><div class="pp-fallback" style="display:none"></div><i class="pp-tint"></i><i class="pp-dots"></i></figure>' +
@@ -78,7 +78,7 @@ function paperHtml(w) {
     '</div>' +
     /* оборот: полное описание */
     '<div class="pp-sheet pp-back">' +
-      '<div class="pp-meta"><span>' + (soon ? 'Скоро · ' : 'Выпуск ') + esc(w.year) + '</span><span class="pp-genre">' + esc(w.genre) + '</span></div>' +
+      '<div class="pp-meta"><span>' + (soon ? 'Скоро · ' : w.month ? '' : 'Выпуск ') + ymLabel(w) + '</span><span class="pp-genre">' + esc(w.genre) + '</span></div>' +
       '<h3 class="pp-mast">' + esc(w.title) + '</h3>' +
       '<div class="pp-rule"></div>' +
       '<div class="pp-desc-full">' + esc(text) + '</div>' +
@@ -165,3 +165,9 @@ function fitMasts() {
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(run);
   new MutationObserver(function (m) { for (var i = 0; i < m.length; i++) if (m[i].addedNodes.length) { run(); return; } }).observe(document.documentElement, { childList: true, subtree: true });
 })();
+
+/* «Ноябрь 2025», если в админке указан месяц, иначе просто год */
+function ymLabel(w) {
+  var m = String(w.month || ''); m = m ? m.charAt(0).toUpperCase() + m.slice(1) + ' ' : '';
+  return esc(m + (w.year || ''));
+}
