@@ -19,7 +19,8 @@ var SITE = {
   heroFx: "pixel",
   heroFxIntensity: 1,
   heroFxSpeed: 1,
-  heroFxColor: "blood"
+  heroOrder: "random",
+  heroSeconds: 6
 };
 var HERO = [
   "cap/header_1.jpg",
