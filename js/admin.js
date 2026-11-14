@@ -575,9 +575,26 @@ function heroPhone(item) {
   });
 }
 VIEWS.hero = function () {
-  return { title: 'Шапка', after: function () { $$('.hero-item').forEach(heroPhone); }, html:
+  var hc = heroCfg(S.SITE), nH = S.HERO.length, bg = S.HERO[0] ? imgUrl(S.HERO[0]) : '';
+  function rng(label, key, val, min, max, hint, unit) {
+    var id = 'f_' + key;
+    return '<div class="f"><label for="' + id + '">' + label + ' <output>' + val + (unit || '') + '</output></label><input class="rng" id="' + id + '" type="range" min="' + min + '" max="' + max + '" step="1" value="' + val + '" data-bind="site:' + key + '"><small>' + hint + '</small></div>';
+  }
+  var cntOpts = [[0, 'Все картинки (' + nH + ')']]; for (var ci = 1; ci < nH; ci++) cntOpts.push([ci, 'Только ' + ci + ' — первые в списке']);
+  var heroSettings = '<div class="card"><h2>Показ и эффекты</h2><p class="lead">Сколько слайдов крутится, как долго показывается каждый и как «играет» надпись Dark Stories. Внизу — живой предпросмотр.</p>' +
+    '<div class="grid g2">' + field('Сколько слайдов показывать', 'site:heroCount', hc.count, { options: cntOpts, hint: 'Остальные картинки остаются в списке ниже, просто не показываются.' }) +
+    field('Порядок слайдов', 'site:heroOrder', hc.order, { options: [['normal', 'По порядку, как в списке'], ['random', 'Случайный при каждом заходе']] }) +
+    rng('Секунд на слайд', 'heroSeconds', hc.seconds, 2, 20, 'Как долго показывается одна картинка.', ' с') + '</div>' +
+    '<h3 style="margin:1.2rem 0 .6rem;font-size:1rem">Надпись «Dark Stories»</h3><div class="grid g2">' +
+    field('Эффект', 'site:heroFx', hc.fx, { options: HERO_FX_LIST, hint: 'Туман — плавное переливание; Пиксельная волна — буквы из пикселей с бегущей волной; Северное сияние — цветные полосы; Угли — тёплое свечение и искры; Глитч — редкие «сбои» как на старом мониторе.' }) +
+    field('Цвет', 'site:heroFxColor', hc.color, { options: Object.keys(HERO_FX_COLORS).map(function (k) { return [k, HERO_FX_COLORS[k][0]]; }), hint: 'Для «Северного сияния» цвет не нужен — у него свои.' }) +
+    rng('Интенсивность', 'heroFxIntensity', hc.intensity, 1, 10, 'Сила свечения, размах волны, число искр, смещение при глитче.') +
+    rng('Скорость', 'heroFxSpeed', hc.speed, 1, 10, 'Как быстро переливается и движется эффект.') + '</div>' +
+    '<div class="hfx-prev" id="hfxPrev">' + (bg ? '<img src="' + esc(bg) + '" alt="">' : '') + '<div class="hfx-prev-in"><h1>Dark<br>Stories</h1></div></div>' +
+    '<p class="small muted" style="margin:.5rem 0 0">Если у читателя в системе включено «уменьшить движение», надпись остаётся спокойной.</p></div>';
+  return { title: 'Шапка', after: function () { $$('.hero-item').forEach(heroPhone); heroPrev(); }, html:
     '<div class="page-h"><div><span class="eyebrow">Главная страница</span><h2>Картинки шапки</h2></div><span class="sp"></span><button class="btn" data-act="hero-add">' + icon('plus') + 'Добавить картинку</button><input type="file" accept="image/*" data-file="hero" hidden></div>' +
-    '<p class="lead muted" style="margin-bottom:1.2rem;max-width:720px">Картинки листаются на главной. Когда экран не совпадает с пропорциями картинки, её края обрезаются. Отметьте, где главный объект: <b>по горизонтали</b> — это работает на телефоне и планшете, <b>по вертикали</b> — на компьютере, где картинка обрезается сверху и снизу. Справа видно, как выглядит кадр на компьютере и на телефоне.</p>' +
+    heroSettings + '<p class="lead muted" style="margin-bottom:1.2rem;max-width:720px">Картинки листаются на главной. Когда экран не совпадает с пропорциями картинки, её края обрезаются. Отметьте, где главный объект: <b>по горизонтали</b> — это работает на телефоне и планшете, <b>по вертикали</b> — на компьютере, где картинка обрезается сверху и снизу. Справа видно, как выглядит кадр на компьютере и на телефоне.</p>' +
     '<div class="hero-list">' + S.HERO.map(function (p, i) {
       var f = S.HERO_FOCUS[p]; if (f === undefined) f = 50;
       var fy = typeof S.HERO_FOCUS_Y[p] === 'number' ? S.HERO_FOCUS_Y[p] : 0;
@@ -769,9 +786,23 @@ function done(msg) { baseline(); chrome(); notify(msg); setTimeout(function () {
 /* ───────── события ───────── */
 function parseHash() { return location.hash.replace(/^#\/?/, '').split('/'); }
 
+var HERO_NUM = { heroSeconds: 1, heroCount: 1, heroFxIntensity: 1, heroFxSpeed: 1 };
+/* живой предпросмотр надписи на странице «Шапка» */
+function heroPrev() {
+  var h = document.querySelector('#hfxPrev h1'); if (!h) return;
+  var c = heroCfg(S.SITE); c.delay = 40; HeroFx.mount(h, c);
+}
 function onBind(el) {
   var parts = el.dataset.bind.split(':'), scope = parts[0], v = el.type === 'checkbox' ? el.checked : el.value;
-  if (scope === 'site') S.SITE[parts[1]] = (parts[1] === 'year' && /^\d+$/.test(v)) ? Number(v) : v;
+  if (scope === 'site') {
+    var sk = parts[1];
+    if (HERO_NUM[sk]) v = (v === '' || isNaN(Number(v))) ? '' : Number(v);
+    else if (sk === 'year' && /^\d+$/.test(v)) v = Number(v);
+    if (/^hero/.test(sk) && (v === '' || v === 'normal' || (sk === 'heroFx' && v === 'mist') || (sk === 'heroFxColor' && v === 'frost') || (sk === 'heroFxIntensity' && v === 5) || (sk === 'heroFxSpeed' && v === 5) || (sk === 'heroSeconds' && v === 5) || (sk === 'heroCount' && v === 0))) delete S.SITE[sk];   /* значения по умолчанию в data.js не пишем */
+    else S.SITE[sk] = v;
+    if (el.type === 'range') { var out = el.parentNode.querySelector('output'); if (out) out.textContent = v + (sk === 'heroSeconds' ? ' с' : ''); }
+    if (/^hero/.test(sk)) heroPrev();
+  }
   else if (scope === 'work') {
     var w = curWork(), k = parts[1]; if (!w) return;
     if (k === 'minutes') w.minutes = Math.max(0, Math.round(Number(v)) || 0);

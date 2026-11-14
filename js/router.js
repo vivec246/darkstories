@@ -82,7 +82,7 @@ function startHero() {
       showHeroSlide(idx);
       return;
     }
-  }, 5000);
+  }, heroCfg(SITE).seconds * 1000);
 }
 function setMeta(title, desc, image) {
   document.title = title;
@@ -164,7 +164,7 @@ function route() {
   var hadHero = !!$('.hero');
   $('#app').innerHTML = shell(path, page.render(), showHero);
   setMeta(page.title, page.desc);
-  if (showHero) { startHero(); heroFocusAll(); loadHeroRest(); }
+  if (showHero) { startHero(); heroFocusAll(); loadHeroRest(); HeroFx.mountSite(); }
   if (restoreScroll !== null) { jumpTo(restoreScroll); restoreScroll = null; }
   else if (wasReader && savedScroll !== null) jumpTo(savedScroll);
   else if (hadShell && !wasReader && showHero && !hadHero) { var nv = $('#nav'); jumpTo(nv ? nv.offsetTop : 0); }
