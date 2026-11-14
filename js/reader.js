@@ -12,7 +12,7 @@ var TRASH = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><polyline p
 var THEMES = ['night', 'day', 'candle'];
 var THEME_NAMES = { night: 'Ночь', day: 'День', candle: 'Тёплый' };
 /* стиль оформления читалки: «Стандартная» и «Sci-Fi» (терминал будущего). Какой стиль у текста — задаётся в админке (readerStyle, readerStyleChoice) */
-var STYLES = [['standard', 'Стандартная'], ['scifi', 'Sci-Fi'], ['fantasy', 'Фэнтези']];
+var STYLES = [['standard', 'Dark Stories'], ['scifi', 'Sci-Fi'], ['fantasy', 'Фэнтези']];
 function styleName(id) { for (var i = 0; i < STYLES.length; i++) if (STYLES[i][0] === id) return STYLES[i][1]; return id; }
 /* какие стили предложены читателю: «Стандартная» и стиль текста (если автор включил выбор) */
 function styleOptions(w) {
