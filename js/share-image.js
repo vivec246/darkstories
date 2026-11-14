@@ -91,7 +91,7 @@ function shareImageBlob(w, coverUrl, siteName) {
         var footH = 42, phh = ph - pd - footH - y - 6;
         ctx.save(); ctx.beginPath(); ctx.rect(pd, y, pw - pd * 2, phh); ctx.clip();
         ctx.filter = 'grayscale(1) contrast(1.4) brightness(.97)';
-        if (img) { var rr = Math.max((pw - pd * 2) / img.width, phh / img.height), sw = (pw - pd * 2) / rr, sh2 = phh / rr; ctx.drawImage(img, (img.width - sw) / 2, 0, sw, sh2, pd, y, pw - pd * 2, phh); } else { ctx.fillStyle = '#b9b3a1'; ctx.fillRect(pd, y, pw - pd * 2, phh); }
+        if (img) { var rr = Math.max((pw - pd * 2) / img.width, phh / img.height), sw = (pw - pd * 2) / rr, sh2 = phh / rr; ctx.drawImage(img, (img.width - sw) * (w.coverX == null ? 50 : Number(w.coverX) || 0) / 100, (img.height - sh2) * (w.coverY == null ? 0 : Number(w.coverY) || 0) / 100, sw, sh2, pd, y, pw - pd * 2, phh); } else { ctx.fillStyle = '#b9b3a1'; ctx.fillRect(pd, y, pw - pd * 2, phh); }
         ctx.filter = 'none'; ctx.globalCompositeOperation = 'multiply'; ctx.fillStyle = '#faf6e6'; ctx.fillRect(pd, y, pw - pd * 2, phh); ctx.globalCompositeOperation = 'source-over';
         ctx.fillStyle = 'rgba(250,246,230,.6)';
         for (var gx = pd; gx < pw - pd; gx += 3) for (var gy = y; gy < y + phh; gy += 3) ctx.fillRect(gx, gy, 1.4, 1.4);

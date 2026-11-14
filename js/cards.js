@@ -70,7 +70,7 @@ function paperHtml(w) {
       '<div class="pp-meta"><span>' + (soon ? 'Скоро · ' : 'Выпуск ') + esc(w.year) + '</span><span class="pp-genre">' + esc(w.genre) + '</span></div>' +
       '<h3 class="pp-mast">' + esc(w.title) + '</h3>' +
       '<div class="pp-rule"></div>' +
-      '<figure class="pp-photo"><img src="' + esc(w.cover) + '" alt="" loading="lazy" decoding="async" onerror="coverFail(this)"><div class="pp-fallback" style="display:none"></div><i class="pp-tint"></i><i class="pp-dots"></i></figure>' +
+      '<figure class="pp-photo"><img src="' + esc(w.cover) + '" alt=""' + (w.coverX != null || w.coverY != null ? ' style="object-position:' + (w.coverX == null ? 50 : Number(w.coverX) || 0) + '% ' + (w.coverY == null ? 0 : Number(w.coverY) || 0) + '%"' : '') + ' loading="lazy" decoding="async" onerror="coverFail(this)"><div class="pp-fallback" style="display:none"></div><i class="pp-tint"></i><i class="pp-dots"></i></figure>' +
       '<div class="pp-foot"><span class="pp-age">' + esc(w.age) + '</span>' +
         '<span class="pp-time">' + shortInfo + '</span>' +
         '<button type="button" class="pp-desc-btn" data-desc>Описание</button>' +

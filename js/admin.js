@@ -40,7 +40,7 @@ var origTexts = {};     // тексты, какими они лежат на с�
 var URLS = {};          // путь → blob-адрес только что загруженной картинки (для предпросмотра)
 var UI = { q: '', filter: 'all', tab: 'edit' };
 var CONN = { mode: localGet('ds-admin-mode') || 'github', dir: null, dirName: '', gh: loadGh() };
-var KEYS = ['slug', 'kind', 'path', 'cover', 'title', 'shortTitle', 'description', 'genre', 'age', 'year', 'status', 'minutes', 'readerStyle', 'readerStyleChoice', 'art', 'cycle'];
+var KEYS = ['slug', 'kind', 'path', 'cover', 'title', 'shortTitle', 'description', 'genre', 'age', 'year', 'status', 'minutes', 'readerStyle', 'readerStyleChoice', 'art', 'cycle', 'coverX', 'coverY'];
 var MONTHS = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
 
 function localGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
@@ -110,6 +110,8 @@ function serialize() {
       if (k === 'readerStyle' && !custom) return;
       if (k === 'readerStyleChoice' && !(w.readerStyleChoice && custom)) return;
       if (k === 'art' && !(w.art && w.readerStyle === 'fantasy')) return;
+      if (k === 'coverX' && !(w.kind === 'article' && Number(w.coverX) !== 50 && w.coverX !== undefined && w.coverX !== '')) return;
+      if (k === 'coverY' && !(w.kind === 'article' && Number(w.coverY) !== 0 && w.coverY !== undefined && w.coverY !== '')) return;
       o[k] = w[k];
     });
     return o;
@@ -224,7 +226,7 @@ function removeFile(path) {
 
 /* картинки-карточки для шаринга: рисуются заранее (async), а outgoing() только берёт готовые */
 var shareImgs = {};
-function shareSig(w) { return [w.slug, w.status, w.title, w.genre, w.age, w.year, w.kind, w.cover, (files[w.cover] && files[w.cover].blob ? files[w.cover].blob.size : '')].join('|'); }
+function shareSig(w) { return [w.slug, w.status, w.title, w.genre, w.age, w.year, w.kind, w.coverX, w.coverY, w.cover, (files[w.cover] && files[w.cover].blob ? files[w.cover].blob.size : '')].join('|'); }
 async function buildShareImages() {
   for (var i = 0; i < S.WORKS.length; i++) {
     var w = S.WORKS[i], k = shareSig(w);
@@ -240,7 +242,7 @@ function outgoing() {
   var base = location.origin + location.pathname.replace(/[^\/]*$/, '');
   S.WORKS.forEach(function (w) {
     var b = null; BASE.WORKS.forEach(function (x) { if (x.slug === w.slug) b = x; });
-    if (b && b.title === w.title && b.status === w.status && b.description === w.description && b.cover === w.cover && b.genre === w.genre && b.age === w.age && b.year === w.year && b.kind === w.kind) return;
+    if (b && b.title === w.title && b.status === w.status && b.description === w.description && b.cover === w.cover && b.genre === w.genre && b.age === w.age && b.year === w.year && b.kind === w.kind && b.coverX === w.coverX && b.coverY === w.coverY) return;
     list.push({ path: 's/' + w.slug + '.html', type: 'text', text: sharePageHtml(w, S.SITE.name, base), share: true });
     var im = shareImgs[shareSig(w)];
     if (im) list.push({ path: 's/' + w.slug + '.jpg', type: 'bin', blob: im, share: true });
@@ -457,6 +459,14 @@ VIEWS.work = function (slug) {
     '<div class="f"><label for="f_work_minutes">Время чтения, минут</label><div class="in-row"><input class="in" id="f_work_minutes" data-bind="work:minutes" type="number" min="1" value="' + esc(w.minutes) + '"><button type="button" class="btn ghost sm" style="height:auto" data-act="calc-min">По тексту</button></div></div>' +
     field('Адрес', 'work:slug', w.slug, { ro: true, hint: 'index.html#/read/' + esc(w.slug) + ' · после создания не меняется — по нему хранятся закладки читателей' }) +
     '</div></div><datalist id="genres">' + genres.map(function (g) { return '<option value="' + esc(g) + '">'; }).join('') + '</datalist></div>' +
+    (w.kind === 'article' ? (function () {
+      var cx = w.coverX == null || w.coverX === '' ? 50 : Number(w.coverX), cy = w.coverY == null || w.coverY === '' ? 0 : Number(w.coverY);
+      var sl = function (key, label, v, hint) { return '<div class="f"><label>' + label + '</label><div class="in-row"><input type="range" min="0" max="100" step="1" value="' + v + '" data-bind="work:' + key + '" style="flex:1"><output style="min-width:2.5em;text-align:right">' + v + '</output></div><small>' + hint + '</small></div>'; };
+      return '<div class="card"><h2>Кадр на обложке газеты</h2><p class="lead">Картинка на карточке обрезается под рамку газеты. Подвиньте кадр, чтобы в рамку попало главное. Тот же кадр будет в картинке для соцсетей.</p>' +
+        '<div class="edit-top"><div class="hero-pic" style="max-width:340px;aspect-ratio:3/2;position:relative;overflow:hidden;border:1px solid var(--line);border-radius:10px"><img id="coverFrame" src="' + esc(imgUrl(w.cover)) + '" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:' + cx + '% ' + cy + '%"></div>' +
+        '<div style="display:grid;gap:.8rem;align-content:start">' + sl('coverY', 'По вертикали', cy, '0 — верх картинки (как сейчас), 100 — низ') + sl('coverX', 'По горизонтали', cx, '0 — левый край, 100 — правый') +
+        '<div><button type="button" class="btn ghost sm" data-act="cover-pos-reset">Сбросить</button></div></div></div></div>';
+    })() : '') +
     '<div class="card"><h2>Стиль читалки</h2><p class="lead">Как выглядит страница чтения. «Sci-Fi» — терминал будущего (названия глав справа, большими буквами). «Фэнтези» — пергамент, золотые рамки и иллюстрация вверху. Оба стиля работают в темах «Ночь», «День» и «Тёплый».</p><div class="grid g2">' +
     field('Стиль по умолчанию', 'work:readerStyle', w.readerStyle || 'standard', { options: [['standard', 'Dark Stories (основная)'], ['scifi', 'Sci-Fi (терминал будущего)'], ['fantasy', 'Фэнтези (пергамент)']] }) +
     '<div class="f"><label>Выбор читателя</label><label class="check" style="padding:.75rem 0' + (!w.readerStyle || w.readerStyle === 'standard' ? ';opacity:.5' : '') + '"><input type="checkbox" data-bind="work:readerStyleChoice"' + (w.readerStyleChoice ? ' checked' : '') + (!w.readerStyle || w.readerStyle === 'standard' ? ' disabled' : '') + '> Показывать переключатель стиля в окне смены темы</label><small>Читатель увидит под «Ночь / День / Тёплый» кнопки «Стандартная» и выбранный вами стиль, его выбор запомнится.</small></div>' +
@@ -809,6 +819,11 @@ function onBind(el) {
     var w = curWork(), k = parts[1]; if (!w) return;
     if (k === 'minutes') w.minutes = Math.max(0, Math.round(Number(v)) || 0);
     else if (k === 'cycleText') w.cycle = v.split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
+    else if (k === 'coverX' || k === 'coverY') {
+      w[k] = Math.max(0, Math.min(100, Number(v) || 0));
+      var fr = document.getElementById('coverFrame'); if (fr) fr.style.objectPosition = (w.coverX == null || w.coverX === '' ? 50 : w.coverX) + '% ' + (w.coverY == null || w.coverY === '' ? 0 : w.coverY) + '%';
+      if (el.type === 'range') { var o2 = el.parentNode.querySelector('output'); if (o2) o2.textContent = w[k]; }
+    }
     else w[k] = v;
     if (k === 'title') { var h = document.getElementById('wh'); if (h) h.textContent = v; setTitle(v || 'Текст'); }
     if (k === 'kind') { /* раздел сайта определяется типом — путь к файлу не трогаем */ }
@@ -913,6 +928,7 @@ var ACT = {
     var cleared = 0; S.NEWS.forEach(function (n) { if (n.slug === w.slug) { delete n.slug; cleared++; } });
     notify('Текст удалён' + (cleared ? '; ссылки в новостях очищены' : '')); location.hash = '#/works';
   },
+  'cover-pos-reset': function () { var w = curWork(); if (!w) return; delete w.coverX; delete w.coverY; render(true); },
   'cover-pick': function (el) { el.parentNode.querySelector('input[type=file]').click(); },
   'calc-min': function () { var w = curWork(); if (!w) return; w.minutes = calcMinutes(texts[w.path] || ''); document.getElementById('f_work_minutes').value = w.minutes; chrome(); },
   'cycle-from-h': function () {
