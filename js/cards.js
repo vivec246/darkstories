@@ -149,3 +149,19 @@ function initCardAnimation() {
   }, { threshold: 0.75 });
   $$('.card, .bcard, .paper').forEach(function (c) { cardObserver.observe(c); });
 }
+
+/* Название на карточке статьи: уменьшаем шрифт, пока оно не влезет в отведённое место (картинка при этом остаётся квадратной) */
+function fitMasts() {
+  $$('.pp-sheet:not(.pp-back) .pp-mast').forEach(function (el) {
+    el.style.fontSize = '';
+    if (!el.clientHeight) return;
+    var fs = parseFloat(getComputedStyle(el).fontSize) || 26;
+    while (el.scrollHeight > el.clientHeight + 1 && fs > 11) { fs -= 0.5; el.style.fontSize = fs + 'px'; }
+  });
+}
+(function () {
+  var t = 0, run = function () { clearTimeout(t); t = setTimeout(fitMasts, 60); };
+  window.addEventListener('resize', run);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(run);
+  new MutationObserver(function (m) { for (var i = 0; i < m.length; i++) if (m[i].addedNodes.length) { run(); return; } }).observe(document.documentElement, { childList: true, subtree: true });
+})();

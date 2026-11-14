@@ -1133,3 +1133,13 @@ html:has(#reader.gazette)::-webkit-scrollbar-button{display:none;width:0;height:
 .pp-soon{color:#8a1c1c;border-bottom:2px dashed #8a1c1c}
 .bk-soon{background:rgba(227,196,112,.2);color:#e3c470;border:1px solid rgba(227,196,112,.45)}
 .bcard.soon .bk-cover,.paper.soon .pp-photo img{filter:saturate(.8) brightness(.9)}
+
+/* Карточка статьи: картинка всегда квадратная, а название подгоняет размер шрифта под оставшееся место (js/cards.js, fitMasts) */
+.pp-sheet:not(.pp-back) .pp-photo{flex:none;width:100%;aspect-ratio:1/1;min-height:0}
+.pp-sheet:not(.pp-back) .pp-mast{flex:1 1 0;min-height:0;display:flex;flex-direction:column;justify-content:center;-webkit-line-clamp:unset;margin:0 0 6px;overflow:hidden;line-height:1.04}
+.pp-sheet:not(.pp-back){padding-top:10px;padding-bottom:10px}
+.pp-sheet:not(.pp-back) .pp-meta{padding-bottom:3px}
+.pp-sheet:not(.pp-back) .pp-rule{margin-bottom:6px}
+.pp-sheet:not(.pp-back) .pp-photo{margin-bottom:5px}
+.pp-sheet:not(.pp-back) .pp-foot{padding-top:5px}
+.pp-sheet:not(.pp-back) .pp-mast{margin:0 0 4px}
