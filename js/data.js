@@ -106,7 +106,7 @@ var WORKS = [
     "genre": "Школьное фэнтези",
     "age": "16+",
     "year": "2025",
-    "status": "wip",
+    "status": "soon",
     "minutes": 1
   },
   {
@@ -120,7 +120,7 @@ var WORKS = [
     "genre": "Тёмное фэнтези",
     "age": "18+",
     "year": "2026",
-    "status": "wip",
+    "status": "soon",
     "minutes": 1,
     "readerStyle": "fantasy",
     "readerStyleChoice": true
@@ -136,7 +136,7 @@ var WORKS = [
     "genre": "Философское фэнтези",
     "age": "16+",
     "year": "2026",
-    "status": "published",
+    "status": "soon",
     "minutes": 3,
     "readerStyle": "fantasy",
     "readerStyleChoice": true,
