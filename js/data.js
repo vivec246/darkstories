@@ -20,7 +20,8 @@ var SITE = {
   heroFxIntensity: 1,
   heroFxSpeed: 1,
   heroOrder: "random",
-  heroSeconds: 6
+  heroSeconds: 6,
+  fresh: ["vedmak-ot-sapkovskogo-do-netflix","bear-at-a-crossroads","lord-balderon","new-guy"]
 };
 var HERO = [
   "cap/header_1.jpg",
@@ -96,20 +97,6 @@ var WORKS = [
     "minutes": 59
   },
   {
-    "slug": "new-guy",
-    "kind": "story",
-    "path": "stories/new_guy/new_guy.md",
-    "cover": "covers/new-guy.jpg",
-    "title": "Новенький из параллельного класса",
-    "shortTitle": "Новенький из параллельного класса",
-    "description": "Сато вновь переезжает в новый город. Он думает, что просто попал в странную школу.\nНо чем дольше он там находится, тем яснее понимает: странности не заканчиваются школьными коридорами.\nИ кто-то очень внимательно следит за тем, как Сато осваивается на новом месте.",
-    "genre": "Школьное фэнтези",
-    "age": "16+",
-    "year": "2025",
-    "status": "soon",
-    "minutes": 1
-  },
-  {
     "slug": "bear-at-a-crossroads",
     "kind": "story",
     "path": "stories/bear_at_a_crossroads/bear_at_a_crossroads.md",
@@ -148,6 +135,20 @@ var WORKS = [
       "Сказ пятый. Покой",
       "Сказ шестой. Ошибка"
     ]
+  },
+  {
+    "slug": "new-guy",
+    "kind": "story",
+    "path": "stories/new_guy/new_guy.md",
+    "cover": "covers/new-guy.jpg",
+    "title": "Новенький из параллельного класса",
+    "shortTitle": "Новенький из параллельного класса",
+    "description": "Сато вновь переезжает в новый город. Он думает, что просто попал в странную школу.\nНо чем дольше он там находится, тем яснее понимает: странности не заканчиваются школьными коридорами.\nИ кто-то очень внимательно следит за тем, как Сато осваивается на новом месте.",
+    "genre": "Школьное фэнтези",
+    "age": "16+",
+    "year": "2025",
+    "status": "soon",
+    "minutes": 1
   },
   {
     "slug": "albus-dumbledore",
