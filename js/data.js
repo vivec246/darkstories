@@ -177,7 +177,8 @@ var WORKS = [
     "age": "18+",
     "year": "2025",
     "status": "published",
-    "minutes": 12
+    "minutes": 12,
+    "month": "декабрь"
   },
   {
     "slug": "vedmak-ot-sapkovskogo-do-netflix",
