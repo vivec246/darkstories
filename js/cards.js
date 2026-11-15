@@ -70,7 +70,7 @@ function paperHtml(w) {
       '<div class="pp-meta"><span>' + (soon ? 'Скоро · ' : w.month ? '' : 'Выпуск ') + ymLabel(w) + '</span><span class="pp-genre">' + esc(w.genre) + '</span></div>' +
       '<h3 class="pp-mast">' + esc(w.title) + '</h3>' +
       '<div class="pp-rule"></div>' +
-      '<figure class="pp-photo"><img src="' + esc(w.cover) + '" alt=""' + (w.coverX != null || w.coverY != null ? ' style="object-position:' + (w.coverX == null ? 50 : Number(w.coverX) || 0) + '% ' + (w.coverY == null ? 0 : Number(w.coverY) || 0) + '%"' : '') + ' loading="lazy" decoding="async" onerror="coverFail(this)"><div class="pp-fallback" style="display:none"></div><i class="pp-tint"></i><i class="pp-dots"></i></figure>' +
+      '<figure class="pp-photo"><img src="' + esc(w.cover) + '" alt=""' + coverStyle(w) + ' loading="lazy" decoding="async" onerror="coverFail(this)"><div class="pp-fallback" style="display:none"></div><i class="pp-tint"></i><i class="pp-dots"></i></figure>' +
       '<div class="pp-foot"><span class="pp-age">' + esc(w.age) + '</span>' +
         '<span class="pp-time">' + shortInfo + '</span>' +
         '<button type="button" class="pp-desc-btn" data-desc>Описание</button>' +
@@ -170,4 +170,11 @@ function fitMasts() {
 function ymLabel(w) {
   var m = String(w.month || ''); m = m ? m.charAt(0).toUpperCase() + m.slice(1) + ' ' : '';
   return esc(m + (w.year || ''));
+}
+
+/* кадр картинки статьи: положение (coverX/coverY, %) и увеличение (coverZ, %) */
+function coverStyle(w) {
+  var x = w.coverX == null ? 50 : Number(w.coverX) || 0, y = w.coverY == null ? 0 : Number(w.coverY) || 0, z = Number(w.coverZ) || 100;
+  if (w.coverX == null && w.coverY == null && z <= 100) return '';
+  return ' style="object-position:' + x + '% ' + y + '%' + (z > 100 ? ';transform-origin:' + x + '% ' + y + '%;transform:scale(' + (z / 100) + ')' : '') + '"';
 }

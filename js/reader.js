@@ -68,7 +68,7 @@ function themePanelHtml(w) {
   var opts = styleOptions(w);
   if (opts.length > 1) {
     h += '<div class="sp-sec"><div class="sp-t">Стиль</div><div class="sp-chips">' + opts.map(function (id) {
-      return '<button type="button" class="chip" data-style="' + id + '">' + styleName(id) + '</button>';
+      return '<button type="button" class="chip' + (id === workStyle(w) ? ' on' : '') + '" data-style="' + id + '">' + styleName(id) + '</button>';
     }).join('') + '</div></div>';
   }
   return h + '</div>';

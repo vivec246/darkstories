@@ -40,7 +40,7 @@ var origTexts = {};     // тексты, какими они лежат на с�
 var URLS = {};          // путь → blob-адрес только что загруженной картинки (для предпросмотра)
 var UI = { q: '', filter: 'all', tab: 'edit' };
 var CONN = { mode: localGet('ds-admin-mode') || 'github', dir: null, dirName: '', gh: loadGh() };
-var KEYS = ['slug', 'kind', 'path', 'cover', 'title', 'shortTitle', 'description', 'genre', 'age', 'year', 'status', 'minutes', 'readerStyle', 'readerStyleChoice', 'art', 'cycle', 'coverX', 'coverY', 'month'];
+var KEYS = ['slug', 'kind', 'path', 'cover', 'title', 'shortTitle', 'description', 'genre', 'age', 'year', 'status', 'minutes', 'readerStyle', 'readerStyleChoice', 'art', 'cycle', 'coverX', 'coverY', 'coverZ', 'month'];
 var MONTHS = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
 
 function localGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
@@ -86,6 +86,12 @@ function yearMonthHtml(w) {
   return '<select class="sel" id="f_work_year" data-bind="work:year" style="flex:1">' + ys.map(function (v) { return '<option' + (v === String(w.year) ? ' selected' : '') + '>' + v + '</option>'; }).join('') + '</select>' +
     '<select class="sel" data-bind="work:month" style="flex:1.3"><option value="">месяц</option>' + MONTHS.map(function (m) { var l = m.toLowerCase(); return '<option value="' + l + '"' + (l === mo ? ' selected' : '') + '>' + l + '</option>'; }).join('') + '</select>';
 }
+/* положение и увеличение картинки в рамке (то же считают js/cards.js и js/share-image.js) */
+function coverFrameApply(img, w) {
+  if (!img) return;
+  var x = w.coverX == null || w.coverX === '' ? 50 : Number(w.coverX), y = w.coverY == null || w.coverY === '' ? 0 : Number(w.coverY), z = w.coverZ == null || w.coverZ === '' ? 100 : Number(w.coverZ);
+  img.style.objectPosition = x + '% ' + y + '%'; img.style.transformOrigin = x + '% ' + y + '%'; img.style.transform = z > 100 ? 'scale(' + (z / 100) + ')' : '';
+}
 function monthNow() { var d = new Date(); return MONTHS[d.getMonth()] + ' ' + d.getFullYear(); }
 function wordsN(n, a, b, c) { var m = n % 100, k = n % 10; return n + ' ' + (m > 10 && m < 20 ? c : k === 1 ? a : k > 1 && k < 5 ? b : c); }
 function kindName(k) { return k === 'article' ? 'Статья' : 'Рассказ'; }
@@ -118,6 +124,7 @@ function serialize() {
       if (k === 'readerStyle' && !custom) return;
       if (k === 'readerStyleChoice' && !(w.readerStyleChoice && custom)) return;
       if (k === 'month' && !w.month) return;
+      if (k === 'coverZ' && !(w.kind === 'article' && Number(w.coverZ) > 100)) return;
       if (k === 'art' && !(w.art && w.readerStyle === 'fantasy')) return;
       if (k === 'coverX' && !(w.kind === 'article' && Number(w.coverX) !== 50 && w.coverX !== undefined && w.coverX !== '')) return;
       if (k === 'coverY' && !(w.kind === 'article' && Number(w.coverY) !== 0 && w.coverY !== undefined && w.coverY !== '')) return;
@@ -235,7 +242,7 @@ function removeFile(path) {
 
 /* картинки-карточки для шаринга: рисуются заранее (async), а outgoing() только берёт готовые */
 var shareImgs = {};
-function shareSig(w) { return [w.slug, w.status, w.title, w.genre, w.age, w.year, w.kind, w.coverX, w.coverY, w.cover, (files[w.cover] && files[w.cover].blob ? files[w.cover].blob.size : '')].join('|'); }
+function shareSig(w) { return [w.slug, w.status, w.title, w.genre, w.age, w.year, w.kind, w.coverX, w.coverY, w.coverZ, w.cover, (files[w.cover] && files[w.cover].blob ? files[w.cover].blob.size : '')].join('|'); }
 async function buildShareImages() {
   for (var i = 0; i < S.WORKS.length; i++) {
     var w = S.WORKS[i], k = shareSig(w);
@@ -251,7 +258,7 @@ function outgoing() {
   var base = location.origin + location.pathname.replace(/[^\/]*$/, '');
   S.WORKS.forEach(function (w) {
     var b = null; BASE.WORKS.forEach(function (x) { if (x.slug === w.slug) b = x; });
-    if (b && b.title === w.title && b.status === w.status && b.description === w.description && b.cover === w.cover && b.genre === w.genre && b.age === w.age && b.year === w.year && b.kind === w.kind && b.coverX === w.coverX && b.coverY === w.coverY) return;
+    if (b && b.title === w.title && b.status === w.status && b.description === w.description && b.cover === w.cover && b.genre === w.genre && b.age === w.age && b.year === w.year && b.kind === w.kind && b.coverX === w.coverX && b.coverY === w.coverY && b.coverZ === w.coverZ) return;
     list.push({ path: 's/' + w.slug + '.html', type: 'text', text: sharePageHtml(w, S.SITE.name, base), share: true });
     var im = shareImgs[shareSig(w)];
     if (im) list.push({ path: 's/' + w.slug + '.jpg', type: 'bin', blob: im, share: true });
@@ -398,9 +405,9 @@ VIEWS.home = function () {
 };
 
 /* —— Тексты: список —— */
-function listHtml() {
-  var q = UI.q.trim().toLowerCase(), flt = UI.filter, movable = flt === 'all' && !q;
-  var rows = S.WORKS.map(function (x, i) { return { w: x, i: i }; }).filter(function (o) {
+function workRows() {
+  var q = UI.q.trim().toLowerCase(), flt = UI.filter;
+  return S.WORKS.map(function (x, i) { return { w: x, i: i }; }).filter(function (o) {
     var w = o.w;
     if (flt === 'story' && w.kind !== 'story') return false;
     if (flt === 'article' && w.kind !== 'article') return false;
@@ -408,13 +415,16 @@ function listHtml() {
     if (flt === 'soon' && w.status !== 'soon') return false;
     return !q || (w.title + ' ' + w.genre + ' ' + w.slug).toLowerCase().indexOf(q) >= 0;
   });
+}
+function listHtml() {
+  var rows = workRows();
   if (!rows.length) return '<div class="empty">Ничего не найдено</div>';
-  return '<div class="rows">' + rows.map(function (o) {
+  return '<div class="rows">' + rows.map(function (o, pos) {
     var w = o.w, isNew = !BASE.WORKS.some(function (b) { return b.slug === w.slug; });
     return '<div class="row" data-href="#/works/' + esc(w.slug) + '"><div class="thumb"><img src="' + esc(imgUrl(w.cover)) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'"></div>' +
       '<div style="min-width:0"><h3>' + esc(w.title) + '</h3><div class="meta"><span>' + kindName(w.kind) + '</span><span>·</span><span>' + esc(w.genre) + '</span><span>·</span><span>' + esc(w.year) + '</span><span>·</span><span>' + esc(w.age) + '</span><span>·</span><span>~' + esc(w.minutes) + ' мин</span></div></div>' +
       '<div class="bds">' + (isNew ? '<span class="badge acc">новый</span>' : '') + (w.status === 'soon' ? '<span class="badge acc">анонс</span>' : '') + (w.cycle && w.cycle.length ? '<span class="badge">цикл · ' + w.cycle.length + '</span>' : '') + (w.readerStyle === 'scifi' ? '<span class="badge acc">Sci-Fi</span>' : w.readerStyle === 'fantasy' ? '<span class="badge acc">Фэнтези</span>' : '') + '<span class="badge ' + (w.status === 'wip' ? 'wip' : 'ok') + '">' + (w.status === 'wip' ? 'Пишется' : 'Опубликован') + '</span></div>' +
-      (movable ? '<div class="mv"><button type="button" class="btn ghost sm ico-only" data-act="mv-work" data-i="' + o.i + '" data-d="-1" aria-label="Выше"' + (o.i === 0 ? ' disabled' : '') + '>' + icon('up') + '</button><button type="button" class="btn ghost sm ico-only" data-act="mv-work" data-i="' + o.i + '" data-d="1" aria-label="Ниже"' + (o.i === S.WORKS.length - 1 ? ' disabled' : '') + '>' + icon('down') + '</button></div>' : '<span></span>') + '</div>';
+      ('<div class="mv"><button type="button" class="btn ghost sm ico-only" data-act="mv-work" data-i="' + o.i + '" data-d="-1" aria-label="Выше"' + (pos === 0 ? ' disabled' : '') + '>' + icon('up') + '</button><button type="button" class="btn ghost sm ico-only" data-act="mv-work" data-i="' + o.i + '" data-d="1" aria-label="Ниже"' + (pos === rows.length - 1 ? ' disabled' : '') + '>' + icon('down') + '</button></div>') + '</div>';
   }).join('') + '</div>';
 }
 VIEWS.works = function (arg) {
@@ -424,7 +434,7 @@ VIEWS.works = function (arg) {
     '<div class="tools"><input class="in" id="wq" type="search" placeholder="Поиск по названию, жанру…" aria-label="Поиск" value="' + esc(UI.q) + '"><div class="chips" id="wf">' +
     [['all', 'Все'], ['story', 'Рассказы'], ['article', 'Статьи'], ['wip', 'Пишутся'], ['soon', 'Анонсы']].map(function (c) { return '<button type="button" class="chip' + (UI.filter === c[0] ? ' on' : '') + '" data-act="filter" data-v="' + c[0] + '">' + c[1] + '</button>'; }).join('') + '</div></div>' +
     '<div class="acts" style="margin-bottom:1rem"><button class="btn outline sm" data-act="scifi-all">Sci-Fi для всей научной фантастики</button><button class="btn outline sm" data-act="fantasy-all">«Фэнтези» для всего фэнтези</button></div>' +
-    '<p class="small muted" style="margin-bottom:1rem">Порядок здесь — порядок на сайте. Стрелки доступны, когда включён фильтр «Все» и поиск пуст.</p>' +
+    '<p class="small muted" style="margin-bottom:1rem">Порядок здесь — порядок на сайте. С фильтром или поиском стрелки переставляют текст относительно соседей в показанном списке.</p>' +
     '<div id="list">' + listHtml() + '</div>' };
 };
 
@@ -560,10 +570,33 @@ function mdAction(m) {
 }
 
 /* —— Новости —— */
+/* —— Новинки на главной —— */
+function freshAuto() {
+  return S.WORKS.filter(function (w) { return w.year === '2026' || w.status === 'wip' || w.status === 'soon'; }).sort(function (a, b) { return Number(b.year) - Number(a.year); }).map(function (w) { return w.slug; });
+}
+function freshSlugs() {
+  var l = Array.isArray(S.SITE.fresh) ? S.SITE.fresh : freshAuto();
+  return l.filter(function (sl) { return S.WORKS.some(function (w) { return w.slug === sl; }); });
+}
+function freshHtml() {
+  var l = freshSlugs(), manual = Array.isArray(S.SITE.fresh);
+  var rest = S.WORKS.filter(function (w) { return l.indexOf(w.slug) < 0; });
+  return '<div class="card"><h2>Новинки на главной</h2><p class="small muted" style="margin-bottom:.8rem">' + (manual ? 'Список собран вручную: что здесь и в каком порядке, то и на сайте.' : 'Сейчас список автоматический: тексты 2026 года, пишущиеся и анонсы. Любое изменение ниже переведёт его в ручной режим.') + '</p>' +
+    (l.length ? '<div class="rows">' + l.map(function (sl, i) {
+      var w = S.WORKS.filter(function (x) { return x.slug === sl; })[0];
+      return '<div class="row" style="cursor:default"><div class="thumb"><img src="' + esc(imgUrl(w.cover)) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'"></div><div style="min-width:0"><h3>' + esc(w.title) + '</h3><div class="meta"><span>' + kindName(w.kind) + '</span><span>·</span><span>' + esc(w.year) + '</span></div></div><div class="bds"></div>' +
+        '<div class="mv"><button type="button" class="btn ghost sm ico-only" data-act="fresh-mv" data-i="' + i + '" data-d="-1" aria-label="Выше"' + (i === 0 ? ' disabled' : '') + '>' + icon('up') + '</button><button type="button" class="btn ghost sm ico-only" data-act="fresh-mv" data-i="' + i + '" data-d="1" aria-label="Ниже"' + (i === l.length - 1 ? ' disabled' : '') + '>' + icon('down') + '</button><button type="button" class="btn ghost sm ico-only" data-act="fresh-del" data-i="' + i + '" aria-label="Убрать из новинок">' + icon('trash') + '</button></div></div>';
+    }).join('') + '</div>' : '<div class="empty">В новинках пусто</div>') +
+    '<div class="acts" style="margin-top:.8rem">' + (rest.length ? '<select class="sel" id="freshAdd" style="max-width:320px"><option value="">Добавить текст…</option>' + rest.map(function (w) { return '<option value="' + esc(w.slug) + '">' + esc(w.title) + '</option>'; }).join('') + '</select>' : '') +
+    (manual ? '<button type="button" class="btn ghost sm" data-act="fresh-auto">Вернуть автоматический список</button>' : '') + '</div></div>';
+}
+function freshRedraw() { var b = document.getElementById('freshbox'); if (b) b.innerHTML = freshHtml(); chrome(); }
+
 VIEWS.news = function () {
   var opts = [['', '— без ссылки —']].concat(S.WORKS.map(function (w) { return [w.slug, w.title]; }));
   return { title: 'Новости', html:
     '<div class="page-h"><div><span class="eyebrow">Главная страница</span><h2>Новости</h2></div><span class="sp"></span><button class="btn" data-act="news-add">' + icon('plus') + 'Новая новость</button></div>' +
+    '<div id="freshbox" style="margin-bottom:1.2rem">' + freshHtml() + '</div><h3 class="h-label" style="margin:1.2rem 0 .6rem">Новости</h3>' +
     (S.NEWS.length ? S.NEWS.map(function (n, i) {
       return '<div class="news-item"><div class="head"><span class="badge">№ ' + (i + 1) + '</span><button type="button" class="btn ghost sm ico-only" data-act="news-mv" data-i="' + i + '" data-d="-1" aria-label="Выше"' + (i === 0 ? ' disabled' : '') + '>' + icon('up') + '</button><button type="button" class="btn ghost sm ico-only" data-act="news-mv" data-i="' + i + '" data-d="1" aria-label="Ниже"' + (i === S.NEWS.length - 1 ? ' disabled' : '') + '>' + icon('down') + '</button><button type="button" class="btn danger sm ico-only" data-act="news-del" data-i="' + i + '" aria-label="Удалить">' + icon('trash') + '</button></div>' +
         '<div class="grid g2">' + field('Дата', 'news:' + i + ':date', n.date, { ph: monthNow() }) + field('Заголовок', 'news:' + i + ':title', n.title) + '</div>' +
@@ -820,10 +853,10 @@ function onBind(el) {
     var w = curWork(), k = parts[1]; if (!w) return;
     if (k === 'minutes') w.minutes = Math.max(0, Math.round(Number(v)) || 0);
     else if (k === 'cycleText') w.cycle = v.split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
-    else if (k === 'coverX' || k === 'coverY') {
-      w[k] = Math.max(0, Math.min(100, Number(v) || 0));
-      var fr = document.getElementById('coverFrame'); if (fr) fr.style.objectPosition = (w.coverX == null || w.coverX === '' ? 50 : w.coverX) + '% ' + (w.coverY == null || w.coverY === '' ? 0 : w.coverY) + '%';
-      if (el.type === 'range') { var o2 = el.parentNode.querySelector('output'); if (o2) o2.textContent = w[k]; }
+    else if (k === 'coverX' || k === 'coverY' || k === 'coverZ') {
+      w[k] = k === 'coverZ' ? Math.max(100, Math.min(300, Number(v) || 100)) : Math.max(0, Math.min(100, Number(v) || 0));
+      coverFrameApply(document.getElementById('coverFrame'), w);
+      if (el.type === 'range') { var o2 = el.parentNode.querySelector('output'); if (o2) o2.textContent = w[k] + (k === 'coverZ' ? '%' : ''); }
     }
     else w[k] = v;
     if (k === 'title') { var h = document.getElementById('wh'); if (h) h.textContent = v; setTitle(v || 'Текст'); }
@@ -918,11 +951,18 @@ var ACT = {
     document.getElementById('list').innerHTML = listHtml(); chrome(); notify('Sci-Fi включён: ' + hit.length);
   },
   'filter': function (el) { UI.filter = el.dataset.v; $$('#wf .chip').forEach(function (c) { c.classList.toggle('on', c === el); }); document.getElementById('list').innerHTML = listHtml(); },
-  'mv-work': function (el) { move(S.WORKS, +el.dataset.i, +el.dataset.d); document.getElementById('list').innerHTML = listHtml(); chrome(); },
+  'mv-work': function (el) {
+    var rows = workRows(), i = +el.dataset.i, pos = -1, k;
+    for (k = 0; k < rows.length; k++) if (rows[k].i === i) pos = k;
+    var nb = rows[pos + +el.dataset.d]; if (pos < 0 || !nb) return;
+    var it = S.WORKS.splice(i, 1)[0]; S.WORKS.splice(nb.i, 0, it);
+    document.getElementById('list').innerHTML = listHtml(); chrome();
+  },
   'del-work': async function () {
     var w = curWork(); if (!w) return;
     if (!await ask('Удалить «' + esc(w.title) + '»?', 'Текст, обложка и карточка исчезнут с сайта после публикации. Пока вы не опубликовали, удаление можно отменить, перезагрузив страницу.', 'Удалить', true)) return;
     S.WORKS = S.WORKS.filter(function (x) { return x !== w; });
+    if (Array.isArray(S.SITE.fresh)) S.SITE.fresh = S.SITE.fresh.filter(function (sl) { return sl !== w.slug; });
     removeFile(w.path);
     if (w.art) { removeFile(w.art); delete URLS[w.art]; }
     if (!S.WORKS.some(function (x) { return x.cover === w.cover; })) { removeFile(w.cover); delete URLS[w.cover]; }
@@ -931,16 +971,17 @@ var ACT = {
   },
   'cover-pos': function () {
     var w = curWork(); if (!w) return;
-    var cx = w.coverX == null || w.coverX === '' ? 50 : Number(w.coverX), cy = w.coverY == null || w.coverY === '' ? 0 : Number(w.coverY);
-    var sl = function (key, label, v, hint) { return '<div class="f"><label>' + label + '</label><div class="in-row"><input type="range" min="0" max="100" step="1" value="' + v + '" data-bind="work:' + key + '" style="flex:1"><output style="min-width:2.5em;text-align:right">' + v + '</output></div><small>' + hint + '</small></div>'; };
-    modal({ title: 'Кадр обложки', body: '<p class="small muted" style="margin-bottom:.8rem">Картинка на карточке газеты обрезается под квадратную рамку. Подвиньте кадр, чтобы в рамку попало главное. Тот же кадр будет в картинке для соцсетей.</p>' +
-      '<div style="width:240px;height:240px;margin:0 auto .9rem;position:relative;overflow:hidden;border:1px solid var(--line);border-radius:10px"><img id="coverFrame" src="' + esc(imgUrl(w.cover)) + '" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:' + cx + '% ' + cy + '%"></div>' +
-      sl('coverY', 'По вертикали', cy, '0 — верх картинки, 100 — низ') + sl('coverX', 'По горизонтали', cx, '0 — левый край, 100 — правый'),
+    var cx = w.coverX == null || w.coverX === '' ? 50 : Number(w.coverX), cy = w.coverY == null || w.coverY === '' ? 0 : Number(w.coverY), cz = w.coverZ == null || w.coverZ === '' ? 100 : Number(w.coverZ);
+    var sl = function (key, label, v, hint, min, max, step, unit) { return '<div class="f"><label>' + label + '</label><div class="in-row"><input type="range" min="' + min + '" max="' + max + '" step="' + step + '" value="' + v + '" data-bind="work:' + key + '" style="flex:1"><output style="min-width:3em;text-align:right">' + v + (unit || '') + '</output></div><small>' + hint + '</small></div>'; };
+    modal({ title: 'Кадр обложки', body: '<p class="small muted" style="margin-bottom:.8rem">Картинка на карточке газеты показывается в квадратной рамке. Увеличьте её и подвиньте кадр, чтобы в рамку попало главное. Тот же кадр будет в картинке для соцсетей.</p>' +
+      '<div style="width:240px;height:240px;margin:0 auto .9rem;position:relative;overflow:hidden;border:1px solid var(--line);border-radius:10px"><img id="coverFrame" src="' + esc(imgUrl(w.cover)) + '" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></div>' +
+      sl('coverZ', 'Увеличение', cz, '100% — вся картинка, больше — крупнее', 100, 300, 5, '%') +
+      sl('coverY', 'По вертикали', cy, '0 — верх картинки, 100 — низ', 0, 100, 1) + sl('coverX', 'По горизонтали', cx, '0 — левый край, 100 — правый', 0, 100, 1),
+      onOpen: function (ov) { coverFrameApply(ov.querySelector('#coverFrame'), w); },
       actions: [{ label: 'Сбросить', cls: 'ghost', run: function (ov) {
-        delete w.coverX; delete w.coverY;
-        var y = ov.querySelector('[data-bind="work:coverY"]'), x = ov.querySelector('[data-bind="work:coverX"]');
-        y.value = 0; x.value = 50; y.parentNode.querySelector('output').textContent = 0; x.parentNode.querySelector('output').textContent = 50;
-        var fr = ov.querySelector('#coverFrame'); if (fr) fr.style.objectPosition = '50% 0%'; return false; } },
+        delete w.coverX; delete w.coverY; delete w.coverZ;
+        [['coverZ', 100, '%'], ['coverY', 0, ''], ['coverX', 50, '']].forEach(function (d) { var e = ov.querySelector('[data-bind="work:' + d[0] + '"]'); e.value = d[1]; e.parentNode.querySelector('output').textContent = d[1] + d[2]; });
+        coverFrameApply(ov.querySelector('#coverFrame'), w); return false; } },
         { label: 'Готово', value: true }] });
   },
   'cover-pick': function (el) { el.parentNode.querySelector('input[type=file]').click(); },
@@ -961,6 +1002,9 @@ var ACT = {
   'txt-retry': function () { loadEditor(); },
   'txt-blank': function () { var w = curWork(); texts[w.path] = ''; files[w.path] = { type: 'text', text: '' }; origTexts[w.path] = undefined; document.getElementById('edWrap').innerHTML = editorHtml(w, ''); fillEditor(w); chrome(); },
   'news-add': function () { S.NEWS.unshift({ date: monthNow(), title: '', text: '' }); render(); var t = document.querySelector('[data-bind="news:0:title"]'); if (t) t.focus(); },
+  'fresh-mv': function (el) { var l = freshSlugs(); move(l, +el.dataset.i, +el.dataset.d); S.SITE.fresh = l; freshRedraw(); },
+  'fresh-del': function (el) { var l = freshSlugs(); l.splice(+el.dataset.i, 1); S.SITE.fresh = l; freshRedraw(); },
+  'fresh-auto': function () { delete S.SITE.fresh; freshRedraw(); },
   'news-mv': function (el) { move(S.NEWS, +el.dataset.i, +el.dataset.d); render(); },
   'news-del': async function (el) { var n = S.NEWS[+el.dataset.i]; if (await ask('Удалить новость?', esc(n.title || 'Без заголовка'), 'Удалить', true)) { S.NEWS.splice(+el.dataset.i, 1); render(); } },
   'hero-add': function (el) { el.parentNode.querySelector('input[type=file]').click(); },
@@ -1026,6 +1070,7 @@ function bindEvents() {
   document.addEventListener('change', function (e) {
     var t = e.target;
     if (t.dataset && t.dataset.file) onFile(t);
+    else if (t.id === 'freshAdd') { if (t.value) { var fl = freshSlugs(); fl.push(t.value); S.SITE.fresh = fl; freshRedraw(); } }
     else if (t.dataset && t.dataset.bind && (t.tagName === 'SELECT' || t.type === 'checkbox')) { onBind(t); if (t.dataset.bind === 'work:kind' || t.dataset.bind === 'work:status' || t.dataset.bind === 'work:readerStyle') render(true); }
   });
   document.addEventListener('keydown', function (e) {
