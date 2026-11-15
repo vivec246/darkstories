@@ -190,9 +190,10 @@ var WORKS = [
     "age": "16+",
     "year": "2026",
     "status": "published",
-    "minutes": 10,
+    "minutes": 13,
     "coverX": 47,
-    "coverY": 42
+    "coverY": 42,
+    "month": "ноябрь"
   }
 ];
 
