@@ -94,7 +94,8 @@ var WORKS = [
     "age": "16+",
     "year": "2025",
     "status": "published",
-    "minutes": 59
+    "minutes": 59,
+    "readerStyle": "noir"
   },
   {
     "slug": "bear-at-a-crossroads",
