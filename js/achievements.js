@@ -112,7 +112,7 @@ var Ach = (function () {
   var COMBO_STYLES = ['standard', 'fantasy', 'scifi', 'gazette'], COMBO_MODES = ['day', 'night', 'candle'];
   function comboNow() {
     var r = document.getElementById('reader'); if (!r) return null;
-    var cl = r.classList, style = cl.contains('scifi') ? 'scifi' : cl.contains('fantasy') ? 'fantasy' : cl.contains('gazette') ? 'gazette' : 'standard';
+    var cl = r.classList, style = cl.contains('scifi') ? 'scifi' : cl.contains('fantasy') ? 'fantasy' : cl.contains('gazette') ? 'gazette' : cl.contains('noir') ? 'noir' : 'standard';
     var mode = cl.contains('candle') ? 'candle' : cl.contains('night') ? 'night' : 'day';
     return style + '|' + mode;
   }

@@ -9,7 +9,8 @@ function contextMenuOpen() { var m = $('#readerContextMenu'); return !!(m && m.c
 /* тема читалки для меню/панели, которые лежат вне #reader: копируем классы стиля и режима */
 function themeOverlay(el) {
   var r = document.getElementById('reader'); if (!el) return;
-  ['scifi', 'fantasy', 'gazette', 'day', 'night', 'candle'].forEach(function (c) { el.classList.toggle(c, !!(r && r.classList.contains(c))); });
+  ['scifi', 'fantasy', 'gazette', 'noir', 'day', 'night', 'candle'].forEach(function (c) { el.classList.toggle(c, !!(r && r.classList.contains(c))); });
+  if (r && r.classList.contains('noir')) el.classList.add('gazette');   /* меню и окна в нуаре одеваются как газетные, но с нуар-цветами */
 }
 function showContextMenu(x, y) {
   var m = $('#readerContextMenu'); if (!m) return;
