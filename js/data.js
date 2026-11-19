@@ -163,7 +163,7 @@ var WORKS = [
     "age": "16+",
     "year": "2026",
     "status": "published",
-    "minutes": 8,
+    "minutes": 7,
     "coverX": 25,
     "month": "апрель"
   },
