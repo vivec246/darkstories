@@ -6,7 +6,7 @@ function lsGet(k) { try { return window.localStorage.getItem(k); } catch (e) { r
 function lsSet(k, v) { try { window.localStorage.setItem(k, v); } catch (e) { memory[k] = v; } }
 var Store = (function () {
   var s = { favorites: [], recent: [], progress: {}, bookmarks: {}, fontSize: 1.1, readerNight: true,
-    readerTheme: '', readerFont: 'sans', readerWidth: 'normal', readerLead: 'normal', styleBy: {} };
+    readerTheme: '', readerFont: 'sans', readerWidth: 'normal', readerLead: 'normal', fantasyBg: 'on', styleBy: {} };
   try {
     var raw = JSON.parse(lsGet(KEY) || 'null');
     if (raw && raw.state) for (var k in s) if (raw.state[k] !== undefined) s[k] = raw.state[k];

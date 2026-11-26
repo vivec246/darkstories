@@ -61,7 +61,7 @@ function textPanelHtml() {
 }
 function readerClass(w) {
   var t = Store.s.readerTheme;
-  return 'reader ' + (t === 'day' ? 'day' : 'night' + (t === 'candle' ? ' candle' : '')) + (workStyle(w) !== 'standard' ? ' ' + workStyle(w) : '');
+  return 'reader ' + (t === 'day' ? 'day' : 'night' + (t === 'candle' ? ' candle' : '')) + (workStyle(w) !== 'standard' ? ' ' + workStyle(w) : '') + (Store.s.fantasyBg === 'off' ? ' nobg' : '');
 }
 /* окно под кнопкой смены темы: Ночь / День / Тёплый, а ниже — стиль (если у текста их несколько) */
 function themePanelHtml(w) {
@@ -72,6 +72,11 @@ function themePanelHtml(w) {
     h += '<div class="sp-sec"><div class="sp-t">Стиль</div><div class="sp-chips">' + opts.map(function (id) {
       return '<button type="button" class="chip' + (id === workStyle(w) ? ' on' : '') + '" data-style="' + id + '">' + styleName(id) + '</button>';
     }).join('') + '</div></div>';
+  }
+  /* переключатель фона читалки: только в стиле «Фэнтези» (в других стилях секция скрыта через CSS) */
+  if (opts.indexOf('fantasy') >= 0) {
+    h += '<div class="sp-sec sp-fabg"><div class="sp-t">Фон</div><div class="sp-chips">' +
+      chipsHtml('fantasyBg', [['on', 'С фоном'], ['off', 'Без фона']]) + '</div></div>';
   }
   return h + '</div>';
 }
@@ -114,6 +119,7 @@ function applyReaderPrefs() {
   rd.classList.toggle('fantasy', st === 'fantasy');
   rd.classList.toggle('gazette', st === 'gazette');
   rd.classList.toggle('noir', st === 'noir');
+  rd.classList.toggle('nobg', S.fantasyBg === 'off');
   ensureStyleFonts(st);
   rd.setAttribute('data-font', S.readerFont);
   rd.setAttribute('data-width', S.readerWidth);
